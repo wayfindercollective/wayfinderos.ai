@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Wayfinder OS — Experience Mockup</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg:#05070b; --ink:#eef3f8; --muted:#8a97a8; --faint:#5a6678;
+    --cyan:#22d3ee; --teal:#2dd4bf; --blue:#38bdf8;
+    --line:rgba(255,255,255,.09); --glass:rgba(255,255,255,.035);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--ink);font-family:'Inter',system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased;overflow-x:hidden}
+  canvas#scene{position:fixed;inset:0;width:100%;height:100%;z-index:0;display:block}
+  .grain{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.04;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+  .content{position:relative;z-index:5}
+  #world{transform-origin:50% 50%}  /* camera layer — transform applied only during the warp turn */
+
+  /* nav */
+  nav{position:fixed;top:0;left:0;right:0;z-index:30;display:flex;align-items:center;justify-content:space-between;
+    padding:22px 5vw;transition:background .4s,backdrop-filter .4s,border-color .4s;border-bottom:1px solid transparent}
+  nav.solid{background:rgba(5,7,11,.72);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+  .brand{display:flex;align-items:center;gap:11px;font-family:'Space Grotesk';font-weight:600;font-size:18px}
+  .brand .os{color:var(--cyan)}
+  .navlinks{display:flex;gap:30px;font-size:14px;color:var(--muted)}
+  .navlinks a{color:inherit;text-decoration:none;transition:color .25s}
+  .navlinks a:hover{color:var(--ink)}
+  .navcta{display:flex;align-items:center;gap:16px}
+  .ghost{font-size:14px;color:var(--muted);text-decoration:none}.ghost:hover{color:var(--ink)}
+  .btn{font-family:'Space Grotesk';font-weight:600;font-size:14px;color:#04181c;
+    background:linear-gradient(135deg,var(--cyan),var(--teal));padding:10px 19px;border-radius:999px;
+    text-decoration:none;cursor:pointer;border:none;
+    box-shadow:0 0 0 1px rgba(34,211,238,.4),0 8px 30px -10px rgba(34,211,238,.7);
+    transition:transform .25s,box-shadow .25s}
+  .btn:hover{transform:translateY(-1px);box-shadow:0 0 0 1px rgba(34,211,238,.7),0 16px 50px -10px rgba(34,211,238,.9)}
+
+  section{padding:14vh 5vw;position:relative}
+  .center{max-width:1080px;margin:0 auto}
+  .eyebrow{font-size:12.5px;letter-spacing:2.5px;text-transform:uppercase;color:var(--cyan);font-weight:600;margin-bottom:18px}
+  h2{font-family:'Space Grotesk';font-weight:600;font-size:clamp(30px,4.4vw,56px);line-height:1.05;letter-spacing:-1px;margin-bottom:20px}
+  .lead{font-size:clamp(16px,1.4vw,19px);color:var(--muted);line-height:1.65;max-width:620px}
+  .grad{background:linear-gradient(120deg,#fff 5%,var(--cyan) 55%,var(--teal) 100%);
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+
+  .rv{opacity:0;transform:translateY(36px);transition:opacity 1s cubic-bezier(.2,.7,.2,1),transform 1s cubic-bezier(.2,.7,.2,1)}
+  .rv.in{opacity:1;transform:none}
+  .rv.d1{transition-delay:.08s}.rv.d2{transition-delay:.16s}.rv.d3{transition-delay:.24s}.rv.d4{transition-delay:.32s}
+
+  /* HERO — sparse */
+  .hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:0 5vw;max-width:760px}
+  .kicker{display:inline-flex;align-items:center;gap:9px;align-self:flex-start;font-size:13px;letter-spacing:.3px;
+    color:var(--cyan);background:var(--glass);border:1px solid rgba(34,211,238,.22);padding:7px 15px;border-radius:999px;
+    margin-bottom:32px;backdrop-filter:blur(8px)}
+  .kicker .dot{width:7px;height:7px;border-radius:50%;background:var(--cyan);box-shadow:0 0 12px var(--cyan);animation:pulse 2.4s ease-in-out infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+  .hero h1{font-family:'Space Grotesk';font-weight:600;font-size:clamp(46px,7.4vw,98px);line-height:.97;letter-spacing:-2px;margin-bottom:28px}
+  .hero .sub{font-size:clamp(17px,1.5vw,21px);line-height:1.55;color:var(--muted);max-width:480px;margin-bottom:44px}
+  .btn.lg{font-size:16px;padding:16px 32px;align-self:flex-start}
+  .scrollhint{position:absolute;bottom:34px;left:5vw;color:var(--faint);font-size:11.5px;letter-spacing:1.5px;
+    text-transform:uppercase;display:flex;align-items:center;gap:12px}
+  .scrollhint .mouse{width:21px;height:34px;border:1.5px solid var(--line);border-radius:12px;position:relative}
+  .scrollhint .mouse::after{content:"";position:absolute;top:6px;left:50%;transform:translateX(-50%);width:3px;height:7px;
+    border-radius:2px;background:var(--cyan);animation:scroll 1.8s ease-in-out infinite}
+  @keyframes scroll{0%{opacity:0;transform:translate(-50%,0)}40%{opacity:1}100%{opacity:0;transform:translate(-50%,10px)}}
+
+  /* PROBLEM chips */
+  .chips{display:flex;flex-wrap:wrap;gap:14px;margin-top:40px;max-width:720px}
+  .chip{font-family:'Space Grotesk';font-size:14px;color:var(--muted);background:rgba(10,14,20,.6);backdrop-filter:blur(8px);
+    border:1px solid var(--line);padding:11px 18px;border-radius:12px;display:flex;align-items:center;gap:9px}
+  .chip .x{color:#ff6b6b;font-size:12px}
+  .chip.jit{animation:jit 3.2s ease-in-out infinite}
+  @keyframes jit{0%,100%{transform:translate(0,0) rotate(0)}25%{transform:translate(3px,-4px) rotate(.8deg)}
+    50%{transform:translate(-3px,3px) rotate(-.7deg)}75%{transform:translate(2px,3px) rotate(.4deg)}}
+
+  /* MODULE grid — readable over glow */
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:54px}
+  .card{position:relative;background:linear-gradient(160deg,rgba(16,22,31,.86),rgba(9,13,19,.78));
+    backdrop-filter:blur(16px);border:1px solid var(--line);border-radius:18px;padding:26px 24px;overflow:hidden;
+    transition:transform .35s,border-color .35s,box-shadow .35s}
+  .card::before{content:"";position:absolute;inset:0;border-radius:18px;opacity:0;transition:opacity .35s;
+    background:radial-gradient(420px circle at var(--mx,50%) var(--my,0%),rgba(34,211,238,.16),transparent 45%)}
+  .card:hover{transform:translateY(-5px);border-color:rgba(34,211,238,.4);box-shadow:0 24px 60px -28px rgba(34,211,238,.55)}
+  .card:hover::before{opacity:1}
+  .card .ico{width:42px;height:42px;border-radius:11px;display:grid;place-items:center;font-size:19px;
+    background:rgba(34,211,238,.12);border:1px solid rgba(34,211,238,.3);color:var(--cyan);margin-bottom:16px}
+  .card h3{font-family:'Space Grotesk';font-weight:600;font-size:17px;margin-bottom:7px}
+  .card p{font-size:13.5px;color:#aab6c6;line-height:1.55}
+
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;text-align:center}
+  .stat{background:rgba(9,13,19,.55);backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:18px;padding:30px 16px}
+  .stat .num{font-family:'Space Grotesk';font-weight:700;font-size:clamp(38px,5vw,60px);line-height:1;
+    background:linear-gradient(120deg,#fff,var(--cyan));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  .stat .lbl{font-size:13.5px;color:var(--muted);margin-top:12px}
+
+  .compare{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:50px}
+  .col{border-radius:20px;padding:30px;border:1px solid var(--line);backdrop-filter:blur(14px)}
+  .col.bad{background:rgba(12,15,21,.7)}
+  .col.good{background:linear-gradient(160deg,rgba(34,211,238,.12),rgba(9,13,19,.72));border-color:rgba(34,211,238,.32)}
+  .col h4{font-family:'Space Grotesk';font-size:15px;margin-bottom:22px;display:flex;align-items:center;gap:10px}
+  .col.bad h4{color:var(--muted)} .col.good h4{color:var(--cyan)}
+  .col li{list-style:none;padding:12px 0;border-top:1px solid var(--line);font-size:14.5px;display:flex;gap:11px;align-items:flex-start}
+  .col li:first-of-type{border-top:none}
+  .col.bad li{color:var(--faint)} .col.good li{color:var(--ink)}
+  .col .m{flex:none;margin-top:1px}
+
+  .apply{text-align:center;max-width:760px;margin:0 auto;background:linear-gradient(160deg,rgba(34,211,238,.13),rgba(9,13,19,.8));
+    backdrop-filter:blur(16px);border:1px solid rgba(34,211,238,.3);border-radius:28px;padding:64px 40px;
+    box-shadow:0 40px 120px -50px rgba(34,211,238,.5)}
+  .apply h2{margin-bottom:18px}.apply .lead{margin:0 auto 34px}
+
+  footer{padding:60px 5vw 40px;border-top:1px solid var(--line);position:relative;z-index:5;
+    display:flex;justify-content:space-between;align-items:center;color:var(--faint);font-size:13px;flex-wrap:wrap;gap:16px;
+    background:rgba(5,7,11,.6);backdrop-filter:blur(10px)}
+
+  /* HYPERSPACE warp + arrival */
+  #warp{position:fixed;inset:0;z-index:100;display:block;opacity:0;pointer-events:none;transition:opacity .25s}
+  #warp.on{opacity:1;pointer-events:auto}
+  .arrived{position:fixed;inset:0;z-index:101;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:18px;text-align:center;opacity:0;pointer-events:none;transition:opacity .8s;background:radial-gradient(60% 60% at 50% 45%,rgba(5,12,18,.4),rgba(3,5,9,.92))}
+  .arrived.on{opacity:1;pointer-events:auto}
+  .arrived h2{font-size:clamp(32px,5vw,56px)}
+  .arrived p{color:var(--muted);max-width:440px}
+  .arrived .logo{width:64px;height:64px;filter:drop-shadow(0 0 24px rgba(34,211,238,.8))}
+
+  @media(max-width:860px){.grid{grid-template-columns:1fr 1fr}.stats{grid-template-columns:1fr 1fr}.compare{grid-template-columns:1fr}.navlinks{display:none}}
+</style>
+</head>
+<body>
+<div id="world">
+<canvas id="scene"></canvas>
+<div class="grain"></div>
+
+<nav id="nav">
+  <div class="brand">
+    <svg width="26" height="26" viewBox="0 0 100 100" fill="none">
+      <defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#22d3ee"/><stop offset="1" stop-color="#2dd4bf"/></linearGradient></defs>
+      <path d="M50 8 L88 86 L50 64 L12 86 Z" fill="url(#lg)"/></svg>
+    Wayfinder <span class="os">OS</span>
+  </div>
+  <div class="navlinks"><a href="#platform">Platform</a><a href="#why">Why Wayfinder</a><a href="#apply">Apply</a></div>
+  <div class="navcta"><a class="ghost" href="#">Sign in</a><a class="btn" href="#apply">Apply for access</a></div>
+</nav>
+
+<div class="content">
+  <!-- HERO -->
+  <section class="hero">
+    <span class="kicker"><span class="dot"></span> Now accepting founding operators</span>
+    <h1>Everything orbits.<br><span class="grad">Nothing leaves.</span></h1>
+    <p class="sub">The operating system for coaching companies. Ten tools, one core.</p>
+    <a class="btn lg" href="#apply">Apply for access →</a>
+    <div class="scrollhint"><div class="mouse"></div>Scroll — watch the chaos resolve</div>
+  </section>
+
+  <!-- PROBLEM -->
+  <section id="problem">
+    <div class="center">
+      <div class="eyebrow rv">The problem</div>
+      <h2 class="rv d1">Seven logins.<br>Nothing in the centre.</h2>
+      <p class="lead rv d2">Spreadsheets for commissions. One tool for the dialer, another for email, a third for payments.
+        Every system talks to every other system — badly. Data leaks, reports drift, and you're the one holding it together.</p>
+      <div class="chips">
+        <div class="chip jit rv d2"><span class="x">✕</span> GoHighLevel</div>
+        <div class="chip jit rv d2"><span class="x">✕</span> Pipedrive</div>
+        <div class="chip jit rv d3"><span class="x">✕</span> Stripe dashboard</div>
+        <div class="chip jit rv d3"><span class="x">✕</span> Calendly</div>
+        <div class="chip jit rv d3"><span class="x">✕</span> Zoom</div>
+        <div class="chip jit rv d4"><span class="x">✕</span> A dialer app</div>
+        <div class="chip jit rv d4"><span class="x">✕</span> Commission spreadsheet</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COLLAPSE / RESOLUTION -->
+  <section id="collapse" style="min-height:96vh;display:flex;align-items:center">
+    <div class="center" style="text-align:center;margin:0 auto">
+      <div class="eyebrow rv">The fix</div>
+      <h2 class="rv d1">We pulled them all<br><span class="grad">into one core.</span></h2>
+      <p class="lead rv d2" style="margin:0 auto">The tangle resolves. One database, one login, one source of truth —
+        every tool now a facet of a single system. That's not a metaphor; it's the architecture.</p>
+    </div>
+  </section>
+
+  <!-- MODULES -->
+  <section id="platform">
+    <div class="center">
+      <div class="eyebrow rv">The platform</div>
+      <h2 class="rv d1">One system. Every job.</h2>
+      <p class="lead rv d2">Each module is native — not an integration, not a bolt-on. They share the same data the instant it changes.</p>
+      <div class="grid">
+        <div class="card rv d1"><div class="ico">◫</div><h3>CRM &amp; Pipeline</h3><p>Deals, stages, bulk actions and analytics — wired to payments, bookings and commissions.</p></div>
+        <div class="card rv d1"><div class="ico">$</div><h3>Payments &amp; Plans</h3><p>Stripe + QuickBooks, saved cards, subscriptions, payment plans, failed-payment alerts.</p></div>
+        <div class="card rv d1"><div class="ico">☎</div><h3>AI Dialer</h3><p>Call recording, transcription, SMS, number porting, and AI voice campaigns that auto-qualify.</p></div>
+        <div class="card rv d2"><div class="ico">✉</div><h3>Unified Inbox</h3><p>Email, SMS and webchat threaded per contact. Gmail/IMAP sync, shared templates.</p></div>
+        <div class="card rv d2"><div class="ico">@</div><h3>Email Marketing</h3><p>Audience segmentation, campaigns, tracking and analytics — triggered by anything.</p></div>
+        <div class="card rv d2"><div class="ico">▤</div><h3>Booking &amp; Calendar</h3><p>Booking pages, two-way Google Calendar sync, reminders, events and cohorts.</p></div>
+        <div class="card rv d3"><div class="ico">▷</div><h3>Video Rooms</h3><p>Persistent rooms built in. No separate Zoom, no copy-pasting links.</p></div>
+        <div class="card rv d3"><div class="ico">⊞</div><h3>Website Builder</h3><p>Build funnels and pages with embeddable webchat bound per-page to route leads.</p></div>
+        <div class="card rv d3"><div class="ico">%</div><h3>Commissions &amp; Tiers</h3><p>Tiered structures, brackets, per-order allocation and automatic tier upgrades.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <section>
+    <div class="center"><div class="stats">
+      <div class="stat rv d1"><div class="num" data-to="10" data-suffix="+">0</div><div class="lbl">tools replaced</div></div>
+      <div class="stat rv d2"><div class="num" data-to="20" data-suffix="%">0</div><div class="lbl">saved on stack cost</div></div>
+      <div class="stat rv d3"><div class="num" data-to="1">0</div><div class="lbl">source of truth</div></div>
+      <div class="stat rv d4"><div class="num" data-to="0">0</div><div class="lbl">integrations to babysit</div></div>
+    </div></div>
+  </section>
+
+  <!-- WHY -->
+  <section id="why">
+    <div class="center">
+      <div class="eyebrow rv">Why Wayfinder</div>
+      <h2 class="rv d1">GoHighLevel was built for agencies.<br><span class="grad">This was built for coaching companies.</span></h2>
+      <div class="compare">
+        <div class="col bad rv d1"><h4>✕ What most settle for</h4><ul>
+          <li><span class="m">·</span> Commissions tracked in spreadsheets</li>
+          <li><span class="m">·</span> 5+ tools duct-taped together</li>
+          <li><span class="m">·</span> Manual payment follow-ups</li>
+          <li><span class="m">·</span> Data leaking between team members</li>
+          <li><span class="m">·</span> Reports you can't trust</li></ul></div>
+        <div class="col good rv d2"><h4>✓ The Wayfinder way</h4><ul>
+          <li><span class="m" style="color:var(--cyan)">✓</span> Automatic commission calc &amp; tiers</li>
+          <li><span class="m" style="color:var(--cyan)">✓</span> One platform, zero integrations</li>
+          <li><span class="m" style="color:var(--cyan)">✓</span> Payment plans that run themselves</li>
+          <li><span class="m" style="color:var(--cyan)">✓</span> Coach isolation from day one</li>
+          <li><span class="m" style="color:var(--cyan)">✓</span> Dashboards you can actually trust</li></ul></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- APPLY -->
+  <section id="apply">
+    <div class="apply rv">
+      <div class="eyebrow">Founding access</div>
+      <h2>Run your whole company<br>from one core.</h2>
+      <p class="lead">We're onboarding a handful of coaching companies as founding operators —
+        hands-on migration, direct support, and a voice in shaping the product. Apply and we'll book a call.</p>
+      <a class="btn lg apply-trigger" href="#" style="align-self:center">Apply for access →</a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="brand" style="font-size:16px">
+      <svg width="22" height="22" viewBox="0 0 100 100"><path d="M50 8 L88 86 L50 64 L12 86 Z" fill="url(#lg)"/></svg>
+      Wayfinder <span class="os">OS</span></div>
+    <div>© 2026 Wayfinder Collective · The operating system for coaching companies.</div>
+  </footer>
+</div>
+</div><!-- /world -->
+
+<!-- hyperspace overlay -->
+<canvas id="warp"></canvas>
+<div class="arrived" id="arrived">
+  <svg class="logo" viewBox="0 0 100 100"><path d="M50 8 L88 86 L50 64 L12 86 Z" fill="url(#lg)"/></svg>
+  <h2 class="grad">Welcome aboard.</h2>
+  <p>Application received. We'll be in touch to book your call and start the jump.</p>
+  <button class="btn lg" onclick="endWarp()">Back to launch</button>
+</div>
+
+<script>
+/* ================= main constellation scene ================= */
+const canvas=document.getElementById('scene'),ctx=canvas.getContext('2d');
+let W,H,DPR;
+function resize(){DPR=Math.min(devicePixelRatio||1,2);W=canvas.width=innerWidth*DPR;H=canvas.height=innerHeight*DPR;
+  canvas.style.width=innerWidth+'px';canvas.style.height=innerHeight+'px';measure();}
+const clamp=v=>Math.max(0,Math.min(1,v));
+const ease=t=>t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
+const CY=[34,211,238], WARN=[255,86,66];
+const mix=(a,b,t)=>[a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t,a[2]+(b[2]-a[2])*t];
+const rgba=(c,a)=>`rgba(${c[0]|0},${c[1]|0},${c[2]|0},${a})`;
+
+// icon placeholders — swap for real Wayfinder OS icons later
+const TOOLS=[['CRM','◫'],['Payments','$'],['Dialer','☎'],['Inbox','✉'],['Email','@'],
+  ['Booking','▤'],['Video','▷'],['Web Chat','◌'],['Website','⊞'],['Commissions','%']];
+const nodes=TOOLS.map(([label,glyph],i)=>({label,glyph,angle:(i/TOOLS.length)*Math.PI*2,
+  radius:0.30+(i%3)*0.022,speed:0.00006+(i%4)*0.000013,tilt:0.5+(i%5)*0.045,phase:i*0.7,bob:0.5+(i%3)*0.25,
+  w1:0.6+(i%3)*0.5,w2:0.8+(i%4)*0.4,w3:0.7+(i%5)*0.3,w4:0.9+(i%3)*0.45,
+  dying:(i%4===0),depth:0,px:0,py:0}));
+const rings=[{r:0.30,tilt:0.5,a:0},{r:0.345,tilt:0.46,a:1.1},{r:0.39,tilt:0.54,a:2.2}];
+const stars=Array.from({length:170},()=>({x:Math.random(),y:Math.random(),r:Math.random()*1.3+0.2,tw:Math.random()*6.28,sp:0.4+Math.random()*0.8}));
+const blobs=[{x:.72,y:.42,r:.5,c:[34,211,238],a:.16,px:.0008,py:.0006,t:0},
+  {x:.3,y:.7,r:.45,c:[45,212,191],a:.08,px:.0006,py:.001,t:2},
+  {x:.55,y:.15,r:.4,c:[56,189,248],a:.07,px:.0009,py:.0007,t:4}];
+const pulses=nodes.map((_,i)=>({t:Math.random(),node:i,sp:0.00018+Math.random()*0.00014}));
+const debris=Array.from({length:46},()=>({x:Math.random(),y:Math.random(),vx:(Math.random()-.5)*.0006,vy:(Math.random()-.5)*.0006,r:Math.random()*2+.6,ph:Math.random()*6.28}));
+
+let mouse={x:0,y:0,tx:0,ty:0};
+addEventListener('mousemove',e=>{mouse.tx=e.clientX/innerWidth-.5;mouse.ty=e.clientY/innerHeight-.5});
+let sy=0,syT=0;addEventListener('scroll',()=>syT=scrollY);
+let coreScreen={x:innerWidth*0.72,y:innerHeight*0.44};   // shared with the warp
+let coreR=60, coreLogoSize=40;                            // live orb glow + logo size (device px)
+
+// measure section anchors so phases line up with copy
+let A={};
+function measure(){
+  const p=document.getElementById('problem'),c=document.getElementById('collapse');
+  if(!p||!c)return;
+  A.pTop=p.getBoundingClientRect().top+scrollY; A.pH=p.offsetHeight;
+  A.cTop=c.getBoundingClientRect().top+scrollY; A.cH=c.offsetHeight;
+}
+addEventListener('resize',resize);addEventListener('load',()=>{measure();setTimeout(measure,400)});
+resize();
+
+function drawLogo(cx,cy,size,alpha){
+  if(alpha<=0.01)return;const s=size/100;
+  ctx.save();ctx.translate(cx-50*s,cy-47*s);ctx.scale(s,s);
+  ctx.beginPath();ctx.moveTo(50,8);ctx.lineTo(88,86);ctx.lineTo(50,64);ctx.lineTo(12,86);ctx.closePath();
+  ctx.fillStyle=`rgba(7,14,20,${alpha})`;ctx.shadowBlur=14;ctx.shadowColor=`rgba(34,211,238,${alpha})`;
+  ctx.fill();ctx.restore();ctx.shadowBlur=0;
+}
+
+let t0=performance.now();
+function frame(now){
+  const dt=Math.min(now-t0,40);t0=now;
+  ctx.clearRect(0,0,W,H);
+  mouse.x+=(mouse.tx-mouse.x)*.05;mouse.y+=(mouse.ty-mouse.y)*.05;
+  sy+=(syT-sy)*.08;
+  const vh=innerHeight, cv=sy+vh*0.5;
+  // phases driven by measured section centres
+  let chaos=0,collapse=0;
+  if(A.pTop!==undefined){
+    const pc=A.pTop+A.pH*0.5, cc=A.cTop+A.cH*0.5, heroLeave=A.pTop-vh*0.55;
+    chaos=clamp((cv-heroLeave)/Math.max(1,pc-heroLeave));
+    collapse=clamp((cv-pc)/Math.max(1,cc-pc));
+  }
+  const ce=ease(collapse), warn=chaos*(1-collapse), pull=ce;
+
+  const par=28*DPR;
+  const cx=W*(0.72+ce*0.15)+mouse.x*par*1.4, cy=H*0.44+mouse.y*par*1.4;  // orb drifts well right as it forms, clear of the text/card
+  const minD=Math.min(W,H);
+  coreScreen={x:cx/DPR,y:cy/DPR};
+
+  // nebula (reddens during chaos)
+  for(const b of blobs){b.t+=dt;const bx=(b.x+Math.sin(b.t*b.px)*.04)*W,by=(b.y+Math.cos(b.t*b.py)*.04)*H;
+    const col=mix(b.c,WARN,warn*0.75);
+    const g=ctx.createRadialGradient(bx,by,0,bx,by,b.r*minD);
+    g.addColorStop(0,rgba(col,b.a*(1+ce*0.5)));g.addColorStop(1,rgba(col,0));ctx.fillStyle=g;ctx.fillRect(0,0,W,H);}
+
+  // stars
+  for(const s of stars){s.tw+=.02*s.sp;const a=.2+Math.abs(Math.sin(s.tw))*.5;
+    ctx.beginPath();ctx.arc(s.x*W+mouse.x*par*.3,s.y*H+mouse.y*par*.3,s.r*DPR,0,7);ctx.fillStyle=`rgba(180,220,255,${a*.45})`;ctx.fill();}
+
+  // orbital rings (hero only)
+  ctx.lineWidth=1*DPR;
+  for(const rg of rings){const rr=rg.r*minD*(1-pull);ctx.beginPath();
+    for(let a=0;a<=6.3;a+=.12){const x=cx+Math.cos(a+rg.a)*rr,y=cy+Math.sin(a+rg.a)*rr*rg.tilt;a===0?ctx.moveTo(x,y):ctx.lineTo(x,y);}
+    ctx.strokeStyle=rgba(CY,0.10*(1-chaos)*(1-pull));ctx.stroke();}
+
+  // node positions: blend clean orbit -> violent wander -> collapse to core
+  // chaos wander: well right of the headline, filling the right-hand space
+  const wcx=W*0.74,wcy=H*0.44;
+  for(const n of nodes){n.angle+=n.speed*dt*(1+warn*1.5);
+    const r=n.radius*minD;
+    const ox=cx+Math.cos(n.angle)*r, oy=cy+Math.sin(n.angle)*r*n.tilt;
+    const chx=wcx+Math.sin(now*0.0012*n.w1+n.phase)*0.14*minD+Math.cos(now*0.0019*n.w2)*0.06*minD;
+    const chy=wcy+Math.cos(now*0.0014*n.w3+n.phase)*0.13*minD+Math.sin(now*0.0021*n.w4)*0.05*minD;
+    let bx=ox+(chx-ox)*warn, by=oy+(chy-oy)*warn;
+    if(n.dying){const d=warn;bx+=Math.cos(n.angle)*d*0.10*minD;by+=Math.sin(n.angle)*d*0.10*minD;}
+    const jx=warn*11*DPR*Math.sin(now*0.009*n.w1+n.phase), jy=warn*11*DPR*Math.cos(now*0.008*n.w2+n.phase);
+    n.depth=(Math.sin(n.angle)+1)/2;
+    bx+=jx+mouse.x*par*(.5+n.depth); by+=jy+mouse.y*par*(.5+n.depth);
+    n.px=bx+(cx-bx)*pull; n.py=by+(cy-by)*pull;}
+  const order=[...nodes].sort((a,b)=>a.depth-b.depth);
+
+  // CHAOS: tangled red mesh between every pair, flickering
+  if(warn>0.02){
+    for(let i=0;i<nodes.length;i++)for(let j=i+1;j<nodes.length;j++){
+      const A1=nodes[i],B1=nodes[j];const fl=0.55+0.45*Math.sin(now*0.01*(i+j+1));
+      ctx.beginPath();ctx.moveTo(A1.px,A1.py);ctx.lineTo(B1.px,B1.py);
+      ctx.strokeStyle=rgba(WARN,warn*0.13*fl);ctx.lineWidth=1.2*DPR;ctx.stroke();}
+    // red debris
+    for(const d of debris){d.x+=d.vx*dt;d.y+=d.vy*dt;if(d.x<0||d.x>1)d.vx*=-1;if(d.y<0||d.y>1)d.vy*=-1;d.ph+=0.03;
+      ctx.beginPath();ctx.arc(d.x*W,d.y*H,d.r*DPR,0,7);ctx.fillStyle=rgba(WARN,warn*(0.3+0.3*Math.sin(d.ph)));ctx.fill();}
+  }
+
+  // clean connection lines + inward pulses (positive states)
+  for(const n of order){const la=(0.05+n.depth*0.11)*(1-warn)*(1-pull*0.4);if(la<=0.005)continue;
+    ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(n.px,n.py);ctx.strokeStyle=rgba(CY,la);ctx.lineWidth=(0.6+n.depth*0.9)*DPR;ctx.stroke();}
+  for(const p of pulses){p.t+=p.sp*dt;if(p.t>1)p.t-=1;const n=nodes[p.node];
+    const x=cx+(n.px-cx)*p.t,y=cy+(n.py-cy)*p.t;ctx.beginPath();ctx.arc(x,y,1.9*DPR,0,7);
+    ctx.fillStyle=`rgba(125,240,255,${0.9*(1-Math.abs(p.t-.5)*1.4)*(1-warn)})`;ctx.shadowBlur=10*DPR;ctx.shadowColor='#22d3ee';ctx.fill();ctx.shadowBlur=0;}
+
+  // the core: soft sun in hero -> gone in chaos -> bright orb + logo at collapse
+  const beat=1+Math.sin(now*.0016)*.06, coreStrength=clamp(0.55*(1-warn)+ce), cr=(40+ce*80)*DPR*beat;
+  if(coreStrength>0.01){
+    const cg=ctx.createRadialGradient(cx,cy,0,cx,cy,cr);
+    cg.addColorStop(0,`rgba(255,255,255,${0.97*coreStrength})`);cg.addColorStop(.32,`rgba(125,240,255,${0.85*coreStrength})`);cg.addColorStop(1,'rgba(34,211,238,0)');
+    ctx.beginPath();ctx.arc(cx,cy,cr,0,7);ctx.fillStyle=cg;ctx.shadowBlur=(50+ce*120)*DPR;ctx.shadowColor='#22d3ee';ctx.fill();ctx.shadowBlur=0;
+    ctx.beginPath();ctx.arc(cx,cy,(28+ce*22)*DPR*beat,0,7);ctx.strokeStyle=`rgba(255,255,255,${0.5*coreStrength})`;ctx.lineWidth=1.2*DPR;ctx.stroke();
+  }
+  drawLogo(cx,cy,(32+ce*32)*DPR*beat, ce);
+  coreR=cr; coreLogoSize=(32+ce*32)*DPR*beat;   // remember the orb's on-screen size for the dive
+
+  // nodes: icon + label, red in chaos, fading into orb on collapse
+  ctx.textBaseline='middle';ctx.textAlign='center';
+  for(const n of order){
+    // no blinking — dying systems simply fade out as they drift away during chaos
+    const vis=(1-pull)*(0.5+n.depth*0.5)*(n.dying?(1-warn*0.85):1);
+    if(vis<=0.02)continue;
+    const sc=.8+n.depth*.5, r=12*DPR*sc, col=mix(CY,WARN,warn);
+    ctx.beginPath();ctx.arc(n.px,n.py,r,0,7);ctx.fillStyle=rgba(col,vis*0.22);
+    ctx.shadowBlur=18*DPR;ctx.shadowColor=rgba(col,vis);ctx.fill();ctx.shadowBlur=0;
+    ctx.lineWidth=1.2*DPR;ctx.strokeStyle=rgba(col,vis*0.9);ctx.stroke();
+    ctx.font=`600 ${12*DPR*sc}px 'Space Grotesk',sans-serif`;ctx.fillStyle=rgba([240,250,255],vis);ctx.fillText(n.glyph,n.px,n.py+0.5*DPR);
+    ctx.font=`600 ${11*DPR*sc}px 'Space Grotesk',sans-serif`;ctx.fillStyle=rgba([230,240,248],vis*0.9);ctx.fillText(n.label,n.px,n.py+r+10*DPR*sc);}
+  ctx.textAlign='left';
+
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+
+/* nav + reveals + counters + card spotlight */
+const nav=document.getElementById('nav');
+addEventListener('scroll',()=>nav.classList.toggle('solid',scrollY>40));
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}}),{threshold:.18});
+document.querySelectorAll('.rv').forEach(el=>io.observe(el));
+const cio=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){const el=e.target,to=+el.dataset.to,suf=el.dataset.suffix||'';let s=null;
+  const step=t=>{s=s||t;const p=Math.min((t-s)/1100,1);el.textContent=Math.round(p*to)+suf;if(p<1)requestAnimationFrame(step);};requestAnimationFrame(step);cio.unobserve(el);}}),{threshold:.6});
+document.querySelectorAll('[data-to]').forEach(el=>cio.observe(el));
+document.querySelectorAll('.card').forEach(c=>c.addEventListener('mousemove',e=>{const r=c.getBoundingClientRect();
+  c.style.setProperty('--mx',(e.clientX-r.left)+'px');c.style.setProperty('--my',(e.clientY-r.top)+'px');}));
+
+/* ================= hyperspace warp — one continuous shot =================
+   A) camera zooms INTO the orb until the Wayfinder logo fills the frame -> black
+   B) hyperspace starfield erupts out of that black (intergalactic travel)
+   C) jump flash -> arrival card                                            */
+const warp=document.getElementById('warp'),wctx=warp.getContext('2d'),arrived=document.getElementById('arrived'),cEl=document.querySelector('.content');
+let wW,wH,warpStars=[],warpOn=false,warpRAF=null,warpT0=0,warpCore={x:0,y:0},warpStartR=60,warpStartLogo=40;
+const sCanvas=document.createElement('canvas'), sctx=sCanvas.getContext('2d');   // offscreen hyperspace layer (sits UNDER the orb)
+const DOLLY=1050, ZDUR=2050, JUMP=4900;   // DOLLY=truck; ZDUR=zoom-in (hyperspace crossfades in during it); JUMP=flash
+function warpResize(){warp.width=wW=innerWidth*DPR;warp.height=wH=innerHeight*DPR;warp.style.width=innerWidth+'px';warp.style.height=innerHeight+'px';
+  sCanvas.width=wW;sCanvas.height=wH;}
+function arrowPath(c,cx,cy,size){const s=size/100, X=x=>cx-50*s+x*s, Y=y=>cy-47*s+y*s;
+  c.beginPath();c.moveTo(X(50),Y(8));c.lineTo(X(88),Y(86));c.lineTo(X(50),Y(64));c.lineTo(X(12),Y(86));c.closePath();}
+function warpLogo(cx,cy,size,alpha){const s=size/100;wctx.save();wctx.translate(cx-50*s,cy-47*s);wctx.scale(s,s);
+  wctx.beginPath();wctx.moveTo(50,8);wctx.lineTo(88,86);wctx.lineTo(50,64);wctx.lineTo(12,86);wctx.closePath();
+  wctx.fillStyle=`rgba(3,4,7,${alpha})`;wctx.fill();wctx.restore();}
+function warpOrb(ox,oy,R,a=1){const g=wctx.createRadialGradient(ox,oy,0,ox,oy,R);
+  g.addColorStop(0,`rgba(255,255,255,${a})`);g.addColorStop(.28,`rgba(125,240,255,${.95*a})`);
+  g.addColorStop(.62,`rgba(34,211,238,${.45*a})`);g.addColorStop(1,'rgba(34,211,238,0)');
+  wctx.fillStyle=g;wctx.beginPath();wctx.arc(ox,oy,R,0,7);wctx.fill();}
+function startWarp(e){if(e)e.preventDefault();if(warpOn)return;warpOn=true;warpResize();
+  document.body.style.overflow='hidden';
+  // DEPTH TRUCK — the application page is the NEAR plane; the orb is far back & to the right.
+  // 1) camera slides RIGHT: the near page parallaxes off to the left & out of view while the far
+  //    orb only drifts to centre; 2) then a straight dolly-in to the centred logo.
+  cEl.style.transition=`transform ${DOLLY}ms cubic-bezier(.5,0,.45,1)`;
+  cEl.style.transform='translateX(-115vw)';
+  canvas.style.transition='opacity 220ms ease';canvas.style.opacity='0';   // hide live scene; warp owns the visuals
+  warpStars=Array.from({length:560},()=>({x:(Math.random()-.5)*wW,y:(Math.random()-.5)*wH,z:Math.random()*wW}));
+  // the warp orb continues from the orb's CURRENT on-screen size (no shrink/pop), then -> black -> hyperspace
+  warpCore={x:coreScreen.x*DPR, y:coreScreen.y*DPR};
+  warpStartR=Math.max(coreR, 46*DPR); warpStartLogo=Math.max(coreLogoSize, 30*DPR);
+  sctx.clearRect(0,0,wW,wH);
+  warp.classList.add('on');warpT0=performance.now();
+  cancelAnimationFrame(warpRAF);warpRAF=requestAnimationFrame(warpFrame);
+  setTimeout(()=>arrived.classList.add('on'),JUMP+260);
+}
+function warpFrame(now){
+  const el=now-warpT0, cxx=wW/2,cyy=wH/2, maxDim=Math.max(wW,wH);
+  if(el<DOLLY){
+    // TRUCK — camera slides right: orb drifts from the right to centre at CONSTANT size (no zoom).
+    // The near page parallaxes off-screen left via the CSS truck.
+    wctx.clearRect(0,0,wW,wH);
+    for(const s of warpStars){const k=160*DPR/s.z;wctx.fillStyle=`rgba(150,200,235,${0.14*Math.min(1,k)})`;
+      wctx.fillRect(cxx+s.x*k,cyy+s.y*k,1.3*DPR,1.3*DPR);}
+    const q=el/DOLLY, c=ease(q);
+    const ox=warpCore.x+(cxx-warpCore.x)*c, oy=warpCore.y+(cyy-warpCore.y)*c;
+    warpOrb(ox,oy, warpStartR);
+    warpLogo(ox,oy, warpStartLogo, 1);   // solid dark arrow during the slide
+  } else if(el<JUMP){
+    // DOLLY-IN — hyperspace lives on an OFFSCREEN layer and is only seen through the arrow cutout.
+    const ze=el-DOLLY, zp=clamp(ze/ZDUR);
+    // 1) advance the persistent hyperspace layer (underneath everything)
+    const sA=clamp((ze-ZDUR*0.30)/(ZDUR*0.70));
+    sctx.fillStyle='rgba(3,4,7,0.32)';sctx.fillRect(0,0,wW,wH);          // trails
+    if(sA>0){const he=ze-ZDUR*0.30, speed=2.2+Math.pow(he/1000,2)*46;
+      for(const s of warpStars){const pz=s.z;s.z-=speed;
+        if(s.z<1){s.z=wW;s.x=(Math.random()-.5)*wW;s.y=(Math.random()-.5)*wH;}
+        const k=160*DPR/s.z,px=cxx+s.x*k,py=cyy+s.y*k, k0=160*DPR/pz,oxx=cxx+s.x*k0,oyy=cyy+s.y*k0;
+        const a=Math.min(1,(wW-s.z)/wW*1.5)*sA;
+        sctx.strokeStyle=`rgba(${180+a*75},240,255,${a})`;sctx.lineWidth=Math.min(3.4,k)*DPR*.5;
+        sctx.beginPath();sctx.moveTo(oxx,oyy);sctx.lineTo(px,py);sctx.stroke();}
+    }
+    // 2) compose: dark space, bright orb, then the arrow cutout that reveals the layer beneath
+    const e=zp*zp*zp;
+    wctx.fillStyle='rgb(4,6,10)';wctx.fillRect(0,0,wW,wH);
+    if(zp<1) warpOrb(cxx,cyy, warpStartR+maxDim*2.0*e, 1-zp*0.9);
+    wctx.save();
+    arrowPath(wctx,cxx,cyy, warpStartLogo+maxDim*2.6*e);
+    wctx.clip();
+    wctx.fillStyle='rgb(2,3,6)';wctx.fillRect(0,0,wW,wH);               // the black of the logo
+    wctx.drawImage(sCanvas,0,0);                                        // hyperspace seen through the cutout only
+    wctx.restore();
+    // 3) flash building toward the jump
+    if(el>JUMP-450){const f=(el-(JUMP-450))/450;wctx.fillStyle=`rgba(225,250,255,${Math.min(1,f)*0.92})`;wctx.fillRect(0,0,wW,wH);}
+  } else {
+    // ARRIVAL — settle the flash to calm space, then STOP (no re-run)
+    const a=Math.min(1,(el-JUMP)/450);
+    wctx.fillStyle=`rgba(6,12,18,${a})`;wctx.fillRect(0,0,wW,wH);
+    if(a>=1) return;                                                    // freeze: do not request another frame
+  }
+  if(warpOn)warpRAF=requestAnimationFrame(warpFrame);
+}
+function endWarp(){warpOn=false;cancelAnimationFrame(warpRAF);warp.classList.remove('on');arrived.classList.remove('on');
+  cEl.style.transition='transform 500ms ease, opacity 500ms ease';cEl.style.transform='';cEl.style.opacity='1';
+  canvas.style.opacity='1';
+  document.body.style.overflow='';wctx.clearRect(0,0,wW,wH);}
+addEventListener('resize',()=>{if(warpOn)warpResize();});
+document.querySelectorAll('.apply-trigger').forEach(b=>b.addEventListener('click',startWarp));
+</script>
+</body>
+</html>
