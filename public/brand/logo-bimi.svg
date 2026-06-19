@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg version="1.2" baseProfile="tiny-ps" xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120">
+  <title>Wayfinder</title>
+  <rect x="0" y="0" width="120" height="120" fill="#000000"/>
+  <polygon points="25,95 50,35 95,80 50,60" fill="none" stroke="#FFFFFF" stroke-width="5" stroke-linejoin="round"/>
+</svg>
