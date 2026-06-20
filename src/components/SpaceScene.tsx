@@ -178,12 +178,13 @@ export default function SpaceScene() {
     }
     function strokeArrow(cx: number, cy: number, size: number, alpha: number) {
       if (alpha <= 0.01) return;
-      // dark outline of the Wayfinder mark — reads against the bright orb centre
+      // dark Wayfinder mark filled into the bright orb centre so it's clearly visible
       arrowPath(ctx, cx, cy, size);
-      ctx.strokeStyle = `rgba(6,16,24,${alpha})`;
-      ctx.lineWidth = Math.max(2, size * 0.07) * DPR;
-      ctx.lineCap = "round";
+      ctx.fillStyle = `rgba(6,16,24,${alpha})`;
+      ctx.fill();
+      ctx.lineWidth = Math.max(1.5, size * 0.03) * DPR;
       ctx.lineJoin = "round";
+      ctx.strokeStyle = `rgba(6,16,24,${alpha})`;
       ctx.stroke();
     }
 
@@ -571,6 +572,8 @@ export default function SpaceScene() {
     window.addEventListener("resize", resize);
     const triggers = Array.from(document.querySelectorAll<HTMLElement>(".warp-trigger"));
     triggers.forEach((b) => b.addEventListener("click", startWarp));
+    const onWarpEvent = () => startWarp();
+    window.addEventListener("wf:warp", onWarpEvent);
     const backBtn = arrived.querySelector<HTMLButtonElement>(".back");
     backBtn?.addEventListener("click", endWarp);
 
@@ -590,6 +593,7 @@ export default function SpaceScene() {
       window.removeEventListener("mousemove", onMove);
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", resize);
+      window.removeEventListener("wf:warp", onWarpEvent);
       triggers.forEach((b) => b.removeEventListener("click", startWarp));
       backBtn?.removeEventListener("click", endWarp);
       document.body.style.overflow = "";

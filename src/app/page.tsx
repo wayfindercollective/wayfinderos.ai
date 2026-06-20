@@ -1,5 +1,6 @@
 import SpaceScene from "@/components/SpaceScene";
 import ClientFX from "@/components/ClientFX";
+import ApplyForm from "@/components/ApplyForm";
 import { Logo, ToolIcon } from "@/components/Brand";
 import { TOOLS } from "@/lib/tools";
 
@@ -219,7 +220,7 @@ export default function Home() {
                 operators — hands-on migration, direct support, and a voice in
                 shaping the product. Apply and we&apos;ll book a call.
               </p>
-              <button className="btn lg warp-trigger" type="button" style={{ alignSelf: "center" }}>
+              <button className="btn lg apply-open" type="button" style={{ alignSelf: "center" }}>
                 Apply for access →
               </button>
             </div>
@@ -240,6 +241,7 @@ export default function Home() {
         </div>
       </div>
 
+      <ApplyForm />
       <ClientFX />
     </>
   );
