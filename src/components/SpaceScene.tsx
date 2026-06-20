@@ -161,12 +161,20 @@ export default function SpaceScene() {
     }
 
     // arrow (from public/brand/logo.svg), centred on (cx,cy)
-    function arrowPath(c: CanvasRenderingContext2D, cx: number, cy: number, size: number) {
-      // anchor a point that is DEEP INSIDE the solid arrow (not the concave notch) to (cx,cy),
-      // so zooming grows the interior to fill the screen instead of revealing the notch.
+    // ax/ay = which point of the 120-box maps to (cx,cy).
+    //  - display (orb logo): visual centre (60,65) so it sits centred in the orb
+    //  - warp zoom: a point DEEP INSIDE the solid arrow (50,50) so the interior fills the screen
+    function arrowPath(
+      c: CanvasRenderingContext2D,
+      cx: number,
+      cy: number,
+      size: number,
+      ax = 50,
+      ay = 50
+    ) {
       const s = size / 120,
-        ox = cx - 50 * s,
-        oy = cy - 50 * s;
+        ox = cx - ax * s,
+        oy = cy - ay * s;
       c.beginPath();
       ARROW_POINTS.forEach((p, i) => {
         const x = ox + p[0] * s,
@@ -179,7 +187,7 @@ export default function SpaceScene() {
     function strokeArrow(cx: number, cy: number, size: number, alpha: number) {
       if (alpha <= 0.01) return;
       // dark Wayfinder mark filled into the bright orb centre so it's clearly visible
-      arrowPath(ctx, cx, cy, size);
+      arrowPath(ctx, cx, cy, size, 60, 65);
       ctx.fillStyle = `rgba(6,16,24,${alpha})`;
       ctx.fill();
       ctx.lineWidth = Math.max(1.5, size * 0.03) * DPR;
