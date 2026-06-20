@@ -50,13 +50,8 @@ export default function Home() {
             Wayfinder <span className="os">OS</span>
           </span>
         </a>
-        <div className="navlinks">
-          <a href="#platform">Platform</a>
-          <a href="#why">Why Wayfinder</a>
-          <a href="#apply">Apply</a>
-        </div>
         <div className="navcta">
-          <a className="ghost" href="#apply">
+          <a className="ghost" href="https://admin.wayfindercollective.io">
             Sign in
           </a>
           <a className="btn" href="#apply">
@@ -220,7 +215,9 @@ export default function Home() {
                 operators — hands-on migration, direct support, and a voice in
                 shaping the product. Apply and we&apos;ll book a call.
               </p>
-              <button className="btn lg apply-open" type="button" style={{ alignSelf: "center" }}>
+              {/* TEMP: bypass the form while testing the animation — swap back to
+                  className="btn lg apply-open" to re-enable the Apply form. */}
+              <button className="btn lg warp-trigger" type="button" style={{ alignSelf: "center" }}>
                 Apply for access →
               </button>
             </div>

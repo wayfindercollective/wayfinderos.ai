@@ -528,13 +528,17 @@ export default function SpaceScene() {
           }
         }
         const e = zp * zp * zp;
+        // ONE proportional zoom factor for the whole orb+logo composite, so the logo
+        // stays the same size relative to the orb the entire way in. Zmax is large enough
+        // that the logo's interior eventually fills the screen.
+        const Zmax = (maxDim * 18) / warpStartLogo;
+        const Z = 1 + (Zmax - 1) * e;
         wctx.fillStyle = "rgb(4,6,10)";
         wctx.fillRect(0, 0, wW, wH);
-        if (zp < 1) warpOrb(cxx, cyy, warpStartR + maxDim * 2.0 * e, 1 - zp * 0.9);
+        warpOrb(cxx, cyy, warpStartR * Z, 1 - zp * 0.7);
         // hyperspace is ONLY ever visible through the arrow cutout (never leaks outside).
-        // The arrow grows huge so its interior eventually fills the whole screen.
         wctx.save();
-        warpArrow(wctx, cxx, cyy, warpStartLogo + maxDim * 18 * e);
+        warpArrow(wctx, cxx, cyy, warpStartLogo * Z);
         wctx.clip();
         wctx.fillStyle = "rgb(2,3,6)";
         wctx.fillRect(0, 0, wW, wH);
