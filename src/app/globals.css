@@ -217,8 +217,9 @@ h2.title {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 0 5vw;
-  max-width: 760px;
+  /* top padding clears the fixed nav, bottom padding clears the scroll hint */
+  padding: 120px 5vw 120px;
+  max-width: min(92vw, 960px);
 }
 .kicker {
   display: inline-flex;
@@ -255,10 +256,10 @@ h2.title {
 .hero h1 {
   font-family: var(--font-display), sans-serif;
   font-weight: 600;
-  font-size: clamp(46px, 7.4vw, 98px);
-  line-height: 0.97;
-  letter-spacing: -2px;
-  margin: 0 0 28px;
+  font-size: clamp(40px, 5.6vw, 76px);
+  line-height: 1;
+  letter-spacing: -1.5px;
+  margin: 0 0 26px;
 }
 .hero .sub {
   font-size: clamp(17px, 1.5vw, 21px);

@@ -162,9 +162,11 @@ export default function SpaceScene() {
 
     // arrow (from public/brand/logo.svg), centred on (cx,cy)
     function arrowPath(c: CanvasRenderingContext2D, cx: number, cy: number, size: number) {
+      // anchor a point that is DEEP INSIDE the solid arrow (not the concave notch) to (cx,cy),
+      // so zooming grows the interior to fill the screen instead of revealing the notch.
       const s = size / 120,
-        ox = cx - 60 * s,
-        oy = cy - 65 * s;
+        ox = cx - 50 * s,
+        oy = cy - 50 * s;
       c.beginPath();
       ARROW_POINTS.forEach((p, i) => {
         const x = ox + p[0] * s,
@@ -176,14 +178,13 @@ export default function SpaceScene() {
     }
     function strokeArrow(cx: number, cy: number, size: number, alpha: number) {
       if (alpha <= 0.01) return;
+      // dark outline of the Wayfinder mark — reads against the bright orb centre
       arrowPath(ctx, cx, cy, size);
-      ctx.strokeStyle = `rgba(240,250,255,${alpha})`;
-      ctx.lineWidth = Math.max(1.5, size * 0.05) * DPR;
+      ctx.strokeStyle = `rgba(6,16,24,${alpha})`;
+      ctx.lineWidth = Math.max(2, size * 0.07) * DPR;
+      ctx.lineCap = "round";
       ctx.lineJoin = "round";
-      ctx.shadowBlur = 16 * DPR;
-      ctx.shadowColor = `rgba(34,211,238,${alpha})`;
       ctx.stroke();
-      ctx.shadowBlur = 0;
     }
 
     /* ---------------- the main scene ---------------- */
@@ -521,8 +522,10 @@ export default function SpaceScene() {
         wctx.fillStyle = "rgb(4,6,10)";
         wctx.fillRect(0, 0, wW, wH);
         if (zp < 1) warpOrb(cxx, cyy, warpStartR + maxDim * 2.0 * e, 1 - zp * 0.9);
+        // hyperspace is ONLY ever visible through the arrow cutout (never leaks outside).
+        // The arrow grows huge so its interior eventually fills the whole screen.
         wctx.save();
-        warpArrow(wctx, cxx, cyy, warpStartLogo + maxDim * 2.6 * e);
+        warpArrow(wctx, cxx, cyy, warpStartLogo + maxDim * 18 * e);
         wctx.clip();
         wctx.fillStyle = "rgb(2,3,6)";
         wctx.fillRect(0, 0, wW, wH);
