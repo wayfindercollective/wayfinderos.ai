@@ -147,6 +147,25 @@ export const COACHING_POINTS = [
   { t: "Live sales leaderboards", d: "Leaderboards, speed-to-lead rankings and a live office view that keep reps moving.", svg: '<path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/>' },
 ];
 
+// The hero constellation set — the ten that orbit the core ("ten tools, one core").
+const _t = Object.fromEntries(TOOLS.map((x) => [x.key, x.svg]));
+const _e = Object.fromEntries(EXTRAS.map((x) => [x.key, x.svg]));
+export const ORBIT: { label: string; svg: string }[] = [
+  { label: "CRM", svg: _t.crm },
+  { label: "Payments", svg: _t.payments },
+  { label: "Dialer", svg: _t.dialer },
+  { label: "Inbox", svg: _t.inbox },
+  { label: "Email", svg: _t.email },
+  { label: "Booking", svg: _t.booking },
+  { label: "Website", svg: _t.website },
+  { label: "Commissions", svg: _t.commissions },
+  { label: "Automations", svg: _e.automations },
+  {
+    label: "AI",
+    svg: '<path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .962 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.962 0z"/><path d="M20 3v4"/><path d="M22 5h-4"/><path d="M4 17v2"/><path d="M5 18H3"/>',
+  },
+];
+
 // The Wayfinder arrow mark, as polyline points in a 120x120 box (from public/brand/logo.svg).
 export const ARROW_POINTS: [number, number][] = [
   [25, 95],

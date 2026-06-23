@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { TOOLS, ARROW_POINTS } from "@/lib/tools";
+import { ORBIT, ARROW_POINTS } from "@/lib/tools";
 
 export default function SpaceScene() {
   const sceneRef = useRef<HTMLCanvasElement>(null);
@@ -52,11 +52,7 @@ export default function SpaceScene() {
       imgC: HTMLImageElement;
       imgR: HTMLImageElement;
       angle: number;
-      radius: number;
-      speed: number;
-      tilt: number;
       phase: number;
-      bob: number;
       w1: number;
       w2: number;
       w3: number;
@@ -67,16 +63,18 @@ export default function SpaceScene() {
       py: number;
     };
 
-    const nodes: Node[] = TOOLS.map((t, i) => ({
+    // Uniform orbit: equal angular spacing, one shared radius/tilt/speed -> steady,
+    // evenly-spaced motion that never bunches up.
+    const N = ORBIT.length;
+    const ORBIT_R = 0.345; // fraction of min(W,H)
+    const ORBIT_TILT = 0.5;
+    const ORBIT_SPEED = 0.00009;
+    const nodes: Node[] = ORBIT.map((t, i) => ({
       label: t.label,
       imgC: iconImg(t.svg, "#bfeefb"),
       imgR: iconImg(t.svg, "#ff8a72"),
-      angle: (i / TOOLS.length) * Math.PI * 2,
-      radius: 0.3 + (i % 3) * 0.022,
-      speed: 0.00006 + (i % 4) * 0.000013,
-      tilt: 0.5 + (i % 5) * 0.045,
+      angle: (i / N) * Math.PI * 2,
       phase: i * 0.7,
-      bob: 0.5 + (i % 3) * 0.25,
       w1: 0.6 + (i % 3) * 0.5,
       w2: 0.8 + (i % 4) * 0.4,
       w3: 0.7 + (i % 5) * 0.3,
@@ -264,11 +262,11 @@ export default function SpaceScene() {
 
       const wcx = W * 0.74,
         wcy = H * 0.44;
+      const r = ORBIT_R * minD;
       for (const n of nodes) {
-        n.angle += n.speed * dt * (1 + warn * 1.5);
-        const r = n.radius * minD;
+        n.angle += ORBIT_SPEED * dt * (1 + warn * 1.5);
         const ox = cx + Math.cos(n.angle) * r,
-          oy = cy + Math.sin(n.angle) * r * n.tilt;
+          oy = cy + Math.sin(n.angle) * r * ORBIT_TILT;
         const chx =
           wcx +
           Math.sin(now * 0.0012 * n.w1 + n.phase) * 0.14 * minD +
@@ -401,11 +399,18 @@ export default function SpaceScene() {
           ctx.drawImage(n.imgR, n.px - isz / 2, n.py - isz / 2, isz, isz);
         }
         ctx.globalAlpha = 1;
+        // label fanned radially OUTWARD from the core so labels never stack/overlap
         ctx.font = `600 ${11 * DPR * sc}px "Space Grotesk", ui-sans-serif, sans-serif`;
         ctx.fillStyle = rgba([230, 240, 248], vis * 0.9);
-        ctx.fillText(n.label, n.px, n.py + r + 11 * DPR * sc);
+        const dx = n.px - cx,
+          dy = n.py - cy,
+          len = Math.hypot(dx, dy) || 1,
+          off = r + 12 * DPR;
+        ctx.textAlign = dx >= 0 ? "left" : "right";
+        ctx.fillText(n.label, n.px + (dx / len) * off, n.py + (dy / len) * off);
       }
       ctx.textAlign = "left";
+      ctx.textBaseline = "alphabetic";
 
       raf = requestAnimationFrame(frame);
     }
