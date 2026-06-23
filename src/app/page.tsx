@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import SpaceScene from "@/components/SpaceScene";
 import ClientFX from "@/components/ClientFX";
 import ApplyForm from "@/components/ApplyForm";
@@ -80,7 +81,7 @@ const faqs = [
   },
   {
     q: "Is this really built for coaching, or just rebranded sales software?",
-    a: "Built for coaching. Capture coach debriefs straight from Slack, confirm them to the right student in one click, and track bootcamp and program history per customer. That feeds an AI upsell brief before every renewal conversation — so your team always knows where a student is in their journey.",
+    a: "Built for coaching. The data model is the coaching relationship, not an agency sub-account: track students through cohorts and program history per customer, and let AI surface where each one is in their journey before every renewal conversation.",
   },
   {
     q: "Does it track commissions automatically?",
@@ -389,13 +390,23 @@ export default function Home() {
                 Migrations are tooling-driven, run in parallel, and reversible
                 until you&apos;re ready. No rushed cutover, no lost data.
               </p>
-              <div className="steps">
+              <div className="steps seq">
                 {steps.map((s, i) => (
-                  <div key={s.h} className={`step rv d${i + 1}`}>
-                    <div className="n">{i + 1}</div>
-                    <h4>{s.h}</h4>
-                    <p>{s.p}</p>
-                  </div>
+                  <Fragment key={s.h}>
+                    {i > 0 && (
+                      <div className="arrow" aria-hidden="true">
+                        <svg viewBox="0 0 56 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M4 12h40" />
+                          <path d="m38 6 8 6-8 6" />
+                        </svg>
+                      </div>
+                    )}
+                    <div className="step">
+                      <div className="n">{i + 1}</div>
+                      <h4>{s.h}</h4>
+                      <p>{s.p}</p>
+                    </div>
+                  </Fragment>
                 ))}
               </div>
             </div>

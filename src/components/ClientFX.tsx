@@ -23,6 +23,19 @@ export default function ClientFX() {
     );
     document.querySelectorAll(".rv").forEach((el) => io.observe(el));
 
+    // sequential reveal (migration steps: step -> arrow -> step -> arrow -> step)
+    const seqIo = new IntersectionObserver(
+      (es) =>
+        es.forEach((e) => {
+          if (e.isIntersecting) {
+            e.target.classList.add("in");
+            seqIo.unobserve(e.target);
+          }
+        }),
+      { threshold: 0.35 }
+    );
+    document.querySelectorAll(".seq").forEach((el) => seqIo.observe(el));
+
     // count-up stats
     const cio = new IntersectionObserver(
       (es) =>
@@ -81,6 +94,7 @@ export default function ClientFX() {
     return () => {
       window.removeEventListener("scroll", onScroll);
       io.disconnect();
+      seqIo.disconnect();
       cio.disconnect();
       spots.forEach(({ c, handler }) => c.removeEventListener("mousemove", handler));
       mags.forEach(({ b, move, leave }) => {

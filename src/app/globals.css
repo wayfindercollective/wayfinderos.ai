@@ -558,10 +558,58 @@ h2.title {
 
 /* ---------- migration steps ---------- */
 .steps {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 18px;
+  display: flex;
+  align-items: stretch;
   margin-top: 50px;
+}
+.steps .step {
+  flex: 1;
+}
+.steps .arrow {
+  flex: 0 0 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--cyan);
+  padding: 0 6px;
+}
+.steps .arrow svg {
+  width: 100%;
+  height: 26px;
+  filter: drop-shadow(0 0 8px rgba(34, 211, 238, 0.5));
+}
+/* sequential reveal: step -> arrow draws right -> step -> arrow -> step */
+.steps.seq .step,
+.steps.seq .arrow {
+  opacity: 0;
+  transition: opacity 0.4s ease, transform 0.45s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.steps.seq .step {
+  transform: translateY(14px);
+}
+.steps.seq .arrow {
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+.steps.seq.in .step,
+.steps.seq.in .arrow {
+  opacity: 1;
+  transform: none;
+}
+.steps.seq.in > :nth-child(1) {
+  transition-delay: 0.05s;
+}
+.steps.seq.in > :nth-child(2) {
+  transition-delay: 0.28s;
+}
+.steps.seq.in > :nth-child(3) {
+  transition-delay: 0.42s;
+}
+.steps.seq.in > :nth-child(4) {
+  transition-delay: 0.65s;
+}
+.steps.seq.in > :nth-child(5) {
+  transition-delay: 0.79s;
 }
 .step {
   padding: 30px;
@@ -957,10 +1005,16 @@ footer.site {
   }
   .compare,
   .bento,
-  .steps,
   .points,
   .points.two {
     grid-template-columns: 1fr;
+  }
+  .steps {
+    flex-direction: column;
+    gap: 14px;
+  }
+  .steps .arrow {
+    display: none;
   }
   .navlinks {
     display: none;
@@ -981,5 +1035,11 @@ footer.site {
   .scrollhint .mouse::after,
   .apply {
     animation: none;
+  }
+  .steps.seq .step,
+  .steps.seq .arrow {
+    opacity: 1;
+    transform: none;
+    transition: none;
   }
 }
