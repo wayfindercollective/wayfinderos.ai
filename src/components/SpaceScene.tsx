@@ -399,14 +399,15 @@ export default function SpaceScene() {
           ctx.drawImage(n.imgR, n.px - isz / 2, n.py - isz / 2, isz, isz);
         }
         ctx.globalAlpha = 1;
-        // label fanned radially OUTWARD from the core so labels never stack/overlap
-        ctx.font = `600 ${11 * DPR * sc}px "Space Grotesk", ui-sans-serif, sans-serif`;
+        // uniform-size labels, always centre-aligned and pushed radially outward from the
+        // core — no left/right flip as a node crosses the vertical axis.
+        ctx.font = `600 ${11.5 * DPR}px "Space Grotesk", ui-sans-serif, sans-serif`;
         ctx.fillStyle = rgba([230, 240, 248], vis * 0.9);
+        ctx.textAlign = "center";
         const dx = n.px - cx,
           dy = n.py - cy,
           len = Math.hypot(dx, dy) || 1,
-          off = r + 12 * DPR;
-        ctx.textAlign = dx >= 0 ? "left" : "right";
+          off = r + 22 * DPR;
         ctx.fillText(n.label, n.px + (dx / len) * off, n.py + (dy / len) * off);
       }
       ctx.textAlign = "left";
