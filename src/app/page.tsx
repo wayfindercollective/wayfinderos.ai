@@ -14,6 +14,24 @@ const problems = [
   "Commission spreadsheet",
 ];
 
+const featured = TOOLS.slice(0, 2);
+const rest = TOOLS.slice(2);
+const featuredDesc: Record<string, string> = {
+  crm: "Every deal, stage and contact in one pipeline — wired live to payments, bookings and commissions. Bulk-action a hundred records and the dashboards update instantly.",
+  payments: "Stripe and QuickBooks, native. Saved cards, subscriptions, and payment plans that chase failed charges for you. Revenue reconciles itself.",
+};
+const featuredTags: Record<string, string[]> = {
+  crm: ["Pipelines", "Deal stages", "Bulk actions", "Live analytics"],
+  payments: ["Stripe", "QuickBooks", "Subscriptions", "Payment plans", "Auto-dunning"],
+};
+
+const stats = [
+  { to: 10, suffix: "+", lbl: "tools replaced" },
+  { to: 20, suffix: "%", lbl: "saved on stack cost" },
+  { to: 1, suffix: "", lbl: "source of truth" },
+  { to: 0, suffix: "", lbl: "integrations to babysit" },
+];
+
 const settle = [
   "Commissions tracked in spreadsheets",
   "5+ tools duct-taped together",
@@ -30,11 +48,46 @@ const wayfinder = [
   "Dashboards you can actually trust",
 ];
 
-const stats = [
-  { to: 10, suffix: "+", lbl: "tools replaced" },
-  { to: 20, suffix: "%", lbl: "saved on stack cost" },
-  { to: 1, suffix: "", lbl: "source of truth" },
-  { to: 0, suffix: "", lbl: "integrations to babysit" },
+const steps = [
+  {
+    h: "We map your stack",
+    p: "GoHighLevel, Intercom, CRM exports — imported with dedicated tooling, not copy-paste.",
+  },
+  {
+    h: "We run in parallel",
+    p: "Your existing tools stay live, at no extra cost, until every record is migrated and verified.",
+  },
+  {
+    h: "You go live",
+    p: "One login, zero data loss, no rushed cutover. Switch the moment you trust it.",
+  },
+];
+
+const faqs = [
+  {
+    q: "What does it cost?",
+    a: "Pricing is custom to your setup. Most companies save at least 20% versus stacking GoHighLevel Elite and the tools around it.",
+  },
+  {
+    q: "How does the migration work?",
+    a: "We run your existing systems in parallel at no extra cost until your data is fully migrated and verified. Dedicated import tools for GoHighLevel, Intercom and bulk CRM data — no downtime, no risk.",
+  },
+  {
+    q: "Does it track commissions automatically?",
+    a: "Yes — tiered structures, brackets and per-order allocation. Coaches move up tiers automatically and commissions recalculate across your whole team.",
+  },
+  {
+    q: "Is there a dialer?",
+    a: "Yes — call recording, transcription, SMS and number porting, plus AI voice campaigns that dial and qualify leads. Works on desktop and mobile.",
+  },
+  {
+    q: "Can each coach have their own dashboard?",
+    a: "Yes. Multi-coach isolation from day one — each coach sees only their own customers, orders and commissions. No data leaks between team members.",
+  },
+  {
+    q: "Do I get real financial reporting?",
+    a: "Full P&L with monthly views and forward projections, sales attribution, expense matching and margin analysis — reporting your accountant will recognise.",
+  },
 ];
 
 export default function Home() {
@@ -134,8 +187,26 @@ export default function Home() {
                 Each module is native — not an integration, not a bolt-on. They
                 share the same data the instant it changes.
               </p>
+              <div className="bento">
+                {featured.map((t, i) => (
+                  <div key={t.key} className={`feature rv d${i + 1}`}>
+                    <div className="ico">
+                      <ToolIcon svg={t.svg} size={26} />
+                    </div>
+                    <h3>{t.title}</h3>
+                    <p>{featuredDesc[t.key]}</p>
+                    <div className="tags">
+                      {featuredTags[t.key].map((tag) => (
+                        <span className="tag" key={tag}>
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
               <div className="grid">
-                {TOOLS.map((t, i) => (
+                {rest.map((t, i) => (
                   <div key={t.key} className={`card rv d${(i % 3) + 1}`}>
                     <div className="ico">
                       <ToolIcon svg={t.svg} />
@@ -161,6 +232,29 @@ export default function Home() {
                   </div>
                 ))}
               </div>
+            </div>
+          </section>
+
+          {/* STORY */}
+          <section id="story">
+            <div className="center story">
+              <div className="eyebrow rv">Why we built it</div>
+              <h2 className="title rv d1">
+                Built by operators who
+                <br />
+                <span className="grad">refused to settle.</span>
+              </h2>
+              <p className="lead rv d2" style={{ margin: "0 auto" }}>
+                We ran a coaching company on five disconnected tools and
+                commission spreadsheets we didn&apos;t trust. So we built the
+                system we wished existed — then opened it to a handful of
+                companies like yours.
+              </p>
+              <p className="quote rv d2">
+                &ldquo;If your software can&apos;t tell you the truth about your
+                business, it&apos;s costing you more than its price.&rdquo;
+                <span className="by">— The Wayfinder team</span>
+              </p>
             </div>
           </section>
 
@@ -197,6 +291,43 @@ export default function Home() {
                     ))}
                   </ul>
                 </div>
+              </div>
+            </div>
+          </section>
+
+          {/* MIGRATION */}
+          <section id="migration">
+            <div className="center">
+              <div className="eyebrow rv">The switch</div>
+              <h2 className="title rv d1">Switch without the downtime.</h2>
+              <p className="lead rv d2">
+                Migrations are tooling-driven, run in parallel, and reversible
+                until you&apos;re ready. No rushed cutover, no lost data.
+              </p>
+              <div className="steps">
+                {steps.map((s, i) => (
+                  <div key={s.h} className={`step rv d${i + 1}`}>
+                    <div className="n">{i + 1}</div>
+                    <h4>{s.h}</h4>
+                    <p>{s.p}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          {/* FAQ */}
+          <section id="faq">
+            <div className="center">
+              <div className="eyebrow rv">Questions</div>
+              <h2 className="title rv d1">Everything you&apos;re about to ask.</h2>
+              <div className="faq">
+                {faqs.map((f) => (
+                  <details key={f.q} className="rv">
+                    <summary>{f.q}</summary>
+                    <p>{f.a}</p>
+                  </details>
+                ))}
               </div>
             </div>
           </section>

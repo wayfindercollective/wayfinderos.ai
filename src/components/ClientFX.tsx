@@ -45,8 +45,8 @@ export default function ClientFX() {
     );
     document.querySelectorAll<HTMLElement>("[data-to]").forEach((el) => cio.observe(el));
 
-    // card cursor spotlight
-    const cards = Array.from(document.querySelectorAll<HTMLElement>(".card"));
+    // card + feature cursor spotlight
+    const cards = Array.from(document.querySelectorAll<HTMLElement>(".card, .feature"));
     const spots = cards.map((c) => {
       const handler = (e: MouseEvent) => {
         const r = c.getBoundingClientRect();
@@ -57,11 +57,36 @@ export default function ClientFX() {
       return { c, handler };
     });
 
+    // magnetic CTA buttons (fine pointer + motion allowed)
+    const fine =
+      window.matchMedia("(pointer:fine)").matches &&
+      !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const mags = fine
+      ? Array.from(document.querySelectorAll<HTMLElement>(".btn")).map((b) => {
+          const move = (e: MouseEvent) => {
+            const r = b.getBoundingClientRect();
+            const mx = e.clientX - (r.left + r.width / 2);
+            const my = e.clientY - (r.top + r.height / 2);
+            b.style.transform = `translate(${mx * 0.18}px, ${my * 0.3}px)`;
+          };
+          const leave = () => {
+            b.style.transform = "";
+          };
+          b.addEventListener("mousemove", move);
+          b.addEventListener("mouseleave", leave);
+          return { b, move, leave };
+        })
+      : [];
+
     return () => {
       window.removeEventListener("scroll", onScroll);
       io.disconnect();
       cio.disconnect();
       spots.forEach(({ c, handler }) => c.removeEventListener("mousemove", handler));
+      mags.forEach(({ b, move, leave }) => {
+        b.removeEventListener("mousemove", move);
+        b.removeEventListener("mouseleave", leave);
+      });
     };
   }, []);
 
