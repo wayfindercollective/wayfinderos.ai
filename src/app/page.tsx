@@ -403,6 +403,24 @@ export default function Home() {
             </div>
           </section>
 
+          {/* TESTIMONIALS */}
+          <section id="testimonials">
+            <div className="center">
+              <div className="eyebrow rv">What operators say</div>
+              <h2 className="title rv d1">Trusted by coaching companies.</h2>
+              <div className="testimonials">
+                {testimonials.map((t, i) => (
+                  <figure key={t.quote} className={`tcard rv d${(i % 3) + 1}`}>
+                    <blockquote>{t.quote}</blockquote>
+                    <figcaption>
+                      — {t.name}, <span className="co">{t.company}</span>
+                    </figcaption>
+                  </figure>
+                ))}
+              </div>
+            </div>
+          </section>
+
           {/* MIGRATION */}
           <section id="migration">
             <div className="center">
@@ -434,40 +452,6 @@ export default function Home() {
             </div>
           </section>
 
-          {/* FAQ */}
-          <section id="faq">
-            <div className="center">
-              <div className="eyebrow rv">Questions</div>
-              <h2 className="title rv d1">Everything you&apos;re about to ask.</h2>
-              <div className="faq">
-                {faqs.map((f) => (
-                  <details key={f.q} className="rv">
-                    <summary>{f.q}</summary>
-                    <p>{f.a}</p>
-                  </details>
-                ))}
-              </div>
-            </div>
-          </section>
-
-          {/* TESTIMONIALS */}
-          <section id="testimonials">
-            <div className="center">
-              <div className="eyebrow rv">What operators say</div>
-              <h2 className="title rv d1">Trusted by coaching companies.</h2>
-              <div className="testimonials">
-                {testimonials.map((t, i) => (
-                  <figure key={t.quote} className={`tcard rv d${(i % 3) + 1}`}>
-                    <blockquote>{t.quote}</blockquote>
-                    <figcaption>
-                      — {t.name}, <span className="co">{t.company}</span>
-                    </figcaption>
-                  </figure>
-                ))}
-              </div>
-            </div>
-          </section>
-
           {/* APPLY */}
           <section id="apply">
             <div className="apply rv">
@@ -487,6 +471,22 @@ export default function Home() {
               <button className="btn lg warp-trigger" type="button" style={{ alignSelf: "center" }}>
                 Apply for access →
               </button>
+            </div>
+          </section>
+
+          {/* FAQ */}
+          <section id="faq">
+            <div className="center">
+              <div className="eyebrow rv">Questions</div>
+              <h2 className="title rv d1">Everything you&apos;re about to ask.</h2>
+              <div className="faq">
+                {faqs.map((f) => (
+                  <details key={f.q} className="rv">
+                    <summary>{f.q}</summary>
+                    <p>{f.a}</p>
+                  </details>
+                ))}
+              </div>
             </div>
           </section>
 
