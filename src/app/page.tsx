@@ -17,7 +17,7 @@ const problems = [
 const ex = Object.fromEntries(EXTRAS.map((m) => [m.key, m]));
 // Automations + Analytics get the spotlight; the core tools + the rest fill the grid.
 const featured = [ex.automations, ex.reporting];
-const rest = [...TOOLS, ex.team, ex.contracts, ex.portal, ex.products, ex.compliance];
+const rest = [...TOOLS, ex.team, ex.portal, ex.products, ex.compliance];
 const featuredDesc: Record<string, string> = {
   automations: ex.automations.desc,
   reporting: ex.reporting.desc,
@@ -71,32 +71,48 @@ const faqs = [
     a: "Pricing is custom to your setup. Most companies save at least 20% versus stacking GoHighLevel Elite and the tools around it.",
   },
   {
-    q: "How does the migration work?",
-    a: "We run your existing systems in parallel at no extra cost until your data is fully migrated and verified. Dedicated import tools for GoHighLevel, Intercom and bulk CRM data — no downtime, no risk.",
+    q: "Can I automate follow-up across email, SMS and calls?",
+    a: "Yes. Build workflows that trigger on anything — a new lead, a deal moving stage, an inbound message, a booking — then fire emails, texts, AI calls, deal updates or follow-up tasks in sequence. Quiet hours, frequency caps and consent rules are enforced automatically, so nothing fires at 2am or to someone who opted out.",
+  },
+  {
+    q: "How much of this is actually AI?",
+    a: "More than the dialer. AI scores every lead from forms, calls and webchat; drafts emails in each coach's voice; transcribes and summarises every call with objections and a coaching scorecard; builds buyer personas; and generates upsell briefs from a customer's history. It works in the background — you don't prompt it.",
+  },
+  {
+    q: "Is this really built for coaching, or just rebranded sales software?",
+    a: "Built for coaching. Capture coach debriefs straight from Slack, confirm them to the right student in one click, and track bootcamp and program history per customer. That feeds an AI upsell brief before every renewal conversation — so your team always knows where a student is in their journey.",
   },
   {
     q: "Does it track commissions automatically?",
     a: "Yes — tiered structures, brackets and per-order allocation. Coaches move up tiers automatically and commissions recalculate across your whole team.",
   },
   {
-    q: "Is there a dialer?",
-    a: "Yes — call recording, transcription, SMS and number porting, plus AI voice campaigns that dial and qualify leads. Works on desktop and mobile.",
+    q: "Can I see what my sales team is actually doing?",
+    a: "In real time. A live activity dashboard shows calls, meetings, talk time and speed-to-lead per rep, with leaderboards and a live “office” view. Each coach still only sees their own customers and commissions — managers see everything.",
   },
   {
-    q: "Can each coach have their own dashboard?",
-    a: "Yes. Multi-coach isolation from day one — each coach sees only their own customers, orders and commissions. No data leaks between team members.",
+    q: "Can my customers manage their own payments?",
+    a: "Yes — a self-service portal lets customers view orders, see upcoming payments and pay or update a card without emailing your team. Fewer “can you resend my invoice” tickets.",
   },
   {
-    q: "Do I get real financial reporting?",
-    a: "Full P&L with monthly views and forward projections, sales attribution, expense matching and margin analysis — fed by a live bank-feed so it's reporting your accountant will recognise.",
+    q: "Will this keep my outbound dialing compliant?",
+    a: "Yes. Built-in TCPA handling, do-not-call lists, SMS consent tracking and automatic STOP-keyword opt-outs. For healthcare or medical-adjacent practices, there's a HIPAA mode with encrypted records and access auditing.",
   },
   {
-    q: "Do you have native apps?",
-    a: "Yes — a native iOS and Android dialer (with CallKit) and a desktop app, alongside the responsive web app. Your team can dial and manage deals from anywhere.",
+    q: "Is there a mobile app?",
+    a: "Yes — a native iOS and Android dialer with proper call handling, plus a desktop app and an installable web app. Your reps can dial, text and check the pipeline from anywhere.",
   },
   {
-    q: "Is outbound compliant?",
-    a: "Built-in TCPA and DNC handling, SMS consent and STOP-keyword management, plus a HIPAA / PHI mode for medical. We keep your dialer legal.",
+    q: "Do I have to give up my accounting workflow?",
+    a: "No. Live bank-feed sync (Mercury / Plaid) auto-matches expenses, QuickBooks stays in sync, and payments reconcile themselves — so your P&L is real, not a month-end reconstruction.",
+  },
+  {
+    q: "How does the migration work?",
+    a: "We run your existing systems in parallel at no extra cost until your data is fully migrated and verified. Dedicated import tools for GoHighLevel, Intercom and bulk CRM data — no downtime, no risk.",
+  },
+  {
+    q: "What happens to my data if I leave?",
+    a: "It's yours. Export contacts, deals, orders and financials at any time. We run your old tools in parallel during migration and stay reversible until you trust the switch — and the door out is just as open as the door in.",
   },
 ];
 
