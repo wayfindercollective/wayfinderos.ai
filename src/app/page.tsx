@@ -66,6 +66,28 @@ const steps = [
   },
 ];
 
+// TODO: replace these placeholders with real customer quotes as they come in.
+const testimonials = [
+  {
+    quote:
+      "We killed five subscriptions in our first month and finally trust our commission numbers.",
+    name: "Placeholder Name",
+    company: "Placeholder Coaching Co.",
+  },
+  {
+    quote:
+      "The migration ran in parallel with our old stack — we switched the day we trusted it, with zero data loss.",
+    name: "Placeholder Name",
+    company: "Placeholder Coaching Co.",
+  },
+  {
+    quote:
+      "One login for the whole team. My coaches see their own pipeline, I see everything.",
+    name: "Placeholder Name",
+    company: "Placeholder Coaching Co.",
+  },
+];
+
 const faqs = [
   {
     q: "What does it cost?",
@@ -423,6 +445,24 @@ export default function Home() {
                     <summary>{f.q}</summary>
                     <p>{f.a}</p>
                   </details>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          {/* TESTIMONIALS */}
+          <section id="testimonials">
+            <div className="center">
+              <div className="eyebrow rv">What operators say</div>
+              <h2 className="title rv d1">Trusted by coaching companies.</h2>
+              <div className="testimonials">
+                {testimonials.map((t, i) => (
+                  <figure key={t.quote} className={`tcard rv d${(i % 3) + 1}`}>
+                    <blockquote>{t.quote}</blockquote>
+                    <figcaption>
+                      — {t.name}, <span className="co">{t.company}</span>
+                    </figcaption>
+                  </figure>
                 ))}
               </div>
             </div>
