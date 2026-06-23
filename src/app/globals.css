@@ -516,6 +516,46 @@ h2.title {
   margin-top: 18px;
 }
 
+/* ---------- AI / coaching point lists ---------- */
+.points {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px 30px;
+  margin-top: 46px;
+}
+.points.two {
+  grid-template-columns: repeat(2, 1fr);
+  max-width: 900px;
+}
+.point {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+.point .pi {
+  flex: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 11px;
+  display: grid;
+  place-items: center;
+  background: rgba(34, 211, 238, 0.12);
+  border: 1px solid rgba(34, 211, 238, 0.28);
+  color: var(--cyan);
+}
+.point h4 {
+  font-family: var(--font-display), sans-serif;
+  font-weight: 600;
+  font-size: 15.5px;
+  margin: 0 0 5px;
+}
+.point p {
+  font-size: 13.5px;
+  color: var(--muted);
+  line-height: 1.55;
+  margin: 0;
+}
+
 /* ---------- migration steps ---------- */
 .steps {
   display: grid;
@@ -917,7 +957,9 @@ footer.site {
   }
   .compare,
   .bento,
-  .steps {
+  .steps,
+  .points,
+  .points.two {
     grid-template-columns: 1fr;
   }
   .navlinks {

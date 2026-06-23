@@ -2,7 +2,7 @@ import SpaceScene from "@/components/SpaceScene";
 import ClientFX from "@/components/ClientFX";
 import ApplyForm from "@/components/ApplyForm";
 import { Logo, ToolIcon } from "@/components/Brand";
-import { TOOLS } from "@/lib/tools";
+import { TOOLS, EXTRAS, AI_POINTS, COACHING_POINTS } from "@/lib/tools";
 
 const problems = [
   "GoHighLevel",
@@ -14,19 +14,21 @@ const problems = [
   "Commission spreadsheet",
 ];
 
-const featured = TOOLS.slice(0, 2);
-const rest = TOOLS.slice(2);
+const ex = Object.fromEntries(EXTRAS.map((m) => [m.key, m]));
+// Automations + Analytics get the spotlight; the core tools + the rest fill the grid.
+const featured = [ex.automations, ex.reporting];
+const rest = [...TOOLS, ex.team, ex.contracts, ex.portal, ex.products, ex.compliance];
 const featuredDesc: Record<string, string> = {
-  crm: "Every deal, stage and contact in one pipeline — wired live to payments, bookings and commissions. Bulk-action a hundred records and the dashboards update instantly.",
-  payments: "Stripe and QuickBooks, native. Saved cards, subscriptions, and payment plans that chase failed charges for you. Revenue reconciles itself.",
+  automations: ex.automations.desc,
+  reporting: ex.reporting.desc,
 };
 const featuredTags: Record<string, string[]> = {
-  crm: ["Pipelines", "Deal stages", "Bulk actions", "Live analytics"],
-  payments: ["Stripe", "QuickBooks", "Subscriptions", "Payment plans", "Auto-dunning"],
+  automations: ["Multi-trigger", "Wait-for-reply", "Quiet hours", "Frequency caps"],
+  reporting: ["P&L + projections", "Attribution", "Bank-feed sync", "Whale tracking"],
 };
 
 const stats = [
-  { to: 10, suffix: "+", lbl: "tools replaced" },
+  { to: 15, suffix: "+", lbl: "tools replaced" },
   { to: 20, suffix: "%", lbl: "saved on stack cost" },
   { to: 1, suffix: "", lbl: "source of truth" },
   { to: 0, suffix: "", lbl: "integrations to babysit" },
@@ -86,7 +88,15 @@ const faqs = [
   },
   {
     q: "Do I get real financial reporting?",
-    a: "Full P&L with monthly views and forward projections, sales attribution, expense matching and margin analysis — reporting your accountant will recognise.",
+    a: "Full P&L with monthly views and forward projections, sales attribution, expense matching and margin analysis — fed by a live bank-feed so it's reporting your accountant will recognise.",
+  },
+  {
+    q: "Do you have native apps?",
+    a: "Yes — a native iOS and Android dialer (with CallKit) and a desktop app, alongside the responsive web app. Your team can dial and manage deals from anywhere.",
+  },
+  {
+    q: "Is outbound compliant?",
+    a: "Built-in TCPA and DNC handling, SMS consent and STOP-keyword management, plus a HIPAA / PHI mode for medical. We keep your dialer legal.",
   },
 ];
 
@@ -219,6 +229,36 @@ export default function Home() {
             </div>
           </section>
 
+          {/* AI */}
+          <section id="ai">
+            <div className="center">
+              <div className="eyebrow rv">AI-native</div>
+              <h2 className="title rv d1">
+                An AI layer across
+                <br />
+                <span className="grad">everything you do.</span>
+              </h2>
+              <p className="lead rv d2">
+                Not a chatbot bolted on. Intelligence wired through every module
+                — drafting, scoring, summarising and selling, in each
+                coach&apos;s voice.
+              </p>
+              <div className="points">
+                {AI_POINTS.map((p, i) => (
+                  <div key={p.t} className={`point rv d${(i % 3) + 1}`}>
+                    <div className="pi">
+                      <ToolIcon svg={p.svg} size={19} />
+                    </div>
+                    <div>
+                      <h4>{p.t}</h4>
+                      <p>{p.d}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+
           {/* STATS */}
           <section>
             <div className="center">
@@ -291,6 +331,35 @@ export default function Home() {
                     ))}
                   </ul>
                 </div>
+              </div>
+            </div>
+          </section>
+
+          {/* BUILT FOR COACHING */}
+          <section id="coaching">
+            <div className="center">
+              <div className="eyebrow rv">Built for coaching, not agencies</div>
+              <h2 className="title rv d1">
+                The features GoHighLevel
+                <br />
+                <span className="grad">will never build.</span>
+              </h2>
+              <p className="lead rv d2">
+                Generic CRMs make you bend your coaching business around them.
+                These are the things only a system built for coaching can do.
+              </p>
+              <div className="points two">
+                {COACHING_POINTS.map((p, i) => (
+                  <div key={p.t} className={`point rv d${(i % 2) + 1}`}>
+                    <div className="pi">
+                      <ToolIcon svg={p.svg} size={19} />
+                    </div>
+                    <div>
+                      <h4>{p.t}</h4>
+                      <p>{p.d}</p>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           </section>

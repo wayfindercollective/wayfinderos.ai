@@ -83,6 +83,77 @@ export const TOOLS: Tool[] = [
   },
 ];
 
+// Additional platform modules shown in the grid/bento (beyond the orbiting core tools).
+export const EXTRAS: Tool[] = [
+  {
+    key: "automations",
+    label: "Automations",
+    title: "Automations",
+    desc: "If-this-then-that across your whole stack. Trigger on new leads, deal-stage changes, inbound messages or calendar events — then email, text, AI-call, update deals, or wait for a reply.",
+    svg: '<rect width="8" height="8" x="3" y="3" rx="2"/><path d="M7 11v4a2 2 0 0 0 2 2h4"/><rect width="8" height="8" x="13" y="13" rx="2"/>',
+  },
+  {
+    key: "reporting",
+    label: "Analytics",
+    title: "Analytics & Reporting",
+    desc: "Full P&L with forward projections, sales attribution, funnel health, speed-to-lead and margin analysis — fed by a live bank-feed (Mercury / Plaid) so the numbers reconcile themselves.",
+    svg: '<path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/>',
+  },
+  {
+    key: "team",
+    label: "Team",
+    title: "Team & Leaderboards",
+    desc: "Live team-activity dashboard, sales leaderboards, speed-to-lead rankings and a live office view — with per-coach data isolation underneath.",
+    svg: '<path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/>',
+  },
+  {
+    key: "contracts",
+    label: "Contracts",
+    title: "Contracts & e-Sign",
+    desc: "Enrollment agreements and contract templates with signature tracking. Send, sign and store — no separate tool.",
+    svg: '<path d="M16 22H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8l6 6v3"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="m9 15 2 2 4-4"/>',
+  },
+  {
+    key: "portal",
+    label: "Portal",
+    title: "Customer Portal",
+    desc: "Customers view orders, payment history and upcoming payments, and update their own cards — fewer support tickets for you.",
+    svg: '<circle cx="12" cy="12" r="10"/><circle cx="12" cy="10" r="3"/><path d="M7 20.66a8 8 0 0 1 10 0"/>',
+  },
+  {
+    key: "products",
+    label: "Checkout",
+    title: "Products & Checkout",
+    desc: "Branded checkout pages and SKU management, wired to the same CRM, payments and analytics as everything else.",
+    svg: '<circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/>',
+  },
+  {
+    key: "compliance",
+    label: "Compliance",
+    title: "Compliance, built in",
+    desc: "TCPA and DNC handling, SMS consent and STOP-keywords, plus a HIPAA / PHI mode for medical. We keep your outbound legal.",
+    svg: '<path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/>',
+  },
+];
+
+// AI capabilities (dedicated AI-native section).
+export const AI_POINTS = [
+  { t: "AI email drafting", d: "Replies and campaigns drafted in each coach's own voice.", svg: '<path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"/><rect x="2" y="4" width="20" height="16" rx="2"/>' },
+  { t: "AI lead scoring", d: "Every form, call and webchat scored so reps work the hottest leads first.", svg: '<circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>' },
+  { t: "Call summaries & scorecards", d: "Automatic transcription, one-paragraph recaps, and objection & coaching scorecards.", svg: '<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/>' },
+  { t: "AI buyer personas", d: "Generated from your real pipeline, not a generic template.", svg: '<circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/>' },
+  { t: "AI upsell briefs", d: "The next best offer for each customer, written for you.", svg: '<path d="M16 7h6v6"/><path d="m22 7-8.5 8.5-5-5L2 17"/>' },
+  { t: "AI voice campaigns", d: "Outbound that dials and qualifies leads automatically.", svg: '<path d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384"/>' },
+];
+
+// Coaching-specific moat features.
+export const COACHING_POINTS = [
+  { t: "Debrief → notes → upsell brief", d: "Capture a Slack debrief, confirm the program notes, and Wayfinder drafts the AI upsell brief automatically.", svg: '<path d="M14 9a2 2 0 0 1-2 2H6l-4 4V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2z"/><path d="M18 9h2a2 2 0 0 1 2 2v11l-4-4h-6a2 2 0 0 1-2-2v-1"/>' },
+  { t: "Bootcamp & cohort tracking", d: "Track students through bootcamps and cohorts — not just deals through stages.", svg: '<path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/>' },
+  { t: "Per-coach voice profiles", d: "Every AI draft and call sounds like the coach who owns the relationship.", svg: '<path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/>' },
+  { t: "Live sales leaderboards", d: "Leaderboards, speed-to-lead rankings and a live office view that keep reps moving.", svg: '<path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/>' },
+];
+
 // The Wayfinder arrow mark, as polyline points in a 120x120 box (from public/brand/logo.svg).
 export const ARROW_POINTS: [number, number][] = [
   [25, 95],
