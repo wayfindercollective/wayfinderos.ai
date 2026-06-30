@@ -18,7 +18,7 @@ const problems = [
 const ex = Object.fromEntries(EXTRAS.map((m) => [m.key, m]));
 // Automations + Analytics get the spotlight; the core tools + the rest fill the grid.
 const featured = [ex.automations, ex.reporting];
-const rest = [...TOOLS, ex.team, ex.portal, ex.products, ex.compliance];
+const rest = [...TOOLS, ex.team, ex.portal, ex.compliance];
 const featuredDesc: Record<string, string> = {
   automations: ex.automations.desc,
   reporting: ex.reporting.desc,
@@ -44,17 +44,17 @@ const settle = [
 ];
 
 const wayfinder = [
-  "Automatic commission calc & tiers",
-  "One platform, zero integrations",
-  "Payment plans that run themselves",
-  "Coach isolation from day one",
-  "Dashboards you can actually trust",
+  "Commission numbers you'd stake payroll on",
+  "Your whole company on one screen",
+  "Payments that chase themselves",
+  "Every coach sees only their own lane",
+  "A P&L you actually believe",
 ];
 
 const steps = [
   {
     h: "We map your stack",
-    p: "GoHighLevel, Intercom, CRM exports — imported with dedicated tooling, not copy-paste.",
+    p: "GoHighLevel, Intercom, CRM exports - imported with dedicated tooling, not copy-paste.",
   },
   {
     h: "We run in parallel",
@@ -76,7 +76,7 @@ const testimonials = [
   },
   {
     quote:
-      "The migration ran in parallel with our old stack — we switched the day we trusted it, with zero data loss.",
+      "The call summaries and AI drafts save each rep hours a week. It's the first tool my team actually adopted instead of working around.",
     name: "Placeholder Name",
     company: "Placeholder Coaching Co.",
   },
@@ -95,11 +95,11 @@ const faqs = [
   },
   {
     q: "Can I automate follow-up across email, SMS and calls?",
-    a: "Yes. Build workflows that trigger on anything — a new lead, a deal moving stage, an inbound message, a booking — then fire emails, texts, AI calls, deal updates or follow-up tasks in sequence. Quiet hours, frequency caps and consent rules are enforced automatically, so nothing fires at 2am or to someone who opted out.",
+    a: "Yes. Build workflows that trigger on anything - a new lead, a deal moving stage, an inbound message, a booking - then fire emails, texts, AI calls, deal updates or follow-up tasks in sequence. Quiet hours, frequency caps and consent rules are enforced automatically, so nothing fires at 2am or to someone who opted out.",
   },
   {
     q: "How much of this is actually AI?",
-    a: "More than the dialer. AI scores every lead from forms, calls and webchat; drafts emails in each coach's voice; transcribes and summarises every call with objections and a coaching scorecard; builds buyer personas; and generates upsell briefs from a customer's history. It works in the background — you don't prompt it.",
+    a: "More than you'd expect, and none of it is a chatbot bolted on the side. It's woven through every module and runs quietly in the background - scoring, drafting and surfacing the next move as you work, without you ever stopping to prompt it.",
   },
   {
     q: "Is this really built for coaching, or just rebranded sales software?",
@@ -107,15 +107,15 @@ const faqs = [
   },
   {
     q: "Does it track commissions automatically?",
-    a: "Yes — tiered structures, brackets and per-order allocation. Coaches move up tiers automatically and commissions recalculate across your whole team.",
+    a: "Yes - tiered structures, brackets and per-order allocation. Coaches move up tiers automatically and commissions recalculate across your whole team.",
   },
   {
     q: "Can I see what my sales team is actually doing?",
-    a: "In real time. A live activity dashboard shows calls, meetings, talk time and speed-to-lead per rep, with leaderboards and a live “office” view. Each coach still only sees their own customers and commissions — managers see everything.",
+    a: "In real time. A live activity dashboard shows calls, meetings, talk time and speed-to-lead per rep, with leaderboards and a live “office” view. Each coach still only sees their own customers and commissions - managers see everything.",
   },
   {
     q: "Can my customers manage their own payments?",
-    a: "Yes — a self-service portal lets customers view orders, see upcoming payments and pay or update a card without emailing your team. Fewer “can you resend my invoice” tickets.",
+    a: "Yes - a self-service portal lets customers view orders, see upcoming payments and pay or update a card without emailing your team. Fewer “can you resend my invoice” tickets.",
   },
   {
     q: "Will this keep my outbound dialing compliant?",
@@ -123,19 +123,15 @@ const faqs = [
   },
   {
     q: "Is there a mobile app?",
-    a: "Yes — a native iOS and Android dialer with proper call handling, plus a desktop app and an installable web app. Your reps can dial, text and check the pipeline from anywhere.",
+    a: "Yes - a native iOS and Android dialer with proper call handling, plus a desktop app and an installable web app. Your reps can dial, text and check the pipeline from anywhere.",
   },
   {
     q: "Do I have to give up my accounting workflow?",
-    a: "No. Live bank-feed sync (Mercury / Plaid) auto-matches expenses, QuickBooks stays in sync, and payments reconcile themselves — so your P&L is real, not a month-end reconstruction.",
+    a: "No. Live bank-feed sync (Mercury / Stripe) auto-matches expenses, QuickBooks stays in sync, and payments reconcile themselves - so your P&L is real, not a month-end reconstruction.",
   },
   {
-    q: "How does the migration work?",
-    a: "We run your existing systems in parallel at no extra cost until your data is fully migrated and verified. Dedicated import tools for GoHighLevel, Intercom and bulk CRM data — no downtime, no risk.",
-  },
-  {
-    q: "What happens to my data if I leave?",
-    a: "It's yours. Export contacts, deals, orders and financials at any time. We run your old tools in parallel during migration and stay reversible until you trust the switch — and the door out is just as open as the door in.",
+    q: "How does migration work - and what if I leave?",
+    a: "Dedicated import tools pull your data from GoHighLevel, Intercom and bulk CRM exports, and we run your old stack in parallel at no extra cost until everything's verified - no downtime, no rushed cutover. And your data stays yours: export contacts, deals, orders and financials at any time. We stay reversible until you trust the switch, so the door out is as open as the door in.",
   },
 ];
 
@@ -175,13 +171,13 @@ export default function Home() {
               <span className="grad">Nothing leaves.</span>
             </h1>
             <p className="sub">
-              The operating system for coaching companies. Ten tools, one core.
+              The operating system for coaching companies. Every tool you need, one core.
             </p>
             <a className="btn lg" href="#apply" style={{ alignSelf: "flex-start" }}>
               Apply for access →
             </a>
             <div className="scrollhint">
-              <div className="mouse" /> Scroll — watch the chaos resolve
+              <div className="mouse" /> Scroll - watch the chaos resolve
             </div>
           </section>
 
@@ -197,7 +193,7 @@ export default function Home() {
               <p className="lead rv d2">
                 Spreadsheets for commissions. One tool for the dialer, another
                 for email, a third for payments. Every system talks to every
-                other system — badly. Data leaks, reports drift, and you&apos;re
+                other system - badly. Data leaks, reports drift, and you&apos;re
                 the one holding it together.
               </p>
               <div className="chips">
@@ -221,7 +217,7 @@ export default function Home() {
               </h2>
               <p className="lead rv d2" style={{ margin: "0 auto" }}>
                 The tangle resolves. One database, one login, one source of
-                truth — every tool now a facet of a single system. That&apos;s
+                truth - every tool now a facet of a single system. That&apos;s
                 not a metaphor; it&apos;s the architecture.
               </p>
             </div>
@@ -233,7 +229,7 @@ export default function Home() {
               <div className="eyebrow rv">The platform</div>
               <h2 className="title rv d1">One system. Every job.</h2>
               <p className="lead rv d2">
-                Each module is native — not an integration, not a bolt-on. They
+                Each module is native - not an integration, not a bolt-on. They
                 share the same data the instant it changes.
               </p>
               <div className="bento">
@@ -279,8 +275,8 @@ export default function Home() {
               </h2>
               <p className="lead rv d2">
                 Not a chatbot bolted on. Intelligence wired through every module
-                — drafting, scoring, summarising and selling, in each
-                coach&apos;s voice.
+                - drafting, scoring, summarising and selling, the way that your
+                brand communicates.
               </p>
               <div className="points">
                 {AI_POINTS.map((p, i) => (
@@ -324,15 +320,11 @@ export default function Home() {
                 <span className="grad">refused to settle.</span>
               </h2>
               <p className="lead rv d2" style={{ margin: "0 auto" }}>
-                We ran a coaching company on five disconnected tools and
+                We ran a coaching company on seven disconnected tools and
                 commission spreadsheets we didn&apos;t trust. So we built the
-                system we wished existed — then opened it to a handful of
-                companies like yours.
-              </p>
-              <p className="quote rv d2">
-                &ldquo;If your software can&apos;t tell you the truth about your
-                business, it&apos;s costing you more than its price.&rdquo;
-                <span className="by">— The Wayfinder team</span>
+                system we wished existed, have successfully ran our own business
+                on it - now we&apos;re opening the doors to a handful of other
+                companies.
               </p>
             </div>
           </section>
@@ -342,9 +334,9 @@ export default function Home() {
             <div className="center">
               <div className="eyebrow rv">Why Wayfinder</div>
               <h2 className="title rv d1">
-                GoHighLevel was built for agencies.
+                Most businesses settle for complication and confusion.
                 <br />
-                <span className="grad">This was built for coaching companies.</span>
+                <span className="grad">We have built the most seamless platform for coaches on the market.</span>
               </h2>
               <div className="compare">
                 <div className="col bad rv d1">
@@ -383,10 +375,6 @@ export default function Home() {
                 <br />
                 <span className="grad">will never build.</span>
               </h2>
-              <p className="lead rv d2">
-                Generic CRMs make you bend your coaching business around them.
-                These are the things only a system built for coaching can do.
-              </p>
               <div className="points two">
                 {COACHING_POINTS.map((p, i) => (
                   <div key={p.t} className={`point rv d${(i % 2) + 1}`}>
@@ -413,7 +401,7 @@ export default function Home() {
                   <figure key={t.quote} className={`tcard rv d${(i % 3) + 1}`}>
                     <blockquote>{t.quote}</blockquote>
                     <figcaption>
-                      — {t.name}, <span className="co">{t.company}</span>
+                      - {t.name}, <span className="co">{t.company}</span>
                     </figcaption>
                   </figure>
                 ))}
@@ -463,10 +451,10 @@ export default function Home() {
               </h2>
               <p className="lead">
                 We&apos;re onboarding a handful of coaching companies as founding
-                operators — hands-on migration, direct support, and a voice in
+                operators - hands-on migration, direct support, and a voice in
                 shaping the product. Apply and we&apos;ll book a call.
               </p>
-              {/* TEMP: bypass the form while testing the animation — swap back to
+              {/* TEMP: bypass the form while testing the animation - swap back to
                   className="btn lg apply-open" to re-enable the Apply form. */}
               <button className="btn lg warp-trigger" type="button" style={{ alignSelf: "center" }}>
                 Apply for access →

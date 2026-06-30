@@ -15,17 +15,17 @@ const sans = Inter({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://wayfinderos.com"),
-  title: "Wayfinder OS — Everything orbits. Nothing leaves.",
+  title: "Wayfinder OS - Everything orbits. Nothing leaves.",
   description:
-    "The operating system for coaching companies. CRM, payments, dialer, inbox, booking, video, email and your website — ten tools collapsed into one core.",
+    "The operating system for coaching companies. CRM, payments, dialer, inbox, booking, video, email and your website - every tool you need collapsed into one core.",
   icons: {
     icon: "/brand/favicon.svg",
     shortcut: "/brand/favicon.svg",
   },
   openGraph: {
-    title: "Wayfinder OS — Everything orbits. Nothing leaves.",
+    title: "Wayfinder OS - Everything orbits. Nothing leaves.",
     description:
-      "Ten tools collapsed into one core. The operating system built for coaching companies.",
+      "Every tool you need, collapsed into one core. The operating system built for coaching companies.",
     type: "website",
   },
 };
