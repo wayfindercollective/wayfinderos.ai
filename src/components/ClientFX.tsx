@@ -10,7 +10,7 @@ export default function ClientFX() {
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
 
-    // reveal on enter — a quiet fade/rise, nothing flashy
+    // reveal on enter - a quiet fade/rise, nothing flashy
     const io = new IntersectionObserver(
       (es) =>
         es.forEach((e) => {

@@ -13,18 +13,18 @@ const svgFor: Record<string, string> = Object.fromEntries(
 const modules = [
   { key: "crm", name: "CRM & pipeline", desc: "Every deal, stage and contact, wired straight to payments, calls and commissions." },
   { key: "payments", name: "Payments & checkout", desc: "Branded checkout, saved cards, plans and failed-payment chasing, running on Stripe." },
-  { key: "dialer", name: "Dialer", desc: "Calls, recordings, transcripts and texts — with a real iOS and Android app." },
+  { key: "dialer", name: "Dialer", desc: "Calls, recordings, transcripts and texts - with a real iOS and Android app." },
   { key: "inbox", name: "Inbox", desc: "Email, SMS and web chat in one thread per person, instead of three tabs." },
   { key: "email", name: "Email marketing", desc: "Segments, campaigns and the numbers behind them, in the same place as the rest." },
   { key: "booking", name: "Booking & calendar", desc: "Booking pages and two-way calendar sync, with no Calendly tab to keep open." },
-  { key: "video", name: "Video rooms", desc: "Calls run inside the platform — no separate Zoom link to dig up and paste." },
+  { key: "video", name: "Video rooms", desc: "Calls run inside the platform - no separate Zoom link to dig up and paste." },
   { key: "website", name: "Website & funnels", desc: "Pages and funnels built on the same data as everything else you do." },
   { key: "commissions", name: "Commissions", desc: "Tiers, brackets and per-order splits that work themselves out. No more spreadsheet." },
-  { key: "automations", name: "Automations", desc: "If this, then that, across the whole stack — with quiet hours and frequency caps built in." },
+  { key: "automations", name: "Automations", desc: "If this, then that, across the whole stack - with quiet hours and frequency caps built in." },
   { key: "reporting", name: "Analytics", desc: "A P&L you can trust, fed by a live bank feed, plus attribution and projections." },
   { key: "team", name: "Team & leaderboards", desc: "Live activity, leaderboards and speed-to-lead, with every coach kept in their own lane." },
   { key: "portal", name: "Customer portal", desc: "Customers see their orders and pay or update a card without emailing your team." },
-  { key: "compliance", name: "Compliance", desc: "TCPA, DNC, SMS consent and a HIPAA mode — your outbound stays on the right side of the line." },
+  { key: "compliance", name: "Compliance", desc: "TCPA, DNC, SMS consent and a HIPAA mode - your outbound stays on the right side of the line." },
 ];
 
 const settle = [
@@ -47,7 +47,7 @@ const steps = [
   {
     n: "01",
     h: "We map your stack",
-    p: "GoHighLevel, Intercom, CRM exports — pulled in with proper import tools, not copy-paste.",
+    p: "GoHighLevel, Intercom, CRM exports - pulled in with proper import tools, not copy-paste.",
   },
   {
     n: "02",
@@ -86,15 +86,15 @@ const testimonials = [
 const faqs = [
   {
     q: "What does it cost?",
-    a: "Pricing is built around your setup. Most companies end up paying less than they did stacking GoHighLevel Elite and the tools around it — usually about 20% less.",
+    a: "Pricing is built around your setup. Most companies end up paying less than they did stacking GoHighLevel Elite and the tools around it - usually about 20% less.",
   },
   {
     q: "Can I automate follow-up across email, SMS and calls?",
-    a: "Yes. Build a workflow off almost anything — a new lead, a deal moving stage, an inbound message, a booking — then send emails, texts, AI calls, deal updates or follow-up tasks in order. Quiet hours, frequency caps and consent rules are handled for you, so nothing fires at 2am or to someone who opted out.",
+    a: "Yes. Build a workflow off almost anything - a new lead, a deal moving stage, an inbound message, a booking - then send emails, texts, AI calls, deal updates or follow-up tasks in order. Quiet hours, frequency caps and consent rules are handled for you, so nothing fires at 2am or to someone who opted out.",
   },
   {
     q: "How much of this is really AI?",
-    a: "More than you'd think, and none of it is a chatbot bolted on the side. It's woven through every part of the platform and runs in the background — scoring, drafting and surfacing the next move while you work, without you ever stopping to prompt it.",
+    a: "More than you'd think, and none of it is a chatbot bolted on the side. It's woven through every part of the platform and runs in the background - scoring, drafting and surfacing the next move while you work, without you ever stopping to prompt it.",
   },
   {
     q: "Is this actually built for coaching, or just rebranded sales software?",
@@ -102,7 +102,7 @@ const faqs = [
   },
   {
     q: "Does it track commissions automatically?",
-    a: "Yes — tiered structures, brackets and per-order allocation. Coaches move up tiers on their own and commissions recalculate across the whole team.",
+    a: "Yes - tiered structures, brackets and per-order allocation. Coaches move up tiers on their own and commissions recalculate across the whole team.",
   },
   {
     q: "Can I see what my sales team is actually doing?",
@@ -110,23 +110,23 @@ const faqs = [
   },
   {
     q: "Can my customers handle their own payments?",
-    a: "Yes — a self-service portal lets them view orders, see what's coming up, and pay or update a card without emailing your team. Far fewer “can you resend my invoice” messages.",
+    a: "Yes - a self-service portal lets them view orders, see what's coming up, and pay or update a card without emailing your team. Far fewer “can you resend my invoice” messages.",
   },
   {
     q: "Will it keep my outbound dialing compliant?",
-    a: "Yes — built-in TCPA handling, do-not-call lists, SMS consent tracking and automatic STOP opt-outs. For medical-adjacent practices there's a HIPAA mode with encrypted records and access auditing.",
+    a: "Yes - built-in TCPA handling, do-not-call lists, SMS consent tracking and automatic STOP opt-outs. For medical-adjacent practices there's a HIPAA mode with encrypted records and access auditing.",
   },
   {
     q: "Is there a mobile app?",
-    a: "Yes — a native iOS and Android dialer with proper call handling, plus a desktop app and an installable web app. Your reps can dial, text and check the pipeline from anywhere.",
+    a: "Yes - a native iOS and Android dialer with proper call handling, plus a desktop app and an installable web app. Your reps can dial, text and check the pipeline from anywhere.",
   },
   {
     q: "Do I have to give up my accounting workflow?",
-    a: "No. A live bank-feed sync (Mercury / Stripe) matches expenses for you, QuickBooks stays in step, and payments reconcile themselves — so your P&L is real, not a month-end reconstruction.",
+    a: "No. A live bank-feed sync (Mercury / Stripe) matches expenses for you, QuickBooks stays in step, and payments reconcile themselves - so your P&L is real, not a month-end reconstruction.",
   },
   {
     q: "How does migration work, and what if I leave?",
-    a: "Import tools pull your data out of GoHighLevel, Intercom and bulk CRM exports, and we run your old stack alongside ours, on us, until everything's verified — no downtime, no rushed cutover. Your data stays yours, too: export contacts, deals, orders and financials whenever you like. The door out is as open as the door in.",
+    a: "Import tools pull your data out of GoHighLevel, Intercom and bulk CRM exports, and we run your old stack alongside ours, on us, until everything's verified - no downtime, no rushed cutover. Your data stays yours, too: export contacts, deals, orders and financials whenever you like. The door out is as open as the door in.",
   },
 ];
 
@@ -147,7 +147,7 @@ export default function Home() {
           <a className="navlink" href="https://admin.wayfindercollective.io">
             Sign in
           </a>
-          <a className="btn" href="#apply">
+          <a className="btn ghost" href="#apply">
             Apply for access
           </a>
         </div>
@@ -162,7 +162,7 @@ export default function Home() {
               Your whole coaching business, <em>under one roof.</em>
             </h1>
             <p className="sub rv d2">
-              CRM, payments, calls, inbox, booking and commissions — the entire
+              CRM, payments, calls, inbox, booking and commissions - the entire
               stack, in <strong>one login</strong>. Built by people who ran a
               coaching company on the exact mess you&apos;re trying to get out of.
             </p>
@@ -179,7 +179,7 @@ export default function Home() {
             </div>
           </section>
 
-          {/* PROBLEM — image-led; drop your generated illustration into the .shot frame */}
+          {/* PROBLEM - image-led; drop your generated illustration into the .shot frame */}
           <section id="problem">
             <div className="center">
               <div className="eyebrow rv">The problem</div>
@@ -188,7 +188,7 @@ export default function Home() {
                   <h2 className="title">You know the drill.</h2>
                   <p>
                     It&apos;s late, and you&apos;re logging into the seventh tool
-                    of the day — the one you can never remember the password to,
+                    of the day - the one you can never remember the password to,
                     so you hit &ldquo;forgot password&rdquo; one more time.
                   </p>
                   <p>
@@ -207,7 +207,7 @@ export default function Home() {
                       <circle cx="9" cy="9" r="2" />
                       <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" />
                     </svg>
-                    Illustration goes here — 16:9
+                    Illustration goes here - 16:9
                   </div>
                 </div>
               </div>
@@ -228,7 +228,7 @@ export default function Home() {
               </h2>
               <p className="lead rv d2" style={{ margin: "0 auto" }}>
                 One database. One login. One set of numbers everyone&apos;s
-                working from. Not seven tools bolted together and hoping — one
+                working from. Not seven tools bolted together and hoping - one
                 system where each part already knows what the others are doing.
               </p>
             </div>
@@ -247,11 +247,13 @@ export default function Home() {
               </p>
               <div className="modules">
                 {modules.map((m) => (
-                  <div className="mod rv" key={m.key}>
-                    <span className="mico">
-                      <ToolIcon svg={svgFor[m.key]} size={22} />
-                    </span>
-                    <h3>{m.name}</h3>
+                  <div className="mod" key={m.key}>
+                    <div className="mhead">
+                      <span className="mico">
+                        <ToolIcon svg={svgFor[m.key]} size={20} />
+                      </span>
+                      <h3>{m.name}</h3>
+                    </div>
                     <p>{m.desc}</p>
                   </div>
                 ))}
@@ -264,11 +266,11 @@ export default function Home() {
             <div className="center">
               <div className="eyebrow rv">The AI in it</div>
               <h2 className="title rv d1">
-                There&apos;s AI all through it — and <em>not a chatbot in sight.</em>
+                There&apos;s AI all through it - and <em>not a chatbot in sight.</em>
               </h2>
               <p className="lead rv d2">
-                It works in the background — drafting, scoring, summarising,
-                sounding like the coach who owns the relationship — instead of
+                It works in the background - drafting, scoring, summarising,
+                sounding like the coach who owns the relationship - instead of
                 sitting there waiting for you to prompt it.
               </p>
               <div className="points">
@@ -400,7 +402,7 @@ export default function Home() {
               <h2 className="title">Come run yours on it.</h2>
               <p className="lead">
                 We&apos;re taking on a small group of coaching companies as
-                founding operators — hands-on migration, a direct line to us, and
+                founding operators - hands-on migration, a direct line to us, and
                 a real say in where it goes next. Tell us about your company and
                 we&apos;ll set up a call.
               </p>

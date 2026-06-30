@@ -49,7 +49,7 @@ export default function ApplyForm() {
       if (!r.ok) throw new Error("request failed");
       setOpen(false);
       setForm(EMPTY);
-      // hand off to the spatial scene — plays the hyperspace jump -> "Welcome aboard"
+      // hand off to the spatial scene - plays the hyperspace jump -> "Welcome aboard"
       window.dispatchEvent(new CustomEvent("wf:warp"));
     } catch {
       setErr("Something went wrong sending your application. Please try again.");

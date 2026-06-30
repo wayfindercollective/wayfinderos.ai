@@ -60,7 +60,7 @@ export async function POST(req: Request) {
       );
     }
   } else {
-    // No webhook configured yet — log so nothing is lost in local/dev.
+    // No webhook configured yet - log so nothing is lost in local/dev.
     console.log("[apply] new application (set WAYFINDER_APPLY_WEBHOOK to forward):", payload);
   }
 

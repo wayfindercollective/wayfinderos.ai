@@ -17,6 +17,11 @@ export default function SpaceScene() {
     const reduce = window.matchMedia(
       "(prefers-reduced-motion: reduce)"
     ).matches;
+    // match the page font (Geist) for canvas labels, with a safe system fallback
+    const sansFont =
+      getComputedStyle(document.documentElement)
+        .getPropertyValue("--font-geist-sans")
+        .trim() || "ui-sans-serif, system-ui, sans-serif";
 
     let W = 0,
       H = 0,
@@ -217,8 +222,18 @@ export default function SpaceScene() {
         chaos = clamp((cv - heroLeave) / Math.max(1, pc - heroLeave));
         collapse = clamp((cv - pc) / Math.max(1, cc - pc));
       }
+      // Once the tools collapse into the core, fade the orb / glow / orbit away but KEEP a
+      // dimmer starfield, so the rest of the page is a darker cosmic backdrop, not flat black.
+      let post = 0;
+      if (A.cTop !== undefined) {
+        const fStart = A.cTop + A.cH! * 0.55,
+          fEnd = A.cTop + A.cH! * 1.0;
+        post = clamp((cv - fStart) / Math.max(1, fEnd - fStart));
+      }
+      const live = 1 - post; // 1 in the hero, 0 below the collapse (orb gone, stars stay)
+
       const ce = ease(collapse),
-        // The old red/jitter "chaos" phase read as stressful, so it's retired — the
+        // The old red/jitter "chaos" phase read as stressful, so it's retired - the
         // problem is now told by the image-led section instead. We keep only the calm
         // orbit that gently collapses into the core. `warn` stays wired (0) so the
         // chaos-tinting maths below all resolve to no-ops without ripping them out.
@@ -237,7 +252,7 @@ export default function SpaceScene() {
           by = (b.y + Math.cos(b.t * b.py) * 0.04) * H;
         const col = mix(b.c, WARN, warn * 0.75);
         const g = ctx.createRadialGradient(bx, by, 0, bx, by, b.r * minD);
-        g.addColorStop(0, rgba(col, b.a * (1 + ce * 0.5)));
+        g.addColorStop(0, rgba(col, b.a * (1 + ce * 0.5) * live));
         g.addColorStop(1, rgba(col, 0));
         ctx.fillStyle = g;
         ctx.fillRect(0, 0, W, H);
@@ -248,7 +263,7 @@ export default function SpaceScene() {
         const a = 0.2 + Math.abs(Math.sin(s.tw)) * 0.5;
         ctx.beginPath();
         ctx.arc(s.x * W + mouse.x * par * 0.3, s.y * H + mouse.y * par * 0.3, s.r * DPR, 0, 7);
-        ctx.fillStyle = `rgba(180,220,255,${a * 0.45})`;
+        ctx.fillStyle = `rgba(180,220,255,${a * 0.45 * (1 - post * 0.4)})`;
         ctx.fill();
       }
 
@@ -297,7 +312,7 @@ export default function SpaceScene() {
       }
       const order = [...nodes].sort((a, b) => a.depth - b.depth);
 
-      // chaos mesh — every tool wired to every other tool, red & flickering
+      // chaos mesh - every tool wired to every other tool, red & flickering
       if (warn > 0.02) {
         for (let i = 0; i < nodes.length; i++)
           for (let j = i + 1; j < nodes.length; j++) {
@@ -326,7 +341,7 @@ export default function SpaceScene() {
 
       // clean connection lines + inward pulses (positive states)
       for (const n of order) {
-        const la = (0.05 + n.depth * 0.11) * (1 - warn) * (1 - pull * 0.4);
+        const la = (0.05 + n.depth * 0.11) * (1 - warn) * (1 - pull * 0.4) * live;
         if (la <= 0.005) continue;
         ctx.beginPath();
         ctx.moveTo(cx, cy);
@@ -343,7 +358,7 @@ export default function SpaceScene() {
           y = cy + (n.py - cy) * p.t;
         ctx.beginPath();
         ctx.arc(x, y, 1.9 * DPR, 0, 7);
-        ctx.fillStyle = `rgba(125,240,255,${0.9 * (1 - Math.abs(p.t - 0.5) * 1.4) * (1 - warn)})`;
+        ctx.fillStyle = `rgba(125,240,255,${0.9 * (1 - Math.abs(p.t - 0.5) * 1.4) * (1 - warn) * live})`;
         ctx.shadowBlur = 10 * DPR;
         ctx.shadowColor = "#22d3ee";
         ctx.fill();
@@ -352,7 +367,7 @@ export default function SpaceScene() {
 
       // the core: soft sun in hero -> gone in chaos -> bright orb + logo at collapse
       const beat = 1 + Math.sin(now * 0.0016) * 0.06,
-        coreStrength = clamp(0.55 * (1 - warn) + ce),
+        coreStrength = clamp((0.55 * (1 - warn) + ce) * live),
         cr = (40 + ce * 80) * DPR * beat;
       if (coreStrength > 0.01) {
         const cg = ctx.createRadialGradient(cx, cy, 0, cx, cy, cr);
@@ -372,11 +387,11 @@ export default function SpaceScene() {
         ctx.lineWidth = 1.2 * DPR;
         ctx.stroke();
       }
-      strokeArrow(cx, cy, (52 + ce * 40) * DPR * beat, ce);
+      strokeArrow(cx, cy, (52 + ce * 40) * DPR * beat, ce * live);
       coreR = cr;
       coreLogoSize = (52 + ce * 40) * DPR * beat;
 
-      // nodes — real tool icons, tinted toward red in chaos, fading into the orb on collapse
+      // nodes - real tool icons, tinted toward red in chaos, fading into the orb on collapse
       ctx.textBaseline = "middle";
       ctx.textAlign = "center";
       for (const n of order) {
@@ -406,9 +421,9 @@ export default function SpaceScene() {
         }
         ctx.globalAlpha = 1;
         // Labels: uniform size, always LEFT-aligned, and sitting the same fixed gap to the
-        // right of each icon. No radial flip and no centring — so a long word never spills
+        // right of each icon. No radial flip and no centring - so a long word never spills
         // back over its icon and a short word never floats off on its own.
-        ctx.font = `500 ${12 * DPR}px "Inter", ui-sans-serif, system-ui, sans-serif`;
+        ctx.font = `500 ${12 * DPR}px ${sansFont}`;
         ctx.fillStyle = rgba([230, 240, 248], vis * 0.85);
         ctx.textAlign = "left";
         ctx.textBaseline = "middle";

@@ -1,15 +1,17 @@
 @import "tailwindcss";
 
 :root {
-  --bg: #08090c;
-  --panel: #0c0e13;
-  --ink: #edf0f4;
-  --muted: #98a1ad;
-  --faint: #5b636f;
-  --accent: #57c6d8; /* one restrained accent, used sparingly */
-  --warm: #e7d8c3; /* quiet warm tint for the occasional emphasis */
-  --line: rgba(255, 255, 255, 0.1);
-  --line-soft: rgba(255, 255, 255, 0.06);
+  /* OS theme: zinc neutral scale + cyan accent + indigo brand (matches the product) */
+  --bg: #09090b; /* zinc-950 */
+  --panel: #18181b; /* zinc-900 */
+  --ink: #f4f4f5; /* zinc-100 */
+  --muted: #a1a1aa; /* zinc-400 */
+  --faint: #71717a; /* zinc-500 */
+  --accent: #22d3ee; /* cyan-400 - highlights, icons, links */
+  --primary: #6366f1; /* indigo-500 - primary actions */
+  --primary-hover: #818cf8; /* indigo-400 */
+  --line: #27272a; /* zinc-800 */
+  --line-soft: rgba(255, 255, 255, 0.055);
 }
 
 * {
@@ -24,7 +26,7 @@ body {
   margin: 0;
   background: var(--bg);
   color: var(--ink);
-  font-family: var(--font-sans), system-ui, sans-serif;
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
   font-size: 17px;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
@@ -32,7 +34,7 @@ body {
 }
 
 ::selection {
-  background: rgba(87, 198, 216, 0.22);
+  background: rgba(34, 211, 238, 0.22);
 }
 
 /* ---------- background canvases ---------- */
@@ -71,23 +73,23 @@ nav.site {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 20px 5vw;
+  padding: 18px 5vw;
   transition: background 0.4s, border-color 0.4s;
   border-bottom: 1px solid transparent;
 }
 nav.site.solid {
-  background: rgba(8, 9, 12, 0.82);
+  background: rgba(9, 9, 11, 0.82);
   backdrop-filter: blur(10px);
-  border-bottom: 1px solid var(--line-soft);
+  border-bottom: 1px solid var(--line);
 }
 .brand {
   display: flex;
   align-items: center;
-  gap: 13px;
-  font-family: var(--font-display), serif;
-  font-weight: 500;
-  font-size: 25px;
-  letter-spacing: -0.4px;
+  gap: 12px;
+  font-family: var(--font-geist-sans), sans-serif;
+  font-weight: 600;
+  font-size: 22px;
+  letter-spacing: -0.5px;
   color: var(--ink);
   text-decoration: none;
 }
@@ -96,7 +98,7 @@ nav.site.solid {
 }
 .brand .os {
   color: var(--muted);
-  font-style: italic;
+  font-weight: 500;
 }
 .navcta {
   display: flex;
@@ -114,8 +116,11 @@ nav.site.solid {
 }
 
 /* ---------- buttons / links ---------- */
+/* primary = monochrome (white fill, dark text) so it belongs to the site's own
+   white-text + cyan-accent palette instead of orphaning a lone indigo pill.
+   hover inverts to a clean outline, echoing the nav ghost button. */
 .btn {
-  font-family: var(--font-sans), sans-serif;
+  font-family: var(--font-geist-sans), sans-serif;
   font-weight: 500;
   font-size: 15px;
   color: var(--bg);
@@ -128,7 +133,7 @@ nav.site.solid {
   display: inline-flex;
   align-items: center;
   gap: 9px;
-  transition: background 0.22s, color 0.22s, border-color 0.22s;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
 }
 .btn:hover {
   background: transparent;
@@ -136,11 +141,22 @@ nav.site.solid {
 }
 .btn.lg {
   font-size: 16px;
-  padding: 15px 28px;
+  padding: 14px 26px;
 }
-/* understated secondary — a real link, not a second button competing with the first */
+/* outlined / hairline variant - used in the nav so it isn't a saturated corner pill */
+.btn.ghost {
+  background: transparent;
+  color: var(--ink);
+  border-color: var(--line);
+}
+.btn.ghost:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: var(--muted);
+  color: var(--ink);
+}
+/* understated secondary - a real link, not a second button fighting the first */
 .textlink {
-  font-family: var(--font-sans), sans-serif;
+  font-family: var(--font-geist-sans), sans-serif;
   font-size: 15px;
   color: var(--ink);
   text-decoration: none;
@@ -149,10 +165,10 @@ nav.site.solid {
   gap: 8px;
   border-bottom: 1px solid var(--line);
   padding-bottom: 3px;
-  transition: border-color 0.22s, color 0.22s;
+  transition: border-color 0.2s, color 0.2s;
 }
 .textlink:hover {
-  border-color: var(--ink);
+  border-color: var(--muted);
 }
 .textlink .accent {
   color: var(--accent);
@@ -167,47 +183,44 @@ section {
   max-width: 1120px;
   margin: 0 auto;
 }
-.measure {
-  max-width: 60ch;
-}
 .eyebrow {
   display: inline-flex;
   align-items: center;
   gap: 12px;
-  font-family: var(--font-sans), sans-serif;
-  font-size: 13.5px;
-  letter-spacing: 0.2px;
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 12px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
   color: var(--muted);
   margin-bottom: 22px;
 }
 .eyebrow::before {
   content: "";
-  width: 26px;
+  width: 24px;
   height: 1px;
   background: var(--accent);
-  opacity: 0.8;
 }
 h1,
 h2.title {
-  font-family: var(--font-display), serif;
-  font-weight: 400;
-  letter-spacing: -0.5px;
+  font-family: var(--font-geist-sans), sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.8px;
   margin: 0 0 22px;
 }
 h2.title {
-  font-size: clamp(30px, 4.2vw, 52px);
-  line-height: 1.08;
+  font-size: clamp(28px, 3.8vw, 46px);
+  line-height: 1.1;
 }
 h1 em,
 h2.title em {
-  font-style: italic;
-  color: var(--ink);
+  font-style: normal;
+  color: var(--accent);
 }
 .grad {
-  font-style: italic;
+  color: var(--accent);
 }
 .lead {
-  font-family: var(--font-sans), sans-serif;
+  font-family: var(--font-geist-sans), sans-serif;
   font-size: clamp(17px, 1.4vw, 19px);
   color: var(--muted);
   line-height: 1.7;
@@ -248,29 +261,30 @@ p a {
   transition-delay: 0.28s;
 }
 
-/* ---------- hero ---------- */
+/* ---------- hero (sized to sit inside one viewport, Scroll cue included) ---------- */
 .hero {
-  min-height: 100vh;
+  min-height: 100svh;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 130px 5vw 130px;
-  max-width: min(92vw, 880px);
+  padding: 100px 5vw 88px;
+  max-width: min(92vw, 900px);
 }
 .hero h1 {
-  font-size: clamp(44px, 6.2vw, 88px);
-  line-height: 1.02;
-  letter-spacing: -1.5px;
-  margin: 0 0 28px;
-  max-width: 16ch;
+  /* the vh term keeps the headline shrinking on short viewports so nothing clips */
+  font-size: clamp(30px, min(5vw, 7.4vh), 56px);
+  line-height: 1.07;
+  letter-spacing: -1.4px;
+  margin: 0 0 22px;
+  max-width: 17ch;
 }
 .hero .sub {
-  font-family: var(--font-sans), sans-serif;
-  font-size: clamp(17px, 1.5vw, 20px);
-  line-height: 1.65;
+  font-family: var(--font-geist-sans), sans-serif;
+  font-size: clamp(16px, 1.4vw, 19px);
+  line-height: 1.6;
   color: var(--muted);
   max-width: 52ch;
-  margin: 0 0 40px;
+  margin: 0 0 32px;
 }
 .hero .sub strong {
   color: var(--ink);
@@ -284,19 +298,20 @@ p a {
 }
 .scrollhint {
   position: absolute;
-  bottom: 34px;
+  bottom: 26px;
   left: 5vw;
   color: var(--faint);
-  font-size: 12px;
-  letter-spacing: 1.5px;
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 11px;
+  letter-spacing: 2px;
   text-transform: uppercase;
   display: flex;
   align-items: center;
   gap: 12px;
 }
 .scrollhint .mouse {
-  width: 20px;
-  height: 32px;
+  width: 19px;
+  height: 30px;
   border: 1px solid var(--line);
   border-radius: 11px;
   position: relative;
@@ -326,6 +341,34 @@ p a {
     transform: translate(-50%, 9px);
   }
 }
+/* short viewports: tighten everything so the CTA + Scroll cue stay on the first screen */
+@media (max-height: 820px) {
+  .hero {
+    padding-top: 88px;
+    padding-bottom: 70px;
+  }
+  .hero .eyebrow {
+    margin-bottom: 14px;
+  }
+  .hero h1 {
+    margin-bottom: 16px;
+  }
+  .hero .sub {
+    margin-bottom: 24px;
+    line-height: 1.55;
+  }
+  .scrollhint {
+    bottom: 20px;
+  }
+}
+@media (max-height: 640px) {
+  .hero {
+    padding-top: 80px;
+  }
+  .hero .sub {
+    font-size: 15px;
+  }
+}
 
 /* ---------- problem (image-led) ---------- */
 .problem-grid {
@@ -349,7 +392,7 @@ p a {
   aspect-ratio: 16 / 9;
   border: 1px solid var(--line);
   border-radius: 14px;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.025), rgba(255, 255, 255, 0));
+  background: #0c0d12;
   overflow: hidden;
   display: grid;
   place-items: center;
@@ -363,10 +406,12 @@ p a {
 .shot .placeholder {
   text-align: center;
   color: var(--faint);
-  font-size: 13px;
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 12px;
   letter-spacing: 0.4px;
+  text-transform: uppercase;
   padding: 24px;
-  line-height: 1.6;
+  line-height: 1.7;
 }
 .shot .placeholder svg {
   width: 30px;
@@ -377,39 +422,50 @@ p a {
   stroke: currentColor;
 }
 
-/* ---------- module list (the platform) ---------- */
+/* ---------- module grid (the platform) ---------- */
+/* opaque cells + 1px gap over a --line backdrop = crisp hairline grid that reads cleanly
+   and never lets the background scene bleed through it */
 .modules {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1px;
   margin-top: 48px;
-  border-top: 1px solid var(--line);
+  background: var(--line);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  overflow: hidden;
 }
 .mod {
-  display: grid;
-  grid-template-columns: 34px minmax(0, 0.7fr) minmax(0, 1.3fr);
-  gap: 24px;
-  align-items: baseline;
-  padding: 26px 4px;
-  border-bottom: 1px solid var(--line);
+  background: var(--bg);
+  padding: 26px 28px;
   transition: background 0.25s;
 }
 .mod:hover {
-  background: rgba(255, 255, 255, 0.018);
+  background: #0d0e13;
+}
+.mhead {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  margin-bottom: 10px;
 }
 .mod .mico {
   color: var(--accent);
-  align-self: center;
+  display: inline-flex;
+  flex: none;
 }
 .mod h3 {
-  font-family: var(--font-display), serif;
-  font-weight: 500;
-  font-size: 21px;
-  letter-spacing: -0.3px;
+  font-family: var(--font-geist-sans), sans-serif;
+  font-weight: 600;
+  font-size: 17px;
+  letter-spacing: -0.2px;
   margin: 0;
   color: var(--ink);
 }
 .mod p {
-  font-size: 15.5px;
+  font-size: 14.5px;
   color: var(--muted);
-  line-height: 1.6;
+  line-height: 1.55;
   margin: 0;
 }
 
@@ -434,9 +490,9 @@ p a {
   color: var(--accent);
 }
 .point h4 {
-  font-family: var(--font-display), serif;
-  font-weight: 500;
-  font-size: 19px;
+  font-family: var(--font-geist-sans), sans-serif;
+  font-weight: 600;
+  font-size: 18px;
   letter-spacing: -0.2px;
   margin: 0;
   color: var(--ink);
@@ -478,16 +534,17 @@ p a {
 }
 .tcard blockquote {
   margin: 0;
-  font-family: var(--font-display), serif;
-  font-weight: 400;
-  font-size: 19px;
+  font-family: var(--font-geist-sans), sans-serif;
+  font-weight: 500;
+  font-size: 18px;
   line-height: 1.5;
   letter-spacing: -0.2px;
   color: var(--ink);
 }
 .tcard figcaption {
-  font-family: var(--font-sans), sans-serif;
-  font-size: 14px;
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 12.5px;
+  letter-spacing: 0.3px;
   color: var(--muted);
   margin-top: auto;
 }
@@ -510,13 +567,13 @@ p a {
 }
 .col.good {
   border-left: 1px solid var(--line);
-  background: rgba(87, 198, 216, 0.04);
+  background: rgba(34, 211, 238, 0.04);
 }
 .col h4 {
-  font-family: var(--font-sans), sans-serif;
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
   font-weight: 500;
-  font-size: 13.5px;
-  letter-spacing: 0.3px;
+  font-size: 12px;
+  letter-spacing: 1px;
   text-transform: uppercase;
   margin: 0 0 24px;
   color: var(--faint);
@@ -581,16 +638,16 @@ p a {
   transition-delay: 0.39s;
 }
 .step .n {
-  font-family: var(--font-display), serif;
-  font-style: italic;
-  font-size: 16px;
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 14px;
+  letter-spacing: 1px;
   color: var(--accent);
   margin-bottom: 16px;
 }
 .step h4 {
-  font-family: var(--font-display), serif;
-  font-weight: 500;
-  font-size: 20px;
+  font-family: var(--font-geist-sans), sans-serif;
+  font-weight: 600;
+  font-size: 19px;
   letter-spacing: -0.2px;
   margin: 0 0 9px;
 }
@@ -614,9 +671,9 @@ p a {
   cursor: pointer;
   list-style: none;
   padding: 22px 4px;
-  font-family: var(--font-display), serif;
+  font-family: var(--font-geist-sans), sans-serif;
   font-weight: 500;
-  font-size: 19px;
+  font-size: 18px;
   letter-spacing: -0.2px;
   display: flex;
   justify-content: space-between;
@@ -632,7 +689,7 @@ p a {
   color: var(--muted);
   font-size: 22px;
   line-height: 1;
-  font-family: var(--font-sans), sans-serif;
+  font-family: var(--font-geist-sans), sans-serif;
   transition: transform 0.25s;
 }
 .faq details[open] summary::after {
@@ -677,7 +734,7 @@ footer.site {
   font-size: 14px;
   flex-wrap: wrap;
   gap: 18px;
-  background: rgba(8, 9, 12, 0.55);
+  background: rgba(9, 9, 11, 0.55);
 }
 footer.site .brand {
   color: var(--ink);
@@ -717,10 +774,10 @@ footer.site .brand {
   transform: none;
 }
 .modal h3 {
-  font-family: var(--font-display), serif;
-  font-size: 26px;
-  font-weight: 500;
-  letter-spacing: -0.3px;
+  font-family: var(--font-geist-sans), sans-serif;
+  font-size: 24px;
+  font-weight: 600;
+  letter-spacing: -0.4px;
   margin: 8px 0 6px;
 }
 .modal .msub {
@@ -824,10 +881,10 @@ footer.site .brand {
   pointer-events: auto;
 }
 .arrived h2 {
-  font-family: var(--font-display), serif;
-  font-weight: 400;
-  font-size: clamp(34px, 5vw, 60px);
-  letter-spacing: -0.5px;
+  font-family: var(--font-geist-sans), sans-serif;
+  font-weight: 600;
+  font-size: clamp(32px, 5vw, 56px);
+  letter-spacing: -0.8px;
   margin: 0;
 }
 .arrived p {
@@ -838,7 +895,7 @@ footer.site .brand {
 .arrived .logo {
   width: 60px;
   height: 60px;
-  color: var(--ink);
+  color: var(--accent);
 }
 
 /* ---------- responsive ---------- */
@@ -859,15 +916,9 @@ footer.site .brand {
   .points.two,
   .testimonials,
   .compare,
-  .steps {
+  .steps,
+  .modules {
     grid-template-columns: 1fr;
-  }
-  .mod {
-    grid-template-columns: 26px 1fr;
-    row-gap: 8px;
-  }
-  .mod p {
-    grid-column: 1 / -1;
   }
   .testimonials,
   .steps {
@@ -882,9 +933,6 @@ footer.site .brand {
   .steps .step {
     padding-right: 0;
   }
-  .compare {
-    grid-template-columns: 1fr;
-  }
   .col.good {
     border-left: none;
     border-top: 1px solid var(--line);
@@ -893,7 +941,7 @@ footer.site .brand {
     gap: 16px;
   }
   .brand {
-    font-size: 21px;
+    font-size: 20px;
   }
 }
 
