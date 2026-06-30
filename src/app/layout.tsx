@@ -1,11 +1,13 @@
 import type { Metadata, Viewport } from "next";
-import { Space_Grotesk, Inter } from "next/font/google";
+import { Fraunces, Inter } from "next/font/google";
 import "./globals.css";
 
-const display = Space_Grotesk({
+// Editorial serif for display — warm, human, deliberately not the default SaaS grotesque.
+const display = Fraunces({
   variable: "--font-display",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["400", "500", "600"],
+  style: ["normal", "italic"],
 });
 
 const sans = Inter({
@@ -15,23 +17,23 @@ const sans = Inter({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://wayfinderos.com"),
-  title: "Wayfinder OS - Everything orbits. Nothing leaves.",
+  title: "Wayfinder OS — one place to run a coaching company",
   description:
-    "The operating system for coaching companies. CRM, payments, dialer, inbox, booking, video, email and your website - every tool you need collapsed into one core.",
+    "We got tired of running our coaching company across seven tools that didn't talk to each other, so we built one that does. CRM, payments, calls, inbox, booking and commissions — all under one login.",
   icons: {
     icon: "/brand/favicon.svg",
     shortcut: "/brand/favicon.svg",
   },
   openGraph: {
-    title: "Wayfinder OS - Everything orbits. Nothing leaves.",
+    title: "Wayfinder OS — one place to run a coaching company",
     description:
-      "Every tool you need, collapsed into one core. The operating system built for coaching companies.",
+      "The whole coaching business under one roof. Built by operators who were sick of duct-taping seven tools together.",
     type: "website",
   },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#05070b",
+  themeColor: "#08090c",
 };
 
 export default function RootLayout({

@@ -66,7 +66,9 @@ export default function SpaceScene() {
     // Uniform orbit: equal angular spacing, one shared radius/tilt/speed -> steady,
     // evenly-spaced motion that never bunches up.
     const N = ORBIT.length;
-    const ORBIT_R = 0.345; // fraction of min(W,H)
+    // Slightly tighter than before so left-aligned labels have room to sit to the
+    // right of each icon without running off the edge on narrower screens.
+    const ORBIT_R = 0.3; // fraction of min(W,H)
     const ORBIT_TILT = 0.5;
     const ORBIT_SPEED = 0.00009;
     const nodes: Node[] = ORBIT.map((t, i) => ({
@@ -216,7 +218,11 @@ export default function SpaceScene() {
         collapse = clamp((cv - pc) / Math.max(1, cc - pc));
       }
       const ce = ease(collapse),
-        warn = chaos * (1 - collapse),
+        // The old red/jitter "chaos" phase read as stressful, so it's retired — the
+        // problem is now told by the image-led section instead. We keep only the calm
+        // orbit that gently collapses into the core. `warn` stays wired (0) so the
+        // chaos-tinting maths below all resolve to no-ops without ripping them out.
+        warn = 0,
         pull = ce;
 
       const par = 28 * DPR;
@@ -399,16 +405,15 @@ export default function SpaceScene() {
           ctx.drawImage(n.imgR, n.px - isz / 2, n.py - isz / 2, isz, isz);
         }
         ctx.globalAlpha = 1;
-        // uniform-size labels, always centre-aligned and pushed radially outward from the
-        // core — no left/right flip as a node crosses the vertical axis.
-        ctx.font = `600 ${11.5 * DPR}px "Space Grotesk", ui-sans-serif, sans-serif`;
-        ctx.fillStyle = rgba([230, 240, 248], vis * 0.9);
-        ctx.textAlign = "center";
-        const dx = n.px - cx,
-          dy = n.py - cy,
-          len = Math.hypot(dx, dy) || 1,
-          off = r + 22 * DPR;
-        ctx.fillText(n.label, n.px + (dx / len) * off, n.py + (dy / len) * off);
+        // Labels: uniform size, always LEFT-aligned, and sitting the same fixed gap to the
+        // right of each icon. No radial flip and no centring — so a long word never spills
+        // back over its icon and a short word never floats off on its own.
+        ctx.font = `500 ${12 * DPR}px "Inter", ui-sans-serif, system-ui, sans-serif`;
+        ctx.fillStyle = rgba([230, 240, 248], vis * 0.85);
+        ctx.textAlign = "left";
+        ctx.textBaseline = "middle";
+        const gap = r + 12 * DPR;
+        ctx.fillText(n.label, n.px + gap, n.py);
       }
       ctx.textAlign = "left";
       ctx.textBaseline = "alphabetic";
