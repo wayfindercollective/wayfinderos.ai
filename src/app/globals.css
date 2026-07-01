@@ -116,18 +116,17 @@ nav.site.solid {
 }
 
 /* ---------- buttons / links ---------- */
-/* primary = monochrome (white fill, dark text) so it belongs to the site's own
-   white-text + cyan-accent palette instead of orphaning a lone indigo pill.
-   hover inverts to a clean outline, echoing the nav ghost button. */
+/* one button style everywhere, matching the header: an outlined hairline button that
+   belongs to the site's white-text + cyan-accent palette (no coloured fill). */
 .btn {
   font-family: var(--font-geist-sans), sans-serif;
   font-weight: 500;
   font-size: 15px;
-  color: var(--bg);
-  background: var(--ink);
+  color: var(--ink);
+  background: transparent;
   padding: 11px 20px;
   border-radius: 8px;
-  border: 1px solid var(--ink);
+  border: 1px solid var(--line);
   text-decoration: none;
   cursor: pointer;
   display: inline-flex;
@@ -136,23 +135,13 @@ nav.site.solid {
   transition: background 0.2s, border-color 0.2s, color 0.2s;
 }
 .btn:hover {
-  background: transparent;
+  background: rgba(255, 255, 255, 0.05);
+  border-color: var(--muted);
   color: var(--ink);
 }
 .btn.lg {
   font-size: 16px;
   padding: 14px 26px;
-}
-/* outlined / hairline variant - used in the nav so it isn't a saturated corner pill */
-.btn.ghost {
-  background: transparent;
-  color: var(--ink);
-  border-color: var(--line);
-}
-.btn.ghost:hover {
-  background: rgba(255, 255, 255, 0.05);
-  border-color: var(--muted);
-  color: var(--ink);
 }
 /* understated secondary - a real link, not a second button fighting the first */
 .textlink {
@@ -422,51 +411,84 @@ p a {
   stroke: currentColor;
 }
 
-/* ---------- module grid (the platform) ---------- */
-/* opaque cells + 1px gap over a --line backdrop = crisp hairline grid that reads cleanly
-   and never lets the background scene bleed through it */
-.modules {
+/* ---------- split layout: features / points on one side, media on the other ---------- */
+.split {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1px;
-  margin-top: 48px;
-  background: var(--line);
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  overflow: hidden;
-}
-.mod {
-  background: var(--bg);
-  padding: 26px 28px;
-  transition: background 0.25s;
-}
-.mod:hover {
-  background: #0d0e13;
-}
-.mhead {
-  display: flex;
+  grid-template-columns: 1fr 1fr;
+  gap: 56px;
   align-items: center;
-  gap: 11px;
-  margin-bottom: 10px;
+  margin-top: 48px;
 }
-.mod .mico {
+.platform-split {
+  align-items: start;
+  gap: 64px;
+}
+/* dashboard shot stays in view while the feature list scrolls past it */
+.platform-split .media-col {
+  position: sticky;
+  top: 96px;
+}
+
+/* platform feature list */
+.feature-list {
+  display: flex;
+  flex-direction: column;
+}
+.frow {
+  display: flex;
+  gap: 15px;
+  align-items: flex-start;
+  padding: 17px 0;
+  border-bottom: 1px solid var(--line);
+}
+.frow:first-child {
+  padding-top: 0;
+}
+.frow:last-child {
+  border-bottom: none;
+}
+.frow .mico {
   color: var(--accent);
-  display: inline-flex;
   flex: none;
+  margin-top: 2px;
 }
-.mod h3 {
+.frow h3 {
   font-family: var(--font-geist-sans), sans-serif;
   font-weight: 600;
-  font-size: 17px;
+  font-size: 16px;
   letter-spacing: -0.2px;
-  margin: 0;
+  margin: 0 0 3px;
   color: var(--ink);
 }
-.mod p {
-  font-size: 14.5px;
+.frow p {
+  font-size: 14px;
   color: var(--muted);
-  line-height: 1.55;
+  line-height: 1.5;
   margin: 0;
+}
+
+/* vertical point list (coaching split) */
+.point-list {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+.point.row {
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 16px;
+}
+.point.row .pi {
+  flex: none;
+  margin-top: 2px;
+}
+
+/* media frames share .shot; these just set the aspect ratio per use */
+.shot.portrait {
+  aspect-ratio: 4 / 5;
+}
+.shot.call {
+  aspect-ratio: 4 / 3;
 }
 
 /* ---------- capability lists (AI / coaching) ---------- */
@@ -516,21 +538,20 @@ p a {
 .testimonials {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 0;
+  gap: 18px;
   margin-top: 52px;
-  border-top: 1px solid var(--line);
 }
+/* slightly-opaque frosted cards so they read cleanly over the starfield */
 .tcard {
   display: flex;
   flex-direction: column;
-  gap: 22px;
-  padding: 34px 32px 34px 0;
+  gap: 20px;
+  padding: 28px 26px;
   margin: 0;
-  border-bottom: 1px solid var(--line);
-}
-.tcard + .tcard {
-  padding-left: 32px;
-  border-left: 1px solid var(--line);
+  background: rgba(18, 19, 23, 0.55);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--line);
+  border-radius: 16px;
 }
 .tcard blockquote {
   margin: 0;
@@ -917,19 +938,23 @@ footer.site .brand {
   .testimonials,
   .compare,
   .steps,
-  .modules {
+  .split {
     grid-template-columns: 1fr;
   }
-  .testimonials,
+  .split {
+    gap: 36px;
+  }
+  .platform-split .media-col {
+    position: static;
+    order: -1;
+  }
   .steps {
     border-top: none;
   }
-  .tcard + .tcard,
   .steps .step + .step {
     padding-left: 0;
     border-left: none;
   }
-  .tcard,
   .steps .step {
     padding-right: 0;
   }

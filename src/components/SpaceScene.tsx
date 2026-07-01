@@ -263,7 +263,7 @@ export default function SpaceScene() {
         const a = 0.2 + Math.abs(Math.sin(s.tw)) * 0.5;
         ctx.beginPath();
         ctx.arc(s.x * W + mouse.x * par * 0.3, s.y * H + mouse.y * par * 0.3, s.r * DPR, 0, 7);
-        ctx.fillStyle = `rgba(180,220,255,${a * 0.45 * (1 - post * 0.4)})`;
+        ctx.fillStyle = `rgba(180,220,255,${a * 0.55 * (1 - post * 0.12)})`;
         ctx.fill();
       }
 

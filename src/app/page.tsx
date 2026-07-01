@@ -2,12 +2,37 @@ import SpaceScene from "@/components/SpaceScene";
 import ClientFX from "@/components/ClientFX";
 import ApplyForm from "@/components/ApplyForm";
 import { Logo, ToolIcon } from "@/components/Brand";
-import { TOOLS, EXTRAS, AI_POINTS, COACHING_POINTS } from "@/lib/tools";
+import { TOOLS, EXTRAS, AI_POINTS } from "@/lib/tools";
 
 // icon lookup by key, drawn from the single source of truth in lib/tools.ts
 const svgFor: Record<string, string> = Object.fromEntries(
   [...TOOLS, ...EXTRAS].map((t) => [t.key, t.svg])
 );
+
+// Coaching-specific delivery - how sessions actually run. Kept distinct from the AI
+// section (no overlap): this is about the live room, cohorts and recordings.
+const coaching = [
+  {
+    t: "Video rooms, built in",
+    d: "Run 1:1s and group calls right inside the platform - no Zoom links to hunt down and paste.",
+    svg: svgFor.video,
+  },
+  {
+    t: "Breakout rooms",
+    d: "Split a cohort into small groups for an exercise, then pull everyone back together.",
+    svg: svgFor.team,
+  },
+  {
+    t: "Cohorts & programs",
+    d: "Track students through cohorts and program milestones, not just deals through pipeline stages.",
+    svg: '<path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/>',
+  },
+  {
+    t: "Recordings & recaps",
+    d: "Every session is recorded and shared back to the group automatically.",
+    svg: '<circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/>',
+  },
+];
 
 // the platform, as a plain spec list rather than a wall of glass cards
 const modules = [
@@ -147,7 +172,7 @@ export default function Home() {
           <a className="navlink" href="https://admin.wayfindercollective.io">
             Sign in
           </a>
-          <a className="btn ghost" href="#apply">
+          <a className="btn" href="#apply">
             Apply for access
           </a>
         </div>
@@ -238,25 +263,39 @@ export default function Home() {
           <section id="platform">
             <div className="center">
               <div className="eyebrow rv">What&apos;s inside</div>
-              <h2 className="title rv d1">
-                Everything a coaching day actually needs.
-              </h2>
+              <h2 className="title rv d1">Every tool the day needs. One login.</h2>
               <p className="lead rv d2">
-                Each one is part of the same system, not an integration taped on
-                the side. Change something in one place and the rest already knows.
+                One system, not a stack of integrations. Change something in one
+                place and the rest already knows about it.
               </p>
-              <div className="modules">
-                {modules.map((m) => (
-                  <div className="mod" key={m.key}>
-                    <div className="mhead">
+              <div className="split platform-split">
+                <div className="feature-list">
+                  {modules.map((m) => (
+                    <div className="frow" key={m.key}>
                       <span className="mico">
                         <ToolIcon svg={svgFor[m.key]} size={20} />
                       </span>
-                      <h3>{m.name}</h3>
+                      <div>
+                        <h3>{m.name}</h3>
+                        <p>{m.desc}</p>
+                      </div>
                     </div>
-                    <p>{m.desc}</p>
+                  ))}
+                </div>
+                <div className="media-col">
+                  {/* Drop your dashboard screenshot in here:
+                      <img src="/dashboard.png" alt="The Wayfinder OS dashboard" /> */}
+                  <div className="shot dash">
+                    <div className="placeholder">
+                      <svg viewBox="0 0 24 24" fill="none" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                        <rect x="3" y="3" width="18" height="18" rx="2" />
+                        <path d="M3 9h18" />
+                        <path d="M9 21V9" />
+                      </svg>
+                      Dashboard screenshot &middot; 16:9
+                    </div>
                   </div>
-                ))}
+                </div>
               </div>
             </div>
           </section>
@@ -264,15 +303,20 @@ export default function Home() {
           {/* AI */}
           <section id="ai">
             <div className="center">
-              <div className="eyebrow rv">The AI in it</div>
-              <h2 className="title rv d1">
-                There&apos;s AI all through it - and <em>not a chatbot in sight.</em>
-              </h2>
-              <p className="lead rv d2">
-                It works in the background - drafting, scoring, summarising,
-                sounding like the coach who owns the relationship - instead of
-                sitting there waiting for you to prompt it.
-              </p>
+              <div className="eyebrow rv">AI, built in</div>
+              <h2 className="title rv d1">See it actually work.</h2>
+              {/* Drop an autoplaying demo in here (drafting an AI email, reading a
+                  call, scoring a deal):
+                  <video autoPlay muted loop playsInline src="/ai-demo.mp4" /> */}
+              <div className="shot video rv d2">
+                <div className="placeholder">
+                  <svg viewBox="0 0 24 24" fill="none" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <rect x="2" y="3" width="20" height="14" rx="2" />
+                    <polygon points="10 8 15 10.5 10 13 10 8" />
+                  </svg>
+                  Autoplaying demo &middot; the AI drafting an email, reading a call, scoring a deal
+                </div>
+              </div>
               <div className="points">
                 {AI_POINTS.map((p) => (
                   <div className="point rv" key={p.t}>
@@ -289,16 +333,34 @@ export default function Home() {
 
           {/* STORY */}
           <section id="story">
-            <div className="center story">
-              <div className="eyebrow rv">Why we built it</div>
-              <h2 className="title rv d1">We built this for ourselves first.</h2>
-              <p className="lead rv d2">
-                We ran a coaching company on seven disconnected tools and a
-                commission spreadsheet we argued over every month. Nothing we
-                could buy actually fixed it, so we built the thing we wanted, ran
-                our own business on it for a couple of years, and now we&apos;re
-                opening it up to a handful of other companies.
-              </p>
+            <div className="center">
+              <div className="split story-split">
+                <div>
+                  <div className="eyebrow rv">Why we built it</div>
+                  <h2 className="title rv d1">
+                    We built this for ourselves first.
+                  </h2>
+                  <p className="lead rv d2">
+                    We ran a coaching company on seven disconnected tools and a
+                    commission spreadsheet we argued over every month. Nothing we
+                    could buy actually fixed it, so we built the thing we wanted,
+                    ran our own business on it for a couple of years, and now
+                    we&apos;re opening it up to a handful of other companies.
+                  </p>
+                </div>
+                <div className="media-col rv d2">
+                  {/* Founder photo: <img src="/founder.png" alt="..." /> */}
+                  <div className="shot portrait">
+                    <div className="placeholder">
+                      <svg viewBox="0 0 24 24" fill="none" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                        <circle cx="12" cy="8" r="4" />
+                        <path d="M4 21a8 8 0 0 1 16 0" />
+                      </svg>
+                      Photo of the founder
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </section>
 
@@ -330,27 +392,42 @@ export default function Home() {
             </div>
           </section>
 
-          {/* BUILT FOR COACHING */}
+          {/* BUILT FOR COACHING - the live room */}
           <section id="coaching">
             <div className="center">
               <div className="eyebrow rv">Made for coaching</div>
-              <h2 className="title rv d1">
-                Built for coaching, not borrowed from sales software.
-              </h2>
+              <h2 className="title rv d1">Where the coaching actually happens.</h2>
               <p className="lead rv d2">
-                The things a coaching business needs that an agency CRM was never
-                going to bother building.
+                Most CRMs stop at the sale. Coaching keeps going - the calls, the
+                cohorts, the room where the work gets done. That part is built in,
+                not bolted on.
               </p>
-              <div className="points two">
-                {COACHING_POINTS.map((p) => (
-                  <div className="point rv" key={p.t}>
-                    <span className="pi">
-                      <ToolIcon svg={p.svg} size={22} />
-                    </span>
-                    <h4>{p.t}</h4>
-                    <p>{p.d}</p>
+              <div className="split coaching-split">
+                <div className="point-list rv d1">
+                  {coaching.map((p) => (
+                    <div className="point row" key={p.t}>
+                      <span className="pi">
+                        <ToolIcon svg={p.svg} size={22} />
+                      </span>
+                      <div>
+                        <h4>{p.t}</h4>
+                        <p>{p.d}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <div className="media-col rv d2">
+                  {/* Photo of a live coaching call: <img src="/video-call.png" alt="..." /> */}
+                  <div className="shot call">
+                    <div className="placeholder">
+                      <svg viewBox="0 0 24 24" fill="none" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                        <path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5" />
+                        <rect x="2" y="6" width="14" height="12" rx="2" />
+                      </svg>
+                      Photo of a live video call
+                    </div>
                   </div>
-                ))}
+                </div>
               </div>
             </div>
           </section>
@@ -377,7 +454,7 @@ export default function Home() {
           <section id="migration">
             <div className="center">
               <div className="eyebrow rv">Switching over</div>
-              <h2 className="title rv d1">Moving across is the easy part.</h2>
+              <h2 className="title rv d1">How we make moving across easy.</h2>
               <p className="lead rv d2">
                 It&apos;s tooling-driven, runs alongside your current setup, and
                 stays reversible until you&apos;re ready. No downtime, nothing
