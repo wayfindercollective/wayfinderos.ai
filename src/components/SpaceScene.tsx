@@ -10,7 +10,9 @@ export default function SpaceScene() {
 
   useEffect(() => {
     const canvas = sceneRef.current!;
-    const ctx = canvas.getContext("2d")!;
+    // opaque context: the scene covers the whole viewport, so skipping the alpha
+    // channel makes every composite of this canvas cheaper
+    const ctx = canvas.getContext("2d", { alpha: false })!;
     const warp = warpRef.current!;
     const wctx = warp.getContext("2d")!;
     const arrived = arrivedRef.current!;
@@ -43,6 +45,28 @@ export default function SpaceScene() {
     ];
     const rgba = (c: [number, number, number], a: number) =>
       `rgba(${c[0] | 0},${c[1] | 0},${c[2] | 0},${a})`;
+
+    // Low-res offscreen buffer for the nebula blobs. They're soft gradients, so they
+    // upscale invisibly - and rendering them at ~220px wide replaces what used to be
+    // three FULL-SCREEN gradient fills per frame (the single biggest cost in the scene).
+    const bg = document.createElement("canvas");
+    const bgx = bg.getContext("2d")!;
+
+    // Pre-rendered cyan glow sprite. Drawing this scaled replaces every shadowBlur in
+    // the scene - canvas shadowBlur is a per-draw Gaussian blur and was a major cost.
+    const glowSprite = (() => {
+      const s = 128;
+      const c = document.createElement("canvas");
+      c.width = c.height = s;
+      const gx = c.getContext("2d")!;
+      const g = gx.createRadialGradient(s / 2, s / 2, 0, s / 2, s / 2, s / 2);
+      g.addColorStop(0, "rgba(34,211,238,0.85)");
+      g.addColorStop(0.35, "rgba(34,211,238,0.28)");
+      g.addColorStop(1, "rgba(34,211,238,0)");
+      gx.fillStyle = g;
+      gx.fillRect(0, 0, s, s);
+      return c;
+    })();
 
     // ---- preload tinted icon images (cyan + red variants) ----
     const iconImg = (svg: string, color: string) => {
@@ -91,6 +115,8 @@ export default function SpaceScene() {
       px: 0,
       py: 0,
     }));
+    // persistent draw-order array, re-sorted in place each frame (no per-frame allocation)
+    const order = nodes.slice();
 
     const rings = [
       { r: 0.3, tilt: 0.5, a: 0 },
@@ -156,6 +182,8 @@ export default function SpaceScene() {
       H = canvas.height = innerHeight * DPR;
       canvas.style.width = innerWidth + "px";
       canvas.style.height = innerHeight + "px";
+      bg.width = 220;
+      bg.height = Math.max(2, Math.round((220 * innerHeight) / Math.max(1, innerWidth)));
       warp.width = innerWidth * DPR;
       warp.height = innerHeight * DPR;
       warp.style.width = innerWidth + "px";
@@ -206,7 +234,9 @@ export default function SpaceScene() {
     function frame(now: number) {
       const dt = Math.min(now - t0, 40);
       t0 = now;
-      ctx.clearRect(0, 0, W, H);
+      // opaque canvas: paint the page background instead of clearing to transparent
+      ctx.fillStyle = "#09090b";
+      ctx.fillRect(0, 0, W, H);
       mouse.x += (mouse.tx - mouse.x) * 0.05;
       mouse.y += (mouse.ty - mouse.y) * 0.05;
       sy += (syT - sy) * 0.08;
@@ -246,39 +276,52 @@ export default function SpaceScene() {
       const minD = Math.min(W, H);
       coreScreen = { x: cx / DPR, y: cy / DPR };
 
-      for (const b of blobs) {
-        b.t += dt;
-        const bx = (b.x + Math.sin(b.t * b.px) * 0.04) * W,
-          by = (b.y + Math.cos(b.t * b.py) * 0.04) * H;
-        const col = mix(b.c, WARN, warn * 0.75);
-        const g = ctx.createRadialGradient(bx, by, 0, bx, by, b.r * minD);
-        g.addColorStop(0, rgba(col, b.a * (1 + ce * 0.5) * live));
-        g.addColorStop(1, rgba(col, 0));
-        ctx.fillStyle = g;
-        ctx.fillRect(0, 0, W, H);
+      // nebula blobs: drawn tiny offscreen, blitted up in one call
+      if (live > 0.004) {
+        const bw = bg.width,
+          bh = bg.height,
+          bsc = bw / W;
+        bgx.clearRect(0, 0, bw, bh);
+        for (const b of blobs) {
+          b.t += dt;
+          const bx = (b.x + Math.sin(b.t * b.px) * 0.04) * bw,
+            by = (b.y + Math.cos(b.t * b.py) * 0.04) * bh;
+          const g = bgx.createRadialGradient(bx, by, 0, bx, by, b.r * minD * bsc);
+          g.addColorStop(0, rgba(b.c, b.a * (1 + ce * 0.5) * live));
+          g.addColorStop(1, rgba(b.c, 0));
+          bgx.fillStyle = g;
+          bgx.fillRect(0, 0, bw, bh);
+        }
+        ctx.drawImage(bg, 0, 0, W, H);
       }
 
+      // stars as tiny rects: visually identical at these sizes, much cheaper than arcs
+      const sax = mouse.x * par * 0.3,
+        say = mouse.y * par * 0.3,
+        sdim = 0.55 * (1 - post * 0.12);
       for (const s of stars) {
         s.tw += 0.02 * s.sp;
         const a = 0.2 + Math.abs(Math.sin(s.tw)) * 0.5;
-        ctx.beginPath();
-        ctx.arc(s.x * W + mouse.x * par * 0.3, s.y * H + mouse.y * par * 0.3, s.r * DPR, 0, 7);
-        ctx.fillStyle = `rgba(180,220,255,${a * 0.55 * (1 - post * 0.12)})`;
-        ctx.fill();
+        const sz = s.r * DPR * 2;
+        ctx.fillStyle = `rgba(180,220,255,${a * sdim})`;
+        ctx.fillRect(s.x * W + sax - sz / 2, s.y * H + say - sz / 2, sz, sz);
       }
 
-      ctx.lineWidth = 1 * DPR;
-      for (const rg of rings) {
-        const rr = rg.r * minD * (1 - pull);
-        ctx.beginPath();
-        for (let a = 0; a <= 6.3; a += 0.12) {
-          const x = cx + Math.cos(a + rg.a) * rr,
-            y = cy + Math.sin(a + rg.a) * rr * rg.tilt;
-          if (a === 0) ctx.moveTo(x, y);
-          else ctx.lineTo(x, y);
+      const ringA = 0.1 * (1 - chaos) * (1 - pull);
+      if (ringA > 0.004) {
+        ctx.lineWidth = 1 * DPR;
+        ctx.strokeStyle = rgba(CY, ringA);
+        for (const rg of rings) {
+          const rr = rg.r * minD * (1 - pull);
+          ctx.beginPath();
+          for (let a = 0; a <= 6.3; a += 0.12) {
+            const x = cx + Math.cos(a + rg.a) * rr,
+              y = cy + Math.sin(a + rg.a) * rr * rg.tilt;
+            if (a === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+          }
+          ctx.stroke();
         }
-        ctx.strokeStyle = rgba(CY, 0.1 * (1 - chaos) * (1 - pull));
-        ctx.stroke();
       }
 
       const wcx = W * 0.74,
@@ -310,7 +353,7 @@ export default function SpaceScene() {
         n.px = bx + (cx - bx) * pull;
         n.py = by + (cy - by) * pull;
       }
-      const order = [...nodes].sort((a, b) => a.depth - b.depth);
+      order.sort((a, b) => a.depth - b.depth);
 
       // chaos mesh - every tool wired to every other tool, red & flickering
       if (warn > 0.02) {
@@ -353,16 +396,17 @@ export default function SpaceScene() {
       for (const p of pulses) {
         p.t += p.sp * dt;
         if (p.t > 1) p.t -= 1;
+        const a = 0.9 * (1 - Math.abs(p.t - 0.5) * 1.4) * (1 - warn) * live;
+        if (a <= 0.02) continue;
         const n = nodes[p.node];
         const x = cx + (n.px - cx) * p.t,
-          y = cy + (n.py - cy) * p.t;
-        ctx.beginPath();
-        ctx.arc(x, y, 1.9 * DPR, 0, 7);
-        ctx.fillStyle = `rgba(125,240,255,${0.9 * (1 - Math.abs(p.t - 0.5) * 1.4) * (1 - warn) * live})`;
-        ctx.shadowBlur = 8 * DPR;
-        ctx.shadowColor = "#22d3ee";
-        ctx.fill();
-        ctx.shadowBlur = 0;
+          y = cy + (n.py - cy) * p.t,
+          ps = 8 * DPR;
+        ctx.globalAlpha = a;
+        ctx.drawImage(glowSprite, x - ps, y - ps, ps * 2, ps * 2);
+        ctx.globalAlpha = 1;
+        ctx.fillStyle = `rgba(215,248,255,${a})`;
+        ctx.fillRect(x - DPR, y - DPR, 2 * DPR, 2 * DPR);
       }
 
       // the core: soft sun in hero -> gone in chaos -> bright orb + logo at collapse
@@ -370,17 +414,18 @@ export default function SpaceScene() {
         coreStrength = clamp((0.55 * (1 - warn) + ce) * live),
         cr = (40 + ce * 80) * DPR * beat;
       if (coreStrength > 0.01) {
-        const cg = ctx.createRadialGradient(cx, cy, 0, cx, cy, cr);
+        // outer halo baked into one larger gradient (shadowBlur here was very expensive)
+        const glowR = cr + (36 + ce * 90) * DPR,
+          k = cr / glowR;
+        const cg = ctx.createRadialGradient(cx, cy, 0, cx, cy, glowR);
         cg.addColorStop(0, `rgba(255,255,255,${0.97 * coreStrength})`);
-        cg.addColorStop(0.32, `rgba(125,240,255,${0.85 * coreStrength})`);
+        cg.addColorStop(0.32 * k, `rgba(125,240,255,${0.85 * coreStrength})`);
+        cg.addColorStop(k, `rgba(34,211,238,${0.3 * coreStrength})`);
         cg.addColorStop(1, "rgba(34,211,238,0)");
         ctx.beginPath();
-        ctx.arc(cx, cy, cr, 0, 7);
+        ctx.arc(cx, cy, glowR, 0, 7);
         ctx.fillStyle = cg;
-        ctx.shadowBlur = (36 + ce * 90) * DPR;
-        ctx.shadowColor = "#22d3ee";
         ctx.fill();
-        ctx.shadowBlur = 0;
         ctx.beginPath();
         ctx.arc(cx, cy, (28 + ce * 22) * DPR * beat, 0, 7);
         ctx.strokeStyle = `rgba(255,255,255,${0.5 * coreStrength})`;
@@ -400,13 +445,14 @@ export default function SpaceScene() {
         const sc = 0.8 + n.depth * 0.5,
           r = 15 * DPR * sc,
           col = mix(CY, WARN, warn);
+        const halo = r * 2.2;
+        ctx.globalAlpha = vis * 0.5;
+        ctx.drawImage(glowSprite, n.px - halo, n.py - halo, halo * 2, halo * 2);
+        ctx.globalAlpha = 1;
         ctx.beginPath();
         ctx.arc(n.px, n.py, r, 0, 7);
         ctx.fillStyle = rgba(col, vis * 0.14);
-        ctx.shadowBlur = 10 * DPR;
-        ctx.shadowColor = rgba(col, vis * 0.8);
         ctx.fill();
-        ctx.shadowBlur = 0;
         ctx.lineWidth = 1.1 * DPR;
         ctx.strokeStyle = rgba(col, vis * 0.6);
         ctx.stroke();
@@ -606,9 +652,12 @@ export default function SpaceScene() {
     const onScroll = () => {
       syT = scrollY;
     };
-    window.addEventListener("mousemove", onMove);
+    window.addEventListener("mousemove", onMove, { passive: true });
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", resize);
+    // fonts/images landing after mount can shift the section anchors the scroll
+    // choreography is measured against - re-measure once everything has loaded
+    window.addEventListener("load", measure);
     const triggers = Array.from(document.querySelectorAll<HTMLElement>(".warp-trigger"));
     triggers.forEach((b) => b.addEventListener("click", startWarp));
     const onWarpEvent = () => startWarp();
@@ -632,6 +681,7 @@ export default function SpaceScene() {
       window.removeEventListener("mousemove", onMove);
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", resize);
+      window.removeEventListener("load", measure);
       window.removeEventListener("wf:warp", onWarpEvent);
       triggers.forEach((b) => b.removeEventListener("click", startWarp));
       backBtn?.removeEventListener("click", endWarp);

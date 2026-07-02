@@ -10,7 +10,10 @@
   --accent: #22d3ee; /* cyan-400 - links, icons, small highlights */
   --line: #27272a; /* zinc-800 */
   --line-soft: rgba(255, 255, 255, 0.055);
-  --card: rgba(24, 25, 29, 0.55); /* frosted panel over the starfield */
+  /* Panel surface over the starfield. Solid-ish on purpose: backdrop-filter here would
+     force a re-blur on every frame of the animated canvas behind it (major scroll jank).
+     Only the nav strip and the (rarely open) modal are allowed backdrop blur. */
+  --card: rgba(21, 22, 27, 0.88);
 }
 
 * {
@@ -590,7 +593,6 @@ p a {
   padding: 28px 26px;
   margin: 0;
   background: var(--card);
-  backdrop-filter: blur(10px);
   border: 1px solid var(--line);
   border-radius: 16px;
 }
@@ -625,7 +627,6 @@ p a {
   border-radius: 16px;
   overflow: hidden;
   background: var(--card);
-  backdrop-filter: blur(10px);
 }
 .col {
   padding: 34px 32px;
@@ -678,7 +679,6 @@ p a {
 .steps .step {
   padding: 30px 28px;
   background: var(--card);
-  backdrop-filter: blur(10px);
   border: 1px solid var(--line);
   border-radius: 16px;
 }
@@ -774,7 +774,6 @@ p a {
   margin: 0 auto;
   text-align: center;
   background: var(--card);
-  backdrop-filter: blur(10px);
   border: 1px solid var(--line);
   border-radius: 20px;
   padding: 72px 48px;
@@ -796,8 +795,7 @@ footer.site {
   border-top: 1px solid var(--line);
   position: relative;
   z-index: 5;
-  background: rgba(9, 9, 11, 0.72);
-  backdrop-filter: blur(10px);
+  background: rgba(9, 9, 11, 0.92);
   font-size: 14px;
 }
 .ftop {
