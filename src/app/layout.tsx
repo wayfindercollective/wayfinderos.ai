@@ -8,17 +8,17 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://wayfinderos.com"),
-  title: "Wayfinder OS - one place to run a coaching company",
+  title: "Wayfinder OS - Run your coaching company from one login",
   description:
-    "We got tired of running our coaching company across seven tools that didn't talk to each other, so we built one that does. CRM, payments, calls, inbox, booking and commissions - all under one login.",
+    "CRM, payments, calls, inbox, booking and commissions - one system, not seven subscriptions. Built by operators who ran a coaching company on the exact mess you're in right now.",
   icons: {
     icon: "/brand/favicon.svg",
     shortcut: "/brand/favicon.svg",
   },
   openGraph: {
-    title: "Wayfinder OS - one place to run a coaching company",
+    title: "Wayfinder OS - Run your coaching company from one login",
     description:
-      "The whole coaching business under one roof. Built by operators who were sick of duct-taping seven tools together.",
+      "One system, not seven subscriptions. Built by operators who ran a coaching company on the exact mess you're in right now.",
     type: "website",
   },
 };

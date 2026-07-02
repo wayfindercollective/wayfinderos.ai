@@ -9,12 +9,11 @@ const svgFor: Record<string, string> = Object.fromEntries(
   [...TOOLS, ...EXTRAS].map((t) => [t.key, t.svg])
 );
 
-// Coaching-specific delivery - how sessions actually run. Kept distinct from the AI
-// section (no overlap): this is about the live room, cohorts and recordings.
+// Coaching delivery - the live room. Kept deliberately distinct from the AI section.
 const coaching = [
   {
     t: "Video rooms, built in",
-    d: "Run 1:1s and group calls right inside the platform - no Zoom links to hunt down and paste.",
+    d: "Run 1:1s and cohort calls inside the platform, with attendance logged straight to each student's record.",
     svg: svgFor.video,
   },
   {
@@ -29,12 +28,12 @@ const coaching = [
   },
   {
     t: "Recordings & recaps",
-    d: "Every session is recorded and shared back to the group automatically.",
+    d: "Every session recorded and shared back to the group, without anyone having to remember to.",
     svg: '<circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/>',
   },
 ];
 
-// the platform, as a plain spec list rather than a wall of glass cards
+// the platform, as a plain spec list rather than a wall of cards
 const modules = [
   { key: "crm", name: "CRM & pipeline", desc: "Every deal, stage and contact, wired straight to payments, calls and commissions." },
   { key: "payments", name: "Payments & checkout", desc: "Branded checkout, saved cards, plans and failed-payment chasing, running on Stripe." },
@@ -122,7 +121,7 @@ const faqs = [
     a: "More than you'd think, and none of it is a chatbot bolted on the side. It's woven through every part of the platform and runs in the background - scoring, drafting and surfacing the next move while you work, without you ever stopping to prompt it.",
   },
   {
-    q: "Is this actually built for coaching, or just rebranded sales software?",
+    q: "Is this built for coaching, or rebranded sales software?",
     a: "Built for coaching. The data model is the coaching relationship, not an agency sub-account: track students through cohorts and program history per customer, and let the AI tell you where each one is in their journey before a renewal conversation.",
   },
   {
@@ -161,13 +160,20 @@ export default function Home() {
       <SpaceScene />
       <div className="grain" />
 
-      <nav className="site">
+      <nav className="site" aria-label="Primary">
         <a className="brand" href="#top">
           <Logo size={30} />
           <span>
             Wayfinder <span className="os">OS</span>
           </span>
         </a>
+        <div className="navlinks">
+          <a href="#platform">What&apos;s inside</a>
+          <a href="#ai">The AI</a>
+          <a href="#coaching">Coaching</a>
+          <a href="#migration">Switching</a>
+          <a href="#faq">FAQ</a>
+        </div>
         <div className="navcta">
           <a className="navlink" href="https://admin.wayfindercollective.io">
             Sign in
@@ -184,12 +190,13 @@ export default function Home() {
           <section className="hero">
             <div className="eyebrow rv">Built for coaching companies</div>
             <h1 className="rv d1">
-              Your whole coaching business, <em>under one roof.</em>
+              Run your whole coaching company{" "}
+              <span className="dim">from one login.</span>
             </h1>
             <p className="sub rv d2">
-              CRM, payments, calls, inbox, booking and commissions - the entire
-              stack, in <strong>one login</strong>. Built by people who ran a
-              coaching company on the exact mess you&apos;re trying to get out of.
+              CRM, payments, calls, inbox, booking and commissions - one system,
+              not seven subscriptions. Built by operators who ran a coaching
+              company on the exact mess you&apos;re in right now.
             </p>
             <div className="hero-cta rv d3">
               <a className="btn lg" href="#apply">
@@ -199,8 +206,12 @@ export default function Home() {
                 See how it fits together <span className="accent">↓</span>
               </a>
             </div>
+            <div className="hero-meta rv d4">
+              Hands-on migration · Your old stack runs in parallel, on us · Your
+              data stays yours
+            </div>
             <div className="scrollhint">
-              <div className="mouse" /> Scroll
+              <span className="line" /> Scroll
             </div>
           </section>
 
@@ -218,10 +229,10 @@ export default function Home() {
                   </p>
                   <p>
                     Commissions live in a spreadsheet you&apos;ve stopped fully
-                    trusting. A lead&apos;s been sitting for two days because their
-                    message landed somewhere nobody checks. None of these tools
-                    talk to each other, so the last thing holding it all together
-                    is you.
+                    trusting. A lead&apos;s been sitting for two days because
+                    their message landed somewhere nobody checks. None of these
+                    tools talk to each other, so the last thing holding it all
+                    together is you.
                   </p>
                 </div>
                 <div className="shot rv d2">
@@ -232,7 +243,7 @@ export default function Home() {
                       <circle cx="9" cy="9" r="2" />
                       <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" />
                     </svg>
-                    Illustration goes here - 16:9
+                    Illustration · 16:9
                   </div>
                 </div>
               </div>
@@ -240,21 +251,16 @@ export default function Home() {
           </section>
 
           {/* FIX */}
-          <section
-            id="collapse"
-            style={{ minHeight: "92vh", display: "flex", alignItems: "center" }}
-          >
-            <div className="center" style={{ textAlign: "center", maxWidth: 720 }}>
-              <div className="eyebrow rv" style={{ display: "inline-flex" }}>
-                The fix
-              </div>
+          <section id="collapse" className="fix">
+            <div className="center statement">
+              <div className="eyebrow rv">The fix</div>
               <h2 className="title rv d1">
-                So we put it all in <em>one place.</em>
+                So we put it all in <span className="dim">one place.</span>
               </h2>
-              <p className="lead rv d2" style={{ margin: "0 auto" }}>
+              <p className="lead rv d2">
                 One database. One login. One set of numbers everyone&apos;s
-                working from. Not seven tools bolted together and hoping - one
-                system where each part already knows what the others are doing.
+                working from. Not seven tools bolted together and hoping - a
+                single system where each part can see the rest.
               </p>
             </div>
           </section>
@@ -263,10 +269,11 @@ export default function Home() {
           <section id="platform">
             <div className="center">
               <div className="eyebrow rv">What&apos;s inside</div>
-              <h2 className="title rv d1">Every tool the day needs. One login.</h2>
+              <h2 className="title rv d1">One system. Fourteen jobs.</h2>
               <p className="lead rv d2">
-                One system, not a stack of integrations. Change something in one
-                place and the rest already knows about it.
+                Every module reads and writes the same records - so a deal moving
+                stage updates the invoice, the commission split and the
+                dashboard, without a Zapier in sight.
               </p>
               <div className="split platform-split">
                 <div className="feature-list">
@@ -292,7 +299,7 @@ export default function Home() {
                         <path d="M3 9h18" />
                         <path d="M9 21V9" />
                       </svg>
-                      Dashboard screenshot &middot; 16:9
+                      Dashboard screenshot · 16:9
                     </div>
                   </div>
                 </div>
@@ -304,7 +311,11 @@ export default function Home() {
           <section id="ai">
             <div className="center">
               <div className="eyebrow rv">AI, built in</div>
-              <h2 className="title rv d1">See it actually work.</h2>
+              <h2 className="title rv d1">Watch it do the busywork.</h2>
+              <p className="lead rv d2">
+                It drafts the replies, reads the calls and scores the deals while
+                you work - no prompts, no chatbot.
+              </p>
               {/* Drop an autoplaying demo in here (drafting an AI email, reading a
                   call, scoring a deal):
                   <video autoPlay muted loop playsInline src="/ai-demo.mp4" /> */}
@@ -314,7 +325,8 @@ export default function Home() {
                     <rect x="2" y="3" width="20" height="14" rx="2" />
                     <polygon points="10 8 15 10.5 10 13 10 8" />
                   </svg>
-                  Autoplaying demo &middot; the AI drafting an email, reading a call, scoring a deal
+                  Autoplaying demo · the AI drafting an email, reading a call,
+                  scoring a deal
                 </div>
               </div>
               <div className="points">
@@ -331,32 +343,39 @@ export default function Home() {
             </div>
           </section>
 
-          {/* STORY */}
-          <section id="story">
+          {/* BUILT FOR COACHING - the live room */}
+          <section id="coaching">
             <div className="center">
-              <div className="split story-split">
-                <div>
-                  <div className="eyebrow rv">Why we built it</div>
-                  <h2 className="title rv d1">
-                    We built this for ourselves first.
-                  </h2>
-                  <p className="lead rv d2">
-                    We ran a coaching company on seven disconnected tools and a
-                    commission spreadsheet we argued over every month. Nothing we
-                    could buy actually fixed it, so we built the thing we wanted,
-                    ran our own business on it for a couple of years, and now
-                    we&apos;re opening it up to a handful of other companies.
-                  </p>
+              <div className="eyebrow rv">Made for coaching</div>
+              <h2 className="title rv d1">Where the coaching happens.</h2>
+              <p className="lead rv d2">
+                Most CRMs stop at the sale. Coaching keeps going - the calls, the
+                cohorts, the room where the work gets done. That part is built
+                in, not bolted on.
+              </p>
+              <div className="split coaching-split">
+                <div className="point-list rv d1">
+                  {coaching.map((p) => (
+                    <div className="point row" key={p.t}>
+                      <span className="pi">
+                        <ToolIcon svg={p.svg} size={22} />
+                      </span>
+                      <div>
+                        <h4>{p.t}</h4>
+                        <p>{p.d}</p>
+                      </div>
+                    </div>
+                  ))}
                 </div>
                 <div className="media-col rv d2">
-                  {/* Founder photo: <img src="/founder.png" alt="..." /> */}
-                  <div className="shot portrait">
+                  {/* Photo of a live coaching call: <img src="/video-call.png" alt="..." /> */}
+                  <div className="shot call">
                     <div className="placeholder">
                       <svg viewBox="0 0 24 24" fill="none" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                        <circle cx="12" cy="8" r="4" />
-                        <path d="M4 21a8 8 0 0 1 16 0" />
+                        <path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5" />
+                        <rect x="2" y="6" width="14" height="12" rx="2" />
                       </svg>
-                      Photo of the founder
+                      Photo of a live video call
                     </div>
                   </div>
                 </div>
@@ -392,39 +411,32 @@ export default function Home() {
             </div>
           </section>
 
-          {/* BUILT FOR COACHING - the live room */}
-          <section id="coaching">
+          {/* STORY */}
+          <section id="story">
             <div className="center">
-              <div className="eyebrow rv">Made for coaching</div>
-              <h2 className="title rv d1">Where the coaching actually happens.</h2>
-              <p className="lead rv d2">
-                Most CRMs stop at the sale. Coaching keeps going - the calls, the
-                cohorts, the room where the work gets done. That part is built in,
-                not bolted on.
-              </p>
-              <div className="split coaching-split">
-                <div className="point-list rv d1">
-                  {coaching.map((p) => (
-                    <div className="point row" key={p.t}>
-                      <span className="pi">
-                        <ToolIcon svg={p.svg} size={22} />
-                      </span>
-                      <div>
-                        <h4>{p.t}</h4>
-                        <p>{p.d}</p>
-                      </div>
-                    </div>
-                  ))}
+              <div className="split story-split">
+                <div>
+                  <div className="eyebrow rv">Why we built it</div>
+                  <h2 className="title rv d1">
+                    We built this for ourselves first.
+                  </h2>
+                  <p className="lead rv d2">
+                    We ran a coaching company on seven disconnected tools and a
+                    commission spreadsheet we argued over every month. Nothing we
+                    could buy fixed it, so we built the thing we wanted, ran our
+                    own business on it for a couple of years, and now we&apos;re
+                    opening it up to a handful of other companies.
+                  </p>
                 </div>
                 <div className="media-col rv d2">
-                  {/* Photo of a live coaching call: <img src="/video-call.png" alt="..." /> */}
-                  <div className="shot call">
+                  {/* Founder photo: <img src="/founder.png" alt="..." /> */}
+                  <div className="shot portrait">
                     <div className="placeholder">
                       <svg viewBox="0 0 24 24" fill="none" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                        <path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5" />
-                        <rect x="2" y="6" width="14" height="12" rx="2" />
+                        <circle cx="12" cy="8" r="4" />
+                        <path d="M4 21a8 8 0 0 1 16 0" />
                       </svg>
-                      Photo of a live video call
+                      Photo of the founder
                     </div>
                   </div>
                 </div>
@@ -476,12 +488,12 @@ export default function Home() {
           <section id="apply">
             <div className="apply rv">
               <div className="eyebrow">Founding access</div>
-              <h2 className="title">Come run yours on it.</h2>
+              <h2 className="title">Bring your company across.</h2>
               <p className="lead">
                 We&apos;re taking on a small group of coaching companies as
                 founding operators - hands-on migration, a direct line to us, and
-                a real say in where it goes next. Tell us about your company and
-                we&apos;ll set up a call.
+                a real say in what gets built next. Tell us about your company
+                and we&apos;ll set up a call.
               </p>
               {/* TEMP: this bypasses the form to demo the hyperspace jump.
                   Swap to className="btn lg apply-open" to re-enable the Apply form. */}
@@ -508,13 +520,43 @@ export default function Home() {
           </section>
 
           <footer className="site">
-            <span className="brand" style={{ fontSize: 20 }}>
-              <Logo size={24} />
-              <span>
-                Wayfinder <span className="os">OS</span>
-              </span>
-            </span>
-            <div>© 2026 Wayfinder Collective · One place to run a coaching company.</div>
+            <div className="center">
+              <div className="ftop">
+                <div className="fbrand">
+                  <span className="brand">
+                    <Logo size={26} />
+                    <span>
+                      Wayfinder <span className="os">OS</span>
+                    </span>
+                  </span>
+                  <p>The operating system for coaching companies.</p>
+                </div>
+                <nav className="fcols" aria-label="Footer">
+                  <div>
+                    <h5>Product</h5>
+                    <a href="#platform">What&apos;s inside</a>
+                    <a href="#ai">The AI</a>
+                    <a href="#coaching">Coaching</a>
+                    <a href="#migration">Switching</a>
+                  </div>
+                  <div>
+                    <h5>Company</h5>
+                    <a href="#story">Why we built it</a>
+                    <a href="#testimonials">Operators</a>
+                    <a href="#faq">FAQ</a>
+                  </div>
+                  <div>
+                    <h5>Get started</h5>
+                    <a href="#apply">Apply for access</a>
+                    <a href="https://admin.wayfindercollective.io">Sign in</a>
+                  </div>
+                </nav>
+              </div>
+              <div className="fbottom">
+                <span>© 2026 Wayfinder Collective. All rights reserved.</span>
+                <span>Built by operators, for operators.</span>
+              </div>
+            </div>
           </footer>
         </div>
       </div>

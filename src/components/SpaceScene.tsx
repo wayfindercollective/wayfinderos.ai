@@ -17,11 +17,11 @@ export default function SpaceScene() {
     const reduce = window.matchMedia(
       "(prefers-reduced-motion: reduce)"
     ).matches;
-    // match the page font (Geist) for canvas labels, with a safe system fallback
-    const sansFont =
+    // match the page fonts for canvas labels, with safe system fallbacks
+    const monoFont =
       getComputedStyle(document.documentElement)
-        .getPropertyValue("--font-geist-sans")
-        .trim() || "ui-sans-serif, system-ui, sans-serif";
+        .getPropertyValue("--font-geist-mono")
+        .trim() || "ui-monospace, monospace";
 
     let W = 0,
       H = 0,
@@ -359,14 +359,14 @@ export default function SpaceScene() {
         ctx.beginPath();
         ctx.arc(x, y, 1.9 * DPR, 0, 7);
         ctx.fillStyle = `rgba(125,240,255,${0.9 * (1 - Math.abs(p.t - 0.5) * 1.4) * (1 - warn) * live})`;
-        ctx.shadowBlur = 10 * DPR;
+        ctx.shadowBlur = 8 * DPR;
         ctx.shadowColor = "#22d3ee";
         ctx.fill();
         ctx.shadowBlur = 0;
       }
 
       // the core: soft sun in hero -> gone in chaos -> bright orb + logo at collapse
-      const beat = 1 + Math.sin(now * 0.0016) * 0.06,
+      const beat = 1 + Math.sin(now * 0.0016) * 0.045,
         coreStrength = clamp((0.55 * (1 - warn) + ce) * live),
         cr = (40 + ce * 80) * DPR * beat;
       if (coreStrength > 0.01) {
@@ -377,7 +377,7 @@ export default function SpaceScene() {
         ctx.beginPath();
         ctx.arc(cx, cy, cr, 0, 7);
         ctx.fillStyle = cg;
-        ctx.shadowBlur = (50 + ce * 120) * DPR;
+        ctx.shadowBlur = (36 + ce * 90) * DPR;
         ctx.shadowColor = "#22d3ee";
         ctx.fill();
         ctx.shadowBlur = 0;
@@ -402,13 +402,13 @@ export default function SpaceScene() {
           col = mix(CY, WARN, warn);
         ctx.beginPath();
         ctx.arc(n.px, n.py, r, 0, 7);
-        ctx.fillStyle = rgba(col, vis * 0.16);
-        ctx.shadowBlur = 16 * DPR;
-        ctx.shadowColor = rgba(col, vis);
+        ctx.fillStyle = rgba(col, vis * 0.14);
+        ctx.shadowBlur = 10 * DPR;
+        ctx.shadowColor = rgba(col, vis * 0.8);
         ctx.fill();
         ctx.shadowBlur = 0;
         ctx.lineWidth = 1.1 * DPR;
-        ctx.strokeStyle = rgba(col, vis * 0.7);
+        ctx.strokeStyle = rgba(col, vis * 0.6);
         ctx.stroke();
         const isz = 17 * DPR * sc;
         if (n.imgC.complete) {
@@ -420,15 +420,16 @@ export default function SpaceScene() {
           ctx.drawImage(n.imgR, n.px - isz / 2, n.py - isz / 2, isz, isz);
         }
         ctx.globalAlpha = 1;
-        // Labels: uniform size, always LEFT-aligned, and sitting the same fixed gap to the
-        // right of each icon. No radial flip and no centring - so a long word never spills
-        // back over its icon and a short word never floats off on its own.
-        ctx.font = `500 ${12 * DPR}px ${sansFont}`;
-        ctx.fillStyle = rgba([230, 240, 248], vis * 0.85);
+        // Labels: uppercase mono (matches the site's eyebrow/meta type), uniform size,
+        // always LEFT-aligned at the same fixed gap to the right of each icon. No radial
+        // flip and no centring - so a long word never spills back over its icon and a
+        // short word never floats off on its own.
+        ctx.font = `500 ${10.5 * DPR}px ${monoFont}`;
+        ctx.fillStyle = rgba([200, 208, 216], vis * 0.8);
         ctx.textAlign = "left";
         ctx.textBaseline = "middle";
         const gap = r + 12 * DPR;
-        ctx.fillText(n.label, n.px + gap, n.py);
+        ctx.fillText(n.label.toUpperCase(), n.px + gap, n.py);
       }
       ctx.textAlign = "left";
       ctx.textBaseline = "alphabetic";
