@@ -43,9 +43,11 @@ body {
   border-radius: 2px;
 }
 
-/* anchored sections land clear of the fixed nav */
+/* Anchored sections land tight under the fixed nav. The section's 13vh top padding
+   is what pushed the heading way down on a jump; cancelling it here means the eyebrow
+   lands ~120px from the top on every viewport, clear of the ~68px nav. */
 section[id] {
-  scroll-margin-top: 88px;
+  scroll-margin-top: calc(120px - 13vh);
 }
 
 /* ---------- background canvases ---------- */
@@ -173,17 +175,15 @@ nav.site.solid {
 .textlink {
   font-family: var(--font-geist-sans), sans-serif;
   font-size: 15px;
-  color: var(--ink);
+  color: var(--muted);
   text-decoration: none;
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  border-bottom: 1px solid var(--line);
-  padding-bottom: 3px;
-  transition: border-color 0.2s;
+  transition: color 0.2s;
 }
 .textlink:hover {
-  border-color: var(--muted);
+  color: var(--ink);
 }
 .textlink .accent {
   color: var(--accent);
@@ -324,13 +324,6 @@ p a {
   gap: 26px;
   flex-wrap: wrap;
 }
-.hero-meta {
-  margin-top: 22px;
-  font-family: var(--font-geist-mono), ui-monospace, monospace;
-  font-size: 12px;
-  letter-spacing: 0.4px;
-  color: var(--faint);
-}
 .scrollhint {
   position: absolute;
   bottom: 26px;
@@ -365,9 +358,6 @@ p a {
     margin-bottom: 24px;
     line-height: 1.55;
   }
-  .hero-meta {
-    margin-top: 16px;
-  }
   .scrollhint {
     bottom: 20px;
   }
@@ -379,17 +369,21 @@ p a {
   .hero .sub {
     font-size: 15px;
   }
-  .hero-meta {
-    display: none;
-  }
 }
 
-/* ---------- problem (image-led) ---------- */
+/* ---------- problem (image bleeds to the right edge) ---------- */
+#problem {
+  padding-right: 0;
+  overflow: hidden;
+}
 .problem-grid {
   display: grid;
-  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
-  gap: 64px;
+  grid-template-columns: minmax(0, 480px) minmax(0, 1fr);
+  gap: clamp(40px, 5vw, 84px);
   align-items: center;
+  /* line the copy up with the site's centered container; the media column then runs
+     out to the right viewport edge, covering the orbiting tools behind it */
+  padding-left: max(0px, calc(45vw - 560px));
 }
 .problem-copy p {
   color: var(--muted);
@@ -400,6 +394,10 @@ p a {
 }
 .problem-copy p + p {
   margin-top: 18px;
+}
+.problem-media .shot {
+  aspect-ratio: 16 / 9;
+  max-height: 74vh;
 }
 
 /* ---------- media frames ---------- */
@@ -1026,9 +1024,16 @@ footer.site {
   body {
     font-size: 16px;
   }
+  #problem {
+    padding-right: 5vw;
+  }
   .problem-grid {
     grid-template-columns: 1fr;
     gap: 36px;
+    padding-left: 0;
+  }
+  .problem-media .shot {
+    max-height: none;
   }
   .points,
   .testimonials,

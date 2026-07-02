@@ -37,7 +37,7 @@ const coaching = [
 const modules = [
   { key: "crm", name: "CRM & pipeline", desc: "Every deal, stage and contact, wired straight to payments, calls and commissions." },
   { key: "payments", name: "Payments & checkout", desc: "Branded checkout, saved cards, plans and failed-payment chasing, running on Stripe." },
-  { key: "dialer", name: "Dialer", desc: "Calls, recordings, transcripts and texts - with a real iOS and Android app." },
+  { key: "dialer", name: "Power dialer", desc: "Rip through a lead list back-to-back - call recording, transcripts and texts, on a real iOS and Android app." },
   { key: "inbox", name: "Inbox", desc: "Email, SMS and web chat in one thread per person, instead of three tabs." },
   { key: "email", name: "Email marketing", desc: "Segments, campaigns and the numbers behind them, in the same place as the rest." },
   { key: "booking", name: "Booking & calendar", desc: "Booking pages and two-way calendar sync, with no Calendly tab to keep open." },
@@ -60,10 +60,10 @@ const settle = [
 ];
 
 const wayfinder = [
-  "Commission numbers you'd put payroll on",
+  "Commission numbers you trust to base payroll on",
   "The whole company on one screen",
   "Payments that chase themselves",
-  "Every coach in their own lane; you see all of it",
+  "Every coach in their own lane; you survey all of it",
   "A P&L that's real, not a month-end guess",
 ];
 
@@ -76,7 +76,7 @@ const steps = [
   {
     n: "02",
     h: "We run side by side",
-    p: "Your old tools stay live, on us, until every record has moved across and been checked.",
+    p: "Your old tools stay live, until every record has moved across and been checked.",
   },
   {
     n: "03",
@@ -121,8 +121,8 @@ const faqs = [
     a: "More than you'd think, and none of it is a chatbot bolted on the side. It's woven through every part of the platform and runs in the background - scoring, drafting and surfacing the next move while you work, without you ever stopping to prompt it.",
   },
   {
-    q: "Is this built for coaching, or rebranded sales software?",
-    a: "Built for coaching. The data model is the coaching relationship, not an agency sub-account: track students through cohorts and program history per customer, and let the AI tell you where each one is in their journey before a renewal conversation.",
+    q: "Is this built for coaches, or rebranded sales software?",
+    a: "Built for coaches. The data model is the coach-student relationship, not an agency sub-account: track students through cohorts and program history per customer, and let the AI tell you where each one is in their journey before a renewal conversation.",
   },
   {
     q: "Does it track commissions automatically?",
@@ -134,7 +134,7 @@ const faqs = [
   },
   {
     q: "Can my customers handle their own payments?",
-    a: "Yes - a self-service portal lets them view orders, see what's coming up, and pay or update a card without emailing your team. Far fewer “can you resend my invoice” messages.",
+    a: "Yes - a self-service portal lets them view orders, see what's coming up, and pay towards their balance without emailing your team. Far fewer “can you resend my invoice” messages.",
   },
   {
     q: "Will it keep my outbound dialing compliant?",
@@ -195,8 +195,9 @@ export default function Home() {
             </h1>
             <p className="sub rv d2">
               CRM, payments, calls, inbox, booking and commissions - one system,
-              not seven subscriptions. Built by operators who ran a coaching
-              company on the exact mess you&apos;re in right now.
+              not seven subscriptions. Built by operators who previously ran a
+              coaching company on the exact same mess of systems you&apos;re
+              dealing with right now.
             </p>
             <div className="hero-cta rv d3">
               <a className="btn lg" href="#apply">
@@ -206,37 +207,33 @@ export default function Home() {
                 See how it fits together <span className="accent">↓</span>
               </a>
             </div>
-            <div className="hero-meta rv d4">
-              Hands-on migration · Your old stack runs in parallel, on us · Your
-              data stays yours
-            </div>
             <div className="scrollhint">
               <span className="line" /> Scroll
             </div>
           </section>
 
-          {/* PROBLEM - image-led; drop your generated illustration into the .shot frame */}
+          {/* PROBLEM - image bleeds to the right edge so the orbiting tools behind are covered */}
           <section id="problem">
-            <div className="center">
-              <div className="eyebrow rv">The problem</div>
-              <div className="problem-grid">
-                <div className="problem-copy rv d1">
-                  <h2 className="title">You know the drill.</h2>
-                  <p>
-                    It&apos;s late, and you&apos;re logging into the seventh tool
-                    of the day - the one you can never remember the password to,
-                    so you hit &ldquo;forgot password&rdquo; one more time.
-                  </p>
-                  <p>
-                    Commissions live in a spreadsheet you&apos;ve stopped fully
-                    trusting. A lead&apos;s been sitting for two days because
-                    their message landed somewhere nobody checks. None of these
-                    tools talk to each other, so the last thing holding it all
-                    together is you.
-                  </p>
-                </div>
-                <div className="shot rv d2">
-                  {/* Replace this placeholder with: <img src="/problem.png" alt="..." /> */}
+            <div className="problem-grid">
+              <div className="problem-copy">
+                <div className="eyebrow rv">The problem</div>
+                <h2 className="title rv d1">You know the drill.</h2>
+                <p className="rv d2">
+                  It&apos;s late, and you&apos;re logging into the seventh tool of
+                  the day - the one you can never remember the password to, so you
+                  hit &ldquo;forgot password&rdquo; one more time.
+                </p>
+                <p className="rv d2">
+                  Commissions live in a spreadsheet you&apos;ve stopped fully
+                  trusting. A lead&apos;s been sitting for two days because their
+                  message landed somewhere nobody checks. None of these tools talk
+                  to each other and there&apos;s money being left on the table. The
+                  last thing holding it all together is you.
+                </p>
+              </div>
+              <div className="problem-media rv d2">
+                {/* Replace this placeholder with: <img src="/problem.png" alt="..." /> */}
+                <div className="shot">
                   <div className="placeholder">
                     <svg viewBox="0 0 24 24" fill="none" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                       <rect x="3" y="3" width="18" height="18" rx="2" />
@@ -313,8 +310,8 @@ export default function Home() {
               <div className="eyebrow rv">AI, built in</div>
               <h2 className="title rv d1">Watch it do the busywork.</h2>
               <p className="lead rv d2">
-                It drafts the replies, reads the calls and scores the deals while
-                you work - no prompts, no chatbot.
+                It drafts the replies, reviews the calls and scores the deals
+                while you work.
               </p>
               {/* Drop an autoplaying demo in here (drafting an AI email, reading a
                   call, scoring a deal):
@@ -349,9 +346,9 @@ export default function Home() {
               <div className="eyebrow rv">Made for coaching</div>
               <h2 className="title rv d1">Where the coaching happens.</h2>
               <p className="lead rv d2">
-                Most CRMs stop at the sale. Coaching keeps going - the calls, the
-                cohorts, the room where the work gets done. That part is built
-                in, not bolted on.
+                Most platforms stop at the sale. But coaching keeps going. So we
+                provide the calls, the cohorts, the video meetings where the work
+                gets done. That part is built in, not bolted on.
               </p>
               <div className="split coaching-split">
                 <div className="point-list rv d1">
@@ -388,7 +385,8 @@ export default function Home() {
             <div className="center">
               <div className="eyebrow rv">Why not just add another tool</div>
               <h2 className="title rv d1">
-                You can keep stacking tools. Or you can stop.
+                You can keep stacking tools. Or you can have everything in one
+                place.
               </h2>
               <div className="compare rv d1">
                 <div className="col bad">
@@ -423,9 +421,9 @@ export default function Home() {
                   <p className="lead rv d2">
                     We ran a coaching company on seven disconnected tools and a
                     commission spreadsheet we argued over every month. Nothing we
-                    could buy fixed it, so we built the thing we wanted, ran our
-                    own business on it for a couple of years, and now we&apos;re
-                    opening it up to a handful of other companies.
+                    could buy fixed it, so we built the thing we wanted, run our
+                    own business on it, and now we&apos;re opening it up to a
+                    handful of other companies.
                   </p>
                 </div>
                 <div className="media-col rv d2">
@@ -468,9 +466,8 @@ export default function Home() {
               <div className="eyebrow rv">Switching over</div>
               <h2 className="title rv d1">How we make moving across easy.</h2>
               <p className="lead rv d2">
-                It&apos;s tooling-driven, runs alongside your current setup, and
-                stays reversible until you&apos;re ready. No downtime, nothing
-                lost.
+                It runs alongside your current setup, and stays reversible until
+                you&apos;re ready. No downtime, nothing lost.
               </p>
               <div className="steps seq">
                 {steps.map((s) => (
