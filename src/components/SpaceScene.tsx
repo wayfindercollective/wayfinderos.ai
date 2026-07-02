@@ -139,8 +139,9 @@ export default function SpaceScene() {
       px: number;
       py: number;
       t: number;
+      track?: boolean; // follows the core through the collapse so its haze stays centred on the orb
     }[] = [
-      { x: 0.72, y: 0.42, r: 0.5, c: [34, 211, 238], a: 0.16, px: 0.0008, py: 0.0006, t: 0 },
+      { x: 0.72, y: 0.42, r: 0.5, c: [34, 211, 238], a: 0.16, px: 0.0008, py: 0.0006, t: 0, track: true },
       { x: 0.3, y: 0.7, r: 0.45, c: [45, 212, 191], a: 0.08, px: 0.0006, py: 0.001, t: 2 },
       { x: 0.55, y: 0.15, r: 0.4, c: [56, 189, 248], a: 0.07, px: 0.0009, py: 0.0007, t: 4 },
     ];
@@ -284,8 +285,13 @@ export default function SpaceScene() {
         bgx.clearRect(0, 0, bw, bh);
         for (const b of blobs) {
           b.t += dt;
-          const bx = (b.x + Math.sin(b.t * b.px) * 0.04) * bw,
-            by = (b.y + Math.cos(b.t * b.py) * 0.04) * bh;
+          // the tracking blob rides the core (incl. its mouse parallax); the core sits at
+          // 0.72W in the hero and slides to 0.87W through the collapse - without this the
+          // haze stays behind and the collapsed orb's glow looks lopsided
+          const baseX = b.track ? cx / W : b.x,
+            baseY = b.track ? cy / H : b.y;
+          const bx = (baseX + Math.sin(b.t * b.px) * 0.04) * bw,
+            by = (baseY + Math.cos(b.t * b.py) * 0.04) * bh;
           const g = bgx.createRadialGradient(bx, by, 0, bx, by, b.r * minD * bsc);
           g.addColorStop(0, rgba(b.c, b.a * (1 + ce * 0.5) * live));
           g.addColorStop(1, rgba(b.c, 0));
@@ -420,7 +426,7 @@ export default function SpaceScene() {
         const cg = ctx.createRadialGradient(cx, cy, 0, cx, cy, glowR);
         cg.addColorStop(0, `rgba(255,255,255,${0.97 * coreStrength})`);
         cg.addColorStop(0.32 * k, `rgba(125,240,255,${0.85 * coreStrength})`);
-        cg.addColorStop(k, `rgba(34,211,238,${0.3 * coreStrength})`);
+        cg.addColorStop(k, `rgba(34,211,238,${0.36 * coreStrength})`);
         cg.addColorStop(1, "rgba(34,211,238,0)");
         ctx.beginPath();
         ctx.arc(cx, cy, glowR, 0, 7);
