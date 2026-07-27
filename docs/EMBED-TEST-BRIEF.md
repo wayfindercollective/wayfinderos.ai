@@ -91,18 +91,42 @@ Convex deployment** with fictional data. Prove the mechanism end to end.
    demo URL as private until the pre-public items (one-time-code identity,
    per-visitor orgs, abuse caps, kill switch) are done.
 
-## Deferred until BEFORE public (out of scope for this test, but required later)
+## Architecture decision (2026-07-22): embeds never write
+
+The abuse/isolation risk exists only if visitor edits hit the database - so they
+don't. **Embeds call queries, never mutations.** Data is read from the demo
+backend through the real product code (so it genuinely is the product), but every
+interaction - dragging a deal, retyping an email - lives in **browser state
+only**. Refresh = pristine. This is already how ai-email works (draft generated,
+shown, redrafted, never stored); pipeline extends the same pattern.
+
+This **dissolves most of the deferred list**: no per-visitor orgs, no cleanup
+jobs, no expiry, no session namespacing, no "why is this deal called test test
+test" for the next prospect. Seed one fictional org, read-only.
+
+Enforce it **structurally, not by convention**: the demo backend should not
+expose mutations to the embed identity at all, so "no writes" can't be forgotten.
+Seed with **real rows** (exercises the real queries) rather than hardcoded
+fixtures.
+
+The **only** thing this does not solve is the AI action's per-call cost - that
+stays a rate-limit/ceiling problem (below), because each redraft spends money
+regardless of whether anything persists.
+
+## Still deferred until BEFORE public
 
 Do not mistake "the test works" for "ready to ship". Still owed before this is
 publicly reachable:
 - One-time-code identity handshake (right now direct `/embed/*` access would mint
   a demo session freely).
-- Ephemeral **per-visitor** demo orgs, not one shared org (shared state reads as
-  broken across visitors).
-- Abuse/cost control on the AI action: per-session + IP + global-daily caps, with
-  an alert.
-- A server-side kill switch that also revokes already-issued demo sessions.
-- The second module, `/embed/pipeline`.
+- AI abuse/cost control: per-session + IP + global-daily caps, with an alert.
+- A server-side kill switch that also revokes/blocks demo AI calls.
+
+~~Ephemeral per-visitor demo orgs~~ and ~~cleanup/expiry~~ are **no longer
+needed** given the no-write architecture above.
+
+Still to build regardless: the second module, `/embed/pipeline` (see the
+placeholder references in `embed-assets/`).
 
 ## Questions back to Nathan / marketing side
 
