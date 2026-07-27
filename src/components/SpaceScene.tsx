@@ -1,21 +1,22 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
 import { ORBIT, ARROW_POINTS } from "@/lib/tools";
 
 export default function SpaceScene() {
   const sceneRef = useRef<HTMLCanvasElement>(null);
   const warpRef = useRef<HTMLCanvasElement>(null);
-  const arrivedRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
 
   useEffect(() => {
+    router.prefetch("/waitlist"); // the warp lands there - have it ready
     const canvas = sceneRef.current!;
     // opaque context: the scene covers the whole viewport, so skipping the alpha
     // channel makes every composite of this canvas cheaper
     const ctx = canvas.getContext("2d", { alpha: false })!;
     const warp = warpRef.current!;
     const wctx = warp.getContext("2d")!;
-    const arrived = arrivedRef.current!;
     const reduce = window.matchMedia(
       "(prefers-reduced-motion: reduce)"
     ).matches;
@@ -166,7 +167,37 @@ export default function SpaceScene() {
     let sy = 0,
       syT = 0;
 
-    const A: { pTop?: number; pH?: number; cTop?: number; cH?: number } = {};
+    const A: {
+      pTop?: number;
+      pH?: number;
+      cTop?: number;
+      cH?: number;
+      // hero text block (viewport px) - the orbit's exclusion zone
+      hy?: number;
+      hw?: number;
+      hh?: number;
+    } = {};
+    // Hero orbit geometry, derived from the measured text block so icons and
+    // labels ring AROUND the copy instead of crossing it. When a viewport is too
+    // tight to fit the ring outside the text, orbitFit drops to 0 and the icons
+    // stay hidden until the scroll blends them to the right-side geometry.
+    const G = { rx: 0, tilt: 0.5, fit: 1, small: false };
+    function layout() {
+      const vw = innerWidth,
+        vh = innerHeight,
+        minD = Math.min(vw, vh);
+      G.small = vw < 760;
+      const hw = A.hw ?? 380,
+        hh = A.hh ?? 190;
+      const need = hw + 74; // icon radius + halo clearance past the text edge
+      const maxRx = vw / 2 - 128; // keep right-side labels on screen
+      G.rx = Math.min(Math.max(need, 0.3 * minD), Math.max(maxRx, 0));
+      let ry = Math.max(G.rx * 0.5, hh + 52);
+      const maxRy = vh / 2 - 72;
+      ry = Math.min(ry, Math.max(maxRy, 0));
+      G.tilt = G.rx > 0 ? ry / G.rx : 0.5;
+      G.fit = !G.small && G.rx >= need && ry >= hh + 34 ? 1 : 0;
+    }
     function measure() {
       const p = document.getElementById("problem");
       const c = document.getElementById("collapse");
@@ -175,6 +206,15 @@ export default function SpaceScene() {
       A.pH = p.offsetHeight;
       A.cTop = c.getBoundingClientRect().top + scrollY;
       A.cH = c.offsetHeight;
+      const h = document.querySelector(".hero-core");
+      if (h) {
+        const r = h.getBoundingClientRect();
+        // the hero sits in the first viewport, so absolute == viewport coords at rest
+        A.hy = r.top + scrollY + r.height / 2;
+        A.hw = r.width / 2;
+        A.hh = r.height / 2;
+      }
+      layout();
     }
 
     function resize() {
@@ -269,12 +309,20 @@ export default function SpaceScene() {
         // orbit that gently collapses into the core. `warn` stays wired (0) so the
         // chaos-tinting maths below all resolve to no-ops without ripping them out.
         warn = 0,
-        pull = ce;
+        pull = ce,
+        // scroll blend: 0 = centred hero geometry (orbit rings the copy),
+        // 1 = right-side geometry the collapse animation was designed around
+        b = ease(chaos);
 
-      const par = 28 * DPR;
-      const cx = W * (0.72 + ce * 0.15) + mouse.x * par * 1.4,
-        cy = H * 0.44 + mouse.y * par * 1.4;
+      // parallax is damped in the hero so drifting icons can't wander into the copy
+      const par = 28 * DPR * (0.35 + 0.65 * b);
+      const heroCy = (A.hy ?? innerHeight * 0.46) * DPR;
+      const cx = W * (0.5 + 0.22 * b + 0.15 * ce) + mouse.x * par * 1.4,
+        cy = heroCy + (H * 0.44 - heroCy) * b + mouse.y * par * 1.4;
       const minD = Math.min(W, H);
+      // node visibility: hidden on small screens; where the hero ring can't clear
+      // the text, icons fade in only as the scroll hands over to the side geometry
+      const nodeA = G.small ? 0 : G.fit ? 1 : b;
       coreScreen = { x: cx / DPR, y: cy / DPR };
 
       // nebula blobs: drawn tiny offscreen, blitted up in one call
@@ -313,16 +361,23 @@ export default function SpaceScene() {
         ctx.fillRect(s.x * W + sax - sz / 2, s.y * H + say - sz / 2, sz, sz);
       }
 
-      const ringA = 0.1 * (1 - chaos) * (1 - pull);
+      // effective orbit: measured hero ellipse blended toward the classic
+      // right-side circle as the scroll takes over
+      const rEff = G.rx * DPR + (ORBIT_R * minD - G.rx * DPR) * b,
+        tiltEff = G.tilt + (ORBIT_TILT - G.tilt) * b,
+        ringScale = rEff / (ORBIT_R * minD);
+
+      const ringA = 0.1 * (1 - chaos) * (1 - pull) * Math.max(nodeA, 0.35);
       if (ringA > 0.004) {
         ctx.lineWidth = 1 * DPR;
         ctx.strokeStyle = rgba(CY, ringA);
         for (const rg of rings) {
-          const rr = rg.r * minD * (1 - pull);
+          const rr = rg.r * minD * ringScale * (1 - pull);
+          const rt = tiltEff * (rg.tilt / 0.5);
           ctx.beginPath();
           for (let a = 0; a <= 6.3; a += 0.12) {
             const x = cx + Math.cos(a + rg.a) * rr,
-              y = cy + Math.sin(a + rg.a) * rr * rg.tilt;
+              y = cy + Math.sin(a + rg.a) * rr * rt;
             if (a === 0) ctx.moveTo(x, y);
             else ctx.lineTo(x, y);
           }
@@ -332,11 +387,11 @@ export default function SpaceScene() {
 
       const wcx = W * 0.74,
         wcy = H * 0.44;
-      const r = ORBIT_R * minD;
+      const r = rEff;
       for (const n of nodes) {
         n.angle += ORBIT_SPEED * dt * (1 + warn * 1.5);
         const ox = cx + Math.cos(n.angle) * r,
-          oy = cy + Math.sin(n.angle) * r * ORBIT_TILT;
+          oy = cy + Math.sin(n.angle) * r * tiltEff;
         const chx =
           wcx +
           Math.sin(now * 0.0012 * n.w1 + n.phase) * 0.14 * minD +
@@ -390,7 +445,8 @@ export default function SpaceScene() {
 
       // clean connection lines + inward pulses (positive states)
       for (const n of order) {
-        const la = (0.05 + n.depth * 0.11) * (1 - warn) * (1 - pull * 0.4) * live;
+        const la =
+          (0.05 + n.depth * 0.11) * (1 - warn) * (1 - pull * 0.4) * live * nodeA;
         if (la <= 0.005) continue;
         ctx.beginPath();
         ctx.moveTo(cx, cy);
@@ -402,7 +458,8 @@ export default function SpaceScene() {
       for (const p of pulses) {
         p.t += p.sp * dt;
         if (p.t > 1) p.t -= 1;
-        const a = 0.9 * (1 - Math.abs(p.t - 0.5) * 1.4) * (1 - warn) * live;
+        const a =
+          0.9 * (1 - Math.abs(p.t - 0.5) * 1.4) * (1 - warn) * live * nodeA;
         if (a <= 0.02) continue;
         const n = nodes[p.node];
         const x = cx + (n.px - cx) * p.t,
@@ -415,9 +472,10 @@ export default function SpaceScene() {
         ctx.fillRect(x - DPR, y - DPR, 2 * DPR, 2 * DPR);
       }
 
-      // the core: soft sun in hero -> gone in chaos -> bright orb + logo at collapse
+      // the core: dim sun behind the centred hero copy (the CSS scrim keeps the
+      // text readable over it) -> brighter as it slides right -> orb at collapse
       const beat = 1 + Math.sin(now * 0.0016) * 0.045,
-        coreStrength = clamp((0.55 * (1 - warn) + ce) * live),
+        coreStrength = clamp(((0.26 + 0.29 * b) * (1 - warn) + ce) * live),
         cr = (40 + ce * 80) * DPR * beat;
       if (coreStrength > 0.01) {
         // outer halo baked into one larger gradient (shadowBlur here was very expensive)
@@ -446,7 +504,11 @@ export default function SpaceScene() {
       ctx.textBaseline = "middle";
       ctx.textAlign = "center";
       for (const n of order) {
-        const vis = (1 - pull) * (0.5 + n.depth * 0.5) * (n.dying ? 1 - warn * 0.85 : 1);
+        const vis =
+          (1 - pull) *
+          (0.5 + n.depth * 0.5) *
+          (n.dying ? 1 - warn * 0.85 : 1) *
+          nodeA;
         if (vis <= 0.02) continue;
         const sc = 0.8 + n.depth * 0.5,
           r = 15 * DPR * sc,
@@ -472,16 +534,26 @@ export default function SpaceScene() {
           ctx.drawImage(n.imgR, n.px - isz / 2, n.py - isz / 2, isz, isz);
         }
         ctx.globalAlpha = 1;
-        // Labels: uppercase mono (matches the site's eyebrow/meta type), uniform size,
-        // always LEFT-aligned at the same fixed gap to the right of each icon. No radial
-        // flip and no centring - so a long word never spills back over its icon and a
-        // short word never floats off on its own.
+        // Labels: uppercase mono, gliding smoothly around the OUTSIDE of each icon.
+        // The label's centre sits along the outward direction from the core, padded
+        // by half its own width/height in that direction - so it slides continuously
+        // from "right of icon" through "above icon" to "left of icon" as the node
+        // orbits, with no snap at the halfway point, and never reaches inward.
         ctx.font = `500 ${10.5 * DPR}px ${monoFont}`;
         ctx.fillStyle = rgba([200, 208, 216], vis * 0.8);
-        ctx.textAlign = "left";
+        ctx.textAlign = "center";
         ctx.textBaseline = "middle";
-        const gap = r + 12 * DPR;
-        ctx.fillText(n.label.toUpperCase(), n.px + gap, n.py);
+        const text = n.label.toUpperCase();
+        const tw = ctx.measureText(text).width;
+        const dx = n.px - cx,
+          dy = n.py - cy,
+          dl = Math.hypot(dx, dy) || 1,
+          ux = dx / dl,
+          uy = dy / dl;
+        const gap = r + 10 * DPR;
+        const lx = n.px + ux * (gap + (tw / 2) * Math.abs(ux)),
+          ly = n.py + uy * (gap + 7 * DPR * Math.abs(uy));
+        ctx.fillText(text, lx, ly);
       }
       ctx.textAlign = "left";
       ctx.textBaseline = "alphabetic";
@@ -492,9 +564,11 @@ export default function SpaceScene() {
     /* ---------------- hyperspace warp ---------------- */
     const sCanvas = document.createElement("canvas");
     const sctx = sCanvas.getContext("2d")!;
-    const DOLLY = 1050,
-      ZDUR = 2050,
-      JUMP = 4900;
+    // shorter than the old show-off timing: this now plays as a page transition
+    // into /waitlist, so it has to feel snappy, not cinematic
+    const DOLLY = 700,
+      ZDUR = 1400,
+      JUMP = 2600;
     let warpStars: { x: number; y: number; z: number }[] = [];
     let warpOn = false,
       warpRAF = 0,
@@ -522,15 +596,13 @@ export default function SpaceScene() {
     function startWarp(e?: Event) {
       if (e) e.preventDefault();
       if (warpOn) return;
-      warpOn = true;
-      document.body.style.overflow = "hidden";
+      // reduced motion: no jump, just go
       if (reduce) {
-        warp.classList.add("on");
-        wctx.fillStyle = "#06080c";
-        wctx.fillRect(0, 0, warp.width, warp.height);
-        arrived.classList.add("on");
+        router.push("/waitlist");
         return;
       }
+      warpOn = true;
+      document.body.style.overflow = "hidden";
       const wW = warp.width;
       const c = cEl();
       c.style.transition = `transform ${DOLLY}ms cubic-bezier(.5,0,.45,1)`;
@@ -549,7 +621,8 @@ export default function SpaceScene() {
       warpT0 = performance.now();
       cancelAnimationFrame(warpRAF);
       warpRAF = requestAnimationFrame(warpFrame);
-      window.setTimeout(() => arrived.classList.add("on"), JUMP + 260);
+      // navigate once the flash has faded to dark - the new page appears seamlessly
+      window.setTimeout(() => router.push("/waitlist"), JUMP + 320);
     }
 
     function warpFrame(now: number) {
@@ -637,19 +710,6 @@ export default function SpaceScene() {
       if (warpOn) warpRAF = requestAnimationFrame(warpFrame);
     }
 
-    function endWarp() {
-      warpOn = false;
-      cancelAnimationFrame(warpRAF);
-      warp.classList.remove("on");
-      arrived.classList.remove("on");
-      const c = cEl();
-      c.style.transition = "transform 500ms ease";
-      c.style.transform = "";
-      canvas.style.opacity = "1";
-      document.body.style.overflow = "";
-      wctx.clearRect(0, 0, warp.width, warp.height);
-    }
-
     /* ---------------- wiring ---------------- */
     const onMove = (e: MouseEvent) => {
       mouse.tx = e.clientX / innerWidth - 0.5;
@@ -661,19 +721,30 @@ export default function SpaceScene() {
     window.addEventListener("mousemove", onMove, { passive: true });
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", resize);
-    // fonts/images landing after mount can shift the section anchors the scroll
-    // choreography is measured against - re-measure once everything has loaded
+    // Anything that lands late - fonts, media, reflowing content - can shift the
+    // section anchors the scroll choreography measures against, so re-measure on
+    // load, when fonts resolve, and whenever the page actually changes height.
     window.addEventListener("load", measure);
+    document.fonts?.ready.then(() => measure()).catch(() => {});
+    const ro =
+      typeof ResizeObserver !== "undefined" ? new ResizeObserver(() => measure()) : null;
+    const contentEl = cEl();
+    if (ro && contentEl) ro.observe(contentEl);
     const triggers = Array.from(document.querySelectorAll<HTMLElement>(".warp-trigger"));
     triggers.forEach((b) => b.addEventListener("click", startWarp));
-    const onWarpEvent = () => startWarp();
-    window.addEventListener("wf:warp", onWarpEvent);
-    const backBtn = arrived.querySelector<HTMLButtonElement>(".back");
-    backBtn?.addEventListener("click", endWarp);
 
     resize();
     setTimeout(measure, 400);
     let raf = requestAnimationFrame(frame);
+    // Don't burn a full-page RAF loop while the tab is in the background.
+    const onVisibility = () => {
+      cancelAnimationFrame(raf);
+      if (!document.hidden && !reduce) {
+        t0 = performance.now(); // avoid a huge dt on the first frame back
+        raf = requestAnimationFrame(frame);
+      }
+    };
+    document.addEventListener("visibilitychange", onVisibility);
     if (reduce) {
       cancelAnimationFrame(raf);
       // draw a single static hero frame
@@ -688,32 +759,18 @@ export default function SpaceScene() {
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", resize);
       window.removeEventListener("load", measure);
-      window.removeEventListener("wf:warp", onWarpEvent);
+      document.removeEventListener("visibilitychange", onVisibility);
+      ro?.disconnect();
       triggers.forEach((b) => b.removeEventListener("click", startWarp));
-      backBtn?.removeEventListener("click", endWarp);
       document.body.style.overflow = "";
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  const arrowD = "M" + ARROW_POINTS.map(([x, y]) => `${x} ${y}`).join("L") + "Z";
 
   return (
     <>
       <canvas id="scene" ref={sceneRef} />
       <canvas id="warp" ref={warpRef} />
-      <div className="arrived" ref={arrivedRef}>
-        <svg className="logo" viewBox="0 0 120 120" fill="none" aria-hidden="true">
-          <path d={arrowD} stroke="currentColor" strokeWidth={7} strokeLinejoin="round" />
-        </svg>
-        <h2 className="grad">Welcome aboard.</h2>
-        <p>
-          Application received. We&apos;ll be in touch to book your call and
-          start the jump.
-        </p>
-        <button className="btn lg back" type="button">
-          Back to launch
-        </button>
-      </div>
     </>
   );
 }
