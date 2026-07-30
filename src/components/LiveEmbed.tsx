@@ -37,10 +37,16 @@ function resolveOrigin(): string | null {
 export default function LiveEmbed({
   path,
   title,
+  allow,
   children,
 }: {
-  path: string; // e.g. "/embed/ai-email"
+  path: string; // e.g. "/embed/sandbox/composer"
   title: string; // accessible name for the frame
+  // Permissions delegated INTO the frame. Only the video room needs this:
+  // getUserMedia rejects silently inside an iframe without an explicit
+  // allow-list, so the camera demo would look broken rather than blocked.
+  // Everything else stays on the default (no delegated permissions).
+  allow?: string;
   children: React.ReactNode; // the coded placeholder
 }) {
   const [src, setSrc] = useState<string | null>(null);
@@ -135,6 +141,7 @@ export default function LiveEmbed({
           // deliberately absent so nothing inside can steer this page. Add
           // further tokens only with a specific justification.
           sandbox="allow-scripts allow-same-origin"
+          allow={allow}
           referrerPolicy="strict-origin-when-cross-origin"
         />
       )}

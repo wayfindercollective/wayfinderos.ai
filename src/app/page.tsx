@@ -257,8 +257,13 @@ export default function Home() {
                 the dashboard updates. Click around - or just watch.
               </p>
               {/* upgrades itself to the real product when the embed origin is
-                  configured; the coded walkthrough is the placeholder */}
-              <LiveEmbed path="/embed/pipeline" title="Wayfinder OS pipeline - live demo">
+                  configured; the coded walkthrough is the placeholder. The
+                  sandbox "os" frame is the shell-with-sidebar one, which is what
+                  OSDemo imitates - opening on pipeline to match it. */}
+              <LiveEmbed
+                path="/embed/sandbox/os?start=pipeline"
+                title="Wayfinder OS - live demo"
+              >
                 <OSDemo />
               </LiveEmbed>
             </div>
@@ -327,7 +332,10 @@ export default function Home() {
                 work. Watch it write:
               </p>
               <div className="ai-vignette rv d2">
-                <LiveEmbed path="/embed/ai-email" title="Wayfinder OS AI email drafting - live demo">
+                <LiveEmbed
+                  path="/embed/sandbox/composer"
+                  title="Wayfinder OS AI email drafting - live demo"
+                >
                   <AIDraftCard />
                 </LiveEmbed>
               </div>
@@ -381,7 +389,15 @@ export default function Home() {
                       />
                     </div>
                   ) : (
-                    <CallGridMock />
+                    /* The live room needs camera+mic delegated into the frame or
+                       getUserMedia rejects silently and the demo looks broken. */
+                    <LiveEmbed
+                      path="/embed/sandbox/room"
+                      title="Wayfinder OS video room - live demo"
+                      allow="camera; microphone; display-capture"
+                    >
+                      <CallGridMock />
+                    </LiveEmbed>
                   )}
                 </div>
               </div>
