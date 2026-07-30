@@ -315,7 +315,14 @@ export default function Home() {
                       <img src="/media/dashboard.png" alt="The Wayfinder OS dashboard" />
                     </div>
                   ) : (
-                    <DashboardShot />
+                    /* a real, live dashboard beside the module list - the coded
+                       shot is the placeholder it cross-fades over */
+                    <LiveEmbed
+                      path="/embed/sandbox/dashboard"
+                      title="Wayfinder OS dashboard - live demo"
+                    >
+                      <DashboardShot />
+                    </LiveEmbed>
                   )}
                 </div>
               </div>
