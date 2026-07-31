@@ -1632,6 +1632,11 @@ footer.site {
 .ai-vignette .live-embed {
   max-width: 680px;
 }
+/* the real composer is a full app panel - at the placeholder's 680px it becomes
+   a very tall, narrow column, so give it more width once it's live */
+.ai-vignette .live-embed.live {
+  max-width: 980px;
+}
 .aidraft {
   width: 100%;
   max-width: 680px;

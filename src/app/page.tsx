@@ -263,7 +263,7 @@ export default function Home() {
               <LiveEmbed
                 path="/embed/sandbox/os?start=pipeline"
                 title="Wayfinder OS - live demo"
-                liveHeight={680}
+                liveHeight={720}
               >
                 <OSDemo />
               </LiveEmbed>
@@ -321,6 +321,7 @@ export default function Home() {
                     <LiveEmbed
                       path="/embed/sandbox/dashboard"
                       title="Wayfinder OS dashboard - live demo"
+                      liveHeight={700}
                     >
                       <DashboardShot />
                     </LiveEmbed>
@@ -343,6 +344,7 @@ export default function Home() {
                 <LiveEmbed
                   path="/embed/sandbox/composer"
                   title="Wayfinder OS AI email drafting - live demo"
+                  liveHeight={920}
                 >
                   <AIDraftCard />
                 </LiveEmbed>
@@ -391,7 +393,7 @@ export default function Home() {
                     path="/embed/sandbox/room"
                     title="Wayfinder OS video room - live demo"
                     allow="camera; microphone; display-capture"
-                    liveHeight={620}
+                    liveHeight={680}
                   >
                     <CallGridMock />
                   </LiveEmbed>
