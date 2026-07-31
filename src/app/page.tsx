@@ -1,13 +1,35 @@
+import { existsSync } from "fs";
+import { join } from "path";
+import Link from "next/link";
 import SpaceScene from "@/components/SpaceScene";
 import ClientFX from "@/components/ClientFX";
-import ApplyForm from "@/components/ApplyForm";
+import OSDemo from "@/components/OSDemo";
+import TestimonialVideo from "@/components/TestimonialVideo";
+import AIDraftCard from "@/components/AIDraftCard";
+import LiveEmbed from "@/components/LiveEmbed";
+import { LoginPileup, CallGridMock, DashboardShot } from "@/components/Vignettes";
 import { Logo, ToolIcon } from "@/components/Brand";
 import { TOOLS, EXTRAS, AI_POINTS } from "@/lib/tools";
+import { SPOTS_LEFT, PRIVACY_URL, TERMS_URL } from "@/lib/waitlist";
 
 // icon lookup by key, drawn from the single source of truth in lib/tools.ts
 const svgFor: Record<string, string> = Object.fromEntries(
   [...TOOLS, ...EXTRAS].map((t) => [t.key, t.svg])
 );
+
+// Real media drops into public/media/ and appears automatically on the next build:
+//   dashboard.png        - real dashboard screenshot (platform section panel)
+//   coaching.mp4         - b-roll of a live coaching call (+ optional coaching.jpg poster)
+//   testimonial-1.mp4    - video testimonial (+ optional testimonial-1.jpg poster)
+const media = (f: string) => existsSync(join(process.cwd(), "public/media", f));
+
+// The stresses, melting away: a pain you recognise dissolves into its relief.
+const melts = [
+  { pain: "The midnight commission spreadsheet, payroll due tomorrow.", relief: "It calculates itself now." },
+  { pain: "Three dashboards, three different numbers.", relief: "One number. Live. True." },
+  { pain: "Chasing failed payments, one awkward email at a time.", relief: "The money chases itself." },
+  { pain: "A week of tool training for every new hire.", relief: "One login. They just start." },
+];
 
 // Coaching delivery - the live room. Kept deliberately distinct from the AI section.
 const coaching = [
@@ -51,22 +73,6 @@ const modules = [
   { key: "compliance", name: "Compliance", desc: "TCPA, DNC, SMS consent and a HIPAA mode - your outbound stays on the right side of the line." },
 ];
 
-const settle = [
-  "Commissions in a spreadsheet you re-check by hand",
-  "Five or six tools, none of them talking",
-  "Chasing payments one email at a time",
-  "Numbers that go stale the moment they move between people",
-  "Reports you quietly don't believe",
-];
-
-const wayfinder = [
-  "Commission numbers you trust to base payroll on",
-  "The whole company on one screen",
-  "Payments that chase themselves",
-  "Every coach in their own lane; you survey all of it",
-  "A P&L that's real, not a month-end guess",
-];
-
 const steps = [
   {
     n: "01",
@@ -85,32 +91,10 @@ const steps = [
   },
 ];
 
-// TODO: replace these placeholders with real founding-operator quotes before launch.
-const testimonials = [
-  {
-    quote:
-      "We cancelled five subscriptions in the first month, and for the first time I actually trust the commission numbers.",
-    name: "Placeholder name",
-    company: "Placeholder Coaching Co.",
-  },
-  {
-    quote:
-      "The call summaries and draft replies save every rep a few hours a week. It's the first tool the team didn't try to work around.",
-    name: "Placeholder name",
-    company: "Placeholder Coaching Co.",
-  },
-  {
-    quote:
-      "One login for everyone. My coaches see their own pipeline, I see the whole floor.",
-    name: "Placeholder name",
-    company: "Placeholder Coaching Co.",
-  },
-];
-
 const faqs = [
   {
     q: "What does it cost?",
-    a: "Pricing is built around your setup. Most companies end up paying less than they did stacking GoHighLevel Elite and the tools around it - usually about 20% less.",
+    a: "Pricing is built around your setup. Most companies end up paying less than they did stacking GoHighLevel Elite and the tools around it - usually about 20% less. Founding companies run free while we tailor it to them.",
   },
   {
     q: "Can I automate follow-up across email, SMS and calls?",
@@ -155,6 +139,8 @@ const faqs = [
 ];
 
 export default function Home() {
+  const hasTestimonial = media("testimonial-1.mp4");
+
   return (
     <>
       <SpaceScene />
@@ -168,8 +154,8 @@ export default function Home() {
           </span>
         </a>
         <div className="navlinks">
+          <a href="#demo">See it work</a>
           <a href="#platform">What&apos;s inside</a>
-          <a href="#ai">The AI</a>
           <a href="#coaching">Coaching</a>
           <a href="#migration">Switching</a>
           <a href="#faq">FAQ</a>
@@ -178,87 +164,124 @@ export default function Home() {
           <a className="navlink" href="https://admin.wayfindercollective.io">
             Sign in
           </a>
-          <a className="btn" href="#apply">
-            Apply for access
-          </a>
+          <Link className="btn" href="/waitlist">
+            Apply to try it free
+          </Link>
+          <button className="menu-btn" type="button" aria-label="Menu" aria-expanded="false">
+            <span />
+            <span />
+            <span />
+          </button>
         </div>
       </nav>
 
       <div id="world">
         <div className="content" id="top">
-          {/* HERO */}
+          {/* HERO - centred; the canvas orbit rings around .hero-core, never over it */}
           <section className="hero">
-            <div className="eyebrow rv">Built for coaching companies</div>
-            <h1 className="rv d1">
-              Run your whole coaching company{" "}
-              <span className="dim">from one login.</span>
-            </h1>
-            <p className="sub rv d2">
-              CRM, payments, calls, inbox, booking and commissions - one system,
-              not seven subscriptions. Built by operators who previously ran a
-              coaching company on the exact same mess of systems you&apos;re
-              dealing with right now.
-            </p>
-            <div className="hero-cta rv d3">
-              <a className="btn lg" href="#apply">
-                Apply for access
-              </a>
-              <a className="textlink" href="#problem">
-                See how it fits together <span className="accent">↓</span>
-              </a>
+            <div className="hero-core">
+              <div className="chip rv">
+                <span className="chip-dot" aria-hidden="true" />
+                Founders pass · {SPOTS_LEFT} spots left
+              </div>
+              <h1 className="rv d1">
+                It shouldn&apos;t take seven logins to run one company.
+              </h1>
+              <p className="sub rv d2">
+                The operating system for coaching companies. One login, one set
+                of numbers you can finally trust.
+              </p>
+              <div className="hero-cta rv d3">
+                <Link className="btn lg" href="/waitlist">
+                  Apply to try it free
+                </Link>
+                <a className="textlink" href="#demo">
+                  See it in action <span className="accent">↓</span>
+                </a>
+              </div>
             </div>
             <div className="scrollhint">
               <span className="line" /> Scroll
             </div>
           </section>
 
-          {/* PROBLEM - image bleeds to the right edge so the orbiting tools behind are covered */}
+          {/* PROBLEM - we lived this. The media column bleeds right, covering the
+              orbit; the story resolves in the #collapse statement below, where the
+              canvas pulls every tool into one orb with the logo inside. */}
           <section id="problem">
             <div className="problem-grid">
               <div className="problem-copy">
-                <div className="eyebrow rv">The problem</div>
-                <h2 className="title rv d1">You know the drill.</h2>
+                <div className="eyebrow rv">We know the feeling</div>
+                <h2 className="title rv d1">
+                  You&apos;re the only thing holding it together.
+                </h2>
                 <p className="rv d2">
-                  It&apos;s late, and you&apos;re logging into the seventh tool of
-                  the day - the one you can never remember the password to, so you
-                  hit &ldquo;forgot password&rdquo; one more time.
+                  Seven logins. A commission spreadsheet you re-check at
+                  midnight. A hot lead going cold in the one inbox nobody
+                  watches, and money quietly leaking between tools that
+                  don&apos;t talk.
                 </p>
                 <p className="rv d2">
-                  Commissions live in a spreadsheet you&apos;ve stopped fully
-                  trusting. A lead&apos;s been sitting for two days because their
-                  message landed somewhere nobody checks. None of these tools talk
-                  to each other and there&apos;s money being left on the table. The
-                  last thing holding it all together is you.
+                  We know, because we ran our coaching company on the exact same
+                  mess - and nothing we could buy fixed it.
                 </p>
               </div>
               <div className="problem-media rv d2">
-                {/* Replace this placeholder with: <img src="/problem.png" alt="..." /> */}
-                <div className="shot">
-                  <div className="placeholder">
-                    <svg viewBox="0 0 24 24" fill="none" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                      <rect x="3" y="3" width="18" height="18" rx="2" />
-                      <circle cx="9" cy="9" r="2" />
-                      <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" />
-                    </svg>
-                    Illustration · 16:9
-                  </div>
-                </div>
+                <LoginPileup />
+              </div>
+            </div>
+
+            {/* the resolution of the same story - #collapse anchors the canvas
+                animation that pulls every tool into the one orb with the logo */}
+            <div id="collapse" className="fix">
+              <div className="center statement">
+                <div className="eyebrow rv">So we built the way out</div>
+                <h2 className="title rv d1">
+                  We put it all in <span className="dim">one place.</span>
+                </h2>
+                <p className="lead rv d2">
+                  One database. One login. One set of numbers. We run our own
+                  company on it every day - and now it&apos;s yours.
+                </p>
               </div>
             </div>
           </section>
 
-          {/* FIX */}
-          <section id="collapse" className="fix">
-            <div className="center statement">
-              <div className="eyebrow rv">The fix</div>
-              <h2 className="title rv d1">
-                So we put it all in <span className="dim">one place.</span>
-              </h2>
+          {/* DEMO - the product, hands-on */}
+          <section id="demo">
+            <div className="center">
+              <div className="eyebrow rv">See it work</div>
+              <h2 className="title rv d1">Watch a lead become revenue.</h2>
               <p className="lead rv d2">
-                One database. One login. One set of numbers everyone&apos;s
-                working from. Not seven tools bolted together and hoping - a
-                single system where each part can see the rest.
+                A lead books, the payment collects, the commission calculates,
+                the dashboard updates. Click around - or just watch.
               </p>
+              {/* upgrades itself to the real product when the embed origin is
+                  configured; the coded walkthrough is the placeholder. The
+                  sandbox "os" frame is the shell-with-sidebar one, which is what
+                  OSDemo imitates - opening on pipeline to match it. */}
+              <LiveEmbed
+                path="/embed/sandbox/os?start=pipeline"
+                title="Wayfinder OS - live demo"
+              >
+                <OSDemo />
+              </LiveEmbed>
+            </div>
+          </section>
+
+          {/* RELIEF - the stresses literally melt away */}
+          <section id="relief">
+            <div className="center">
+              <div className="eyebrow rv">What changes</div>
+              <h2 className="title rv d1">Feel the stress melt away.</h2>
+              <div className="melts">
+                {melts.map((m) => (
+                  <div className="melt rv" key={m.relief}>
+                    <span className="pain">{m.pain}</span>
+                    <h4 className="relief-line">{m.relief}</h4>
+                  </div>
+                ))}
+              </div>
             </div>
           </section>
 
@@ -268,9 +291,8 @@ export default function Home() {
               <div className="eyebrow rv">What&apos;s inside</div>
               <h2 className="title rv d1">One system. Fourteen jobs.</h2>
               <p className="lead rv d2">
-                Every module reads and writes the same records - so a deal moving
-                stage updates the invoice, the commission split and the
-                dashboard, without a Zapier in sight.
+                Every module reads the same records. A deal moves, and the
+                invoice, commission and dashboard already know.
               </p>
               <div className="split platform-split">
                 <div className="feature-list">
@@ -287,18 +309,21 @@ export default function Home() {
                   ))}
                 </div>
                 <div className="media-col">
-                  {/* Drop your dashboard screenshot in here:
-                      <img src="/dashboard.png" alt="The Wayfinder OS dashboard" /> */}
-                  <div className="shot dash">
-                    <div className="placeholder">
-                      <svg viewBox="0 0 24 24" fill="none" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                        <rect x="3" y="3" width="18" height="18" rx="2" />
-                        <path d="M3 9h18" />
-                        <path d="M9 21V9" />
-                      </svg>
-                      Dashboard screenshot · 16:9
+                  {media("dashboard.png") ? (
+                    <div className="shot dash-img">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src="/media/dashboard.png" alt="The Wayfinder OS dashboard" />
                     </div>
-                  </div>
+                  ) : (
+                    /* a real, live dashboard beside the module list - the coded
+                       shot is the placeholder it cross-fades over */
+                    <LiveEmbed
+                      path="/embed/sandbox/dashboard"
+                      title="Wayfinder OS dashboard - live demo"
+                    >
+                      <DashboardShot />
+                    </LiveEmbed>
+                  )}
                 </div>
               </div>
             </div>
@@ -308,23 +333,18 @@ export default function Home() {
           <section id="ai">
             <div className="center">
               <div className="eyebrow rv">AI, built in</div>
-              <h2 className="title rv d1">Watch it do the busywork.</h2>
+              <h2 className="title rv d1">It does the busywork before you ask.</h2>
               <p className="lead rv d2">
-                It drafts the replies, reviews the calls and scores the deals
-                while you work.
+                It drafts replies, reviews calls and scores deals while you
+                work. Watch it write:
               </p>
-              {/* Drop an autoplaying demo in here (drafting an AI email, reading a
-                  call, scoring a deal):
-                  <video autoPlay muted loop playsInline src="/ai-demo.mp4" /> */}
-              <div className="shot video rv d2">
-                <div className="placeholder">
-                  <svg viewBox="0 0 24 24" fill="none" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                    <rect x="2" y="3" width="20" height="14" rx="2" />
-                    <polygon points="10 8 15 10.5 10 13 10 8" />
-                  </svg>
-                  Autoplaying demo · the AI drafting an email, reading a call,
-                  scoring a deal
-                </div>
+              <div className="ai-vignette rv d2">
+                <LiveEmbed
+                  path="/embed/sandbox/composer"
+                  title="Wayfinder OS AI email drafting - live demo"
+                >
+                  <AIDraftCard />
+                </LiveEmbed>
               </div>
               <div className="points">
                 {AI_POINTS.map((p) => (
@@ -346,9 +366,8 @@ export default function Home() {
               <div className="eyebrow rv">Made for coaching</div>
               <h2 className="title rv d1">Where the coaching happens.</h2>
               <p className="lead rv d2">
-                Most platforms stop at the sale. But coaching keeps going. So we
-                provide the calls, the cohorts, the video meetings where the work
-                gets done. That part is built in, not bolted on.
+                Most platforms stop at the sale. Coaching keeps going - so the
+                calls, cohorts and video rooms are built in, not bolted on.
               </p>
               <div className="split coaching-split">
                 <div className="point-list rv d1">
@@ -365,109 +384,58 @@ export default function Home() {
                   ))}
                 </div>
                 <div className="media-col rv d2">
-                  {/* Photo of a live coaching call: <img src="/video-call.png" alt="..." /> */}
-                  <div className="shot call">
-                    <div className="placeholder">
-                      <svg viewBox="0 0 24 24" fill="none" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                        <path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5" />
-                        <rect x="2" y="6" width="14" height="12" rx="2" />
-                      </svg>
-                      Photo of a live video call
+                  {media("coaching.mp4") ? (
+                    <div className="shot call">
+                      <video
+                        autoPlay
+                        muted
+                        loop
+                        playsInline
+                        src="/media/coaching.mp4"
+                        poster={media("coaching.jpg") ? "/media/coaching.jpg" : undefined}
+                      />
                     </div>
-                  </div>
+                  ) : (
+                    /* The live room needs camera+mic delegated into the frame or
+                       getUserMedia rejects silently and the demo looks broken. */
+                    <LiveEmbed
+                      path="/embed/sandbox/room"
+                      title="Wayfinder OS video room - live demo"
+                      allow="camera; microphone; display-capture"
+                    >
+                      <CallGridMock />
+                    </LiveEmbed>
+                  )}
                 </div>
               </div>
             </div>
           </section>
 
-          {/* WHY */}
-          <section id="why">
-            <div className="center">
-              <div className="eyebrow rv">Why not just add another tool</div>
-              <h2 className="title rv d1">
-                You can keep stacking tools. Or you can have everything in one
-                place.
-              </h2>
-              <div className="compare rv d1">
-                <div className="col bad">
-                  <h4>The usual setup</h4>
-                  <ul>
-                    {settle.map((s) => (
-                      <li key={s}>{s}</li>
-                    ))}
-                  </ul>
-                </div>
-                <div className="col good">
-                  <h4>On Wayfinder</h4>
-                  <ul>
-                    {wayfinder.map((s) => (
-                      <li key={s}>{s}</li>
-                    ))}
-                  </ul>
-                </div>
+          {/* PROOF - real video testimonial; renders only when the file exists */}
+          {hasTestimonial && (
+            <section id="proof">
+              <div className="center">
+                <div className="eyebrow rv">From the floor</div>
+                <h2 className="title rv d1">What it&apos;s like to run on it.</h2>
+                <TestimonialVideo
+                  src="/media/testimonial-1.mp4"
+                  poster={media("testimonial-1.jpg") ? "/media/testimonial-1.jpg" : undefined}
+                  caption="A founding operator on moving their company across."
+                />
               </div>
-            </div>
-          </section>
-
-          {/* STORY */}
-          <section id="story">
-            <div className="center">
-              <div className="split story-split">
-                <div>
-                  <div className="eyebrow rv">Why we built it</div>
-                  <h2 className="title rv d1">
-                    We built this for ourselves first.
-                  </h2>
-                  <p className="lead rv d2">
-                    We ran a coaching company on seven disconnected tools and a
-                    commission spreadsheet we argued over every month. Nothing we
-                    could buy fixed it, so we built the thing we wanted, run our
-                    own business on it, and now we&apos;re opening it up to a
-                    handful of other companies.
-                  </p>
-                </div>
-                <div className="media-col rv d2">
-                  {/* Founder photo: <img src="/founder.png" alt="..." /> */}
-                  <div className="shot portrait">
-                    <div className="placeholder">
-                      <svg viewBox="0 0 24 24" fill="none" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                        <circle cx="12" cy="8" r="4" />
-                        <path d="M4 21a8 8 0 0 1 16 0" />
-                      </svg>
-                      Photo of the founder
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          {/* TESTIMONIALS */}
-          <section id="testimonials">
-            <div className="center">
-              <div className="eyebrow rv">From the floor</div>
-              <h2 className="title rv d1">What it&apos;s like to run on it.</h2>
-              <div className="testimonials">
-                {testimonials.map((t) => (
-                  <figure key={t.quote} className="tcard rv">
-                    <blockquote>{t.quote}</blockquote>
-                    <figcaption>
-                      {t.name}, <span className="co">{t.company}</span>
-                    </figcaption>
-                  </figure>
-                ))}
-              </div>
-            </div>
-          </section>
+            </section>
+          )}
 
           {/* MIGRATION */}
           <section id="migration">
             <div className="center">
               <div className="eyebrow rv">Switching over</div>
-              <h2 className="title rv d1">How we make moving across easy.</h2>
+              <h2 className="title rv d1">
+                Scared of the move? How we make it easy.
+              </h2>
               <p className="lead rv d2">
-                It runs alongside your current setup, and stays reversible until
-                you&apos;re ready. No downtime, nothing lost.
+                It runs alongside your current setup and stays reversible until
+                you&apos;re ready. Nothing lost, no downtime.
               </p>
               <div className="steps seq">
                 {steps.map((s) => (
@@ -481,22 +449,27 @@ export default function Home() {
             </div>
           </section>
 
-          {/* APPLY */}
+          {/* APPLY - founders pass */}
           <section id="apply">
             <div className="apply rv">
-              <div className="eyebrow">Founding access</div>
-              <h2 className="title">Bring your company across.</h2>
+              <div className="eyebrow">Founders pass</div>
+              <h2 className="title">Try it free. Help shape it.</h2>
               <p className="lead">
-                We&apos;re taking on a small group of coaching companies as
-                founding operators - hands-on migration, a direct line to us, and
-                a real say in what gets built next. Tell us about your company
-                and we&apos;ll set up a call.
+                {SPOTS_LEFT} founding companies get Wayfinder OS free while we
+                tailor it to them - hands-on migration, a direct line to the
+                builders. When the seats fill, the door closes.
               </p>
-              {/* TEMP: this bypasses the form to demo the hyperspace jump.
-                  Swap to className="btn lg apply-open" to re-enable the Apply form. */}
-              <button className="btn lg warp-trigger" type="button">
-                Apply for access
-              </button>
+              <div className="spots" aria-label={`${SPOTS_LEFT} founders pass spots left`}>
+                {Array.from({ length: SPOTS_LEFT }).map((_, i) => (
+                  <span key={i} aria-hidden="true" />
+                ))}
+                <em>{SPOTS_LEFT} spots left</em>
+              </div>
+              {/* the warp-trigger plays the hyperspace jump, then lands on /waitlist;
+                  without JS it's a plain link to the same place */}
+              <a className="btn lg warp-trigger" href="/waitlist">
+                Apply to try it free
+              </a>
             </div>
           </section>
 
@@ -531,6 +504,7 @@ export default function Home() {
                 <nav className="fcols" aria-label="Footer">
                   <div>
                     <h5>Product</h5>
+                    <a href="#demo">See it work</a>
                     <a href="#platform">What&apos;s inside</a>
                     <a href="#ai">The AI</a>
                     <a href="#coaching">Coaching</a>
@@ -538,27 +512,30 @@ export default function Home() {
                   </div>
                   <div>
                     <h5>Company</h5>
-                    <a href="#story">Why we built it</a>
-                    <a href="#testimonials">Operators</a>
+                    <a href="#problem">Why we built it</a>
                     <a href="#faq">FAQ</a>
+                    <a href={PRIVACY_URL}>Privacy</a>
+                    <a href={TERMS_URL}>Terms</a>
                   </div>
                   <div>
                     <h5>Get started</h5>
-                    <a href="#apply">Apply for access</a>
+                    <Link href="/waitlist">Apply to try it free</Link>
                     <a href="https://admin.wayfindercollective.io">Sign in</a>
                   </div>
                 </nav>
               </div>
               <div className="fbottom">
                 <span>© 2026 Wayfinder Collective. All rights reserved.</span>
-                <span>Built by operators, for operators.</span>
+                <span className="flegal">
+                  <a href={PRIVACY_URL}>Privacy policy</a>
+                  <a href={TERMS_URL}>Terms of service</a>
+                </span>
               </div>
             </div>
           </footer>
         </div>
       </div>
 
-      <ApplyForm />
       <ClientFX />
     </>
   );

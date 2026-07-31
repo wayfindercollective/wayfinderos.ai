@@ -7,10 +7,10 @@ import "./globals.css";
 // app read as one brand. Sans for everything; mono for labels, numbers and code.
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://wayfinderos.com"),
-  title: "Wayfinder OS - Run your coaching company from one login",
+  metadataBase: new URL("https://wayfinderos.ai"),
+  title: "Wayfinder OS - The operating system for coaching companies",
   description:
-    "CRM, payments, calls, inbox, booking and commissions - one system, not seven subscriptions. Built by operators who ran a coaching company on the exact mess you're in right now.",
+    "CRM, payments, calls, inbox, booking and commissions in one place, with numbers you can finally trust. Built by operators who ran a coaching company on the exact mess you're in right now.",
   icons: {
     icon: "/brand/favicon.svg",
     shortcut: "/brand/favicon.svg",
