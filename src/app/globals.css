@@ -1475,6 +1475,19 @@ footer.site {
   visibility: visible;
   pointer-events: auto;
 }
+/* the video room gets the full container width; its 4:3-ish placeholder would
+   otherwise leave the live room letterboxed in a narrow column */
+.coaching-stage {
+  margin-top: 48px;
+}
+.coaching-stage .shot.call.wide {
+  aspect-ratio: 16 / 9;
+}
+.coaching-points {
+  grid-template-columns: repeat(4, 1fr);
+  gap: 34px 32px;
+  margin-top: 44px;
+}
 .le-badge {
   position: absolute;
   right: 14px;
@@ -2173,7 +2186,8 @@ textarea.wl-input {
   .menu-btn {
     display: flex;
   }
-  .points {
+  .points,
+  .coaching-points {
     grid-template-columns: repeat(2, 1fr);
   }
 }
@@ -2194,6 +2208,7 @@ textarea.wl-input {
     padding-left: 0;
   }
   .points,
+  .coaching-points,
   .melts,
   .compare,
   .steps,

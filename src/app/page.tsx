@@ -263,6 +263,7 @@ export default function Home() {
               <LiveEmbed
                 path="/embed/sandbox/os?start=pipeline"
                 title="Wayfinder OS - live demo"
+                liveHeight={680}
               >
                 <OSDemo />
               </LiveEmbed>
@@ -369,44 +370,43 @@ export default function Home() {
                 Most platforms stop at the sale. Coaching keeps going - so the
                 calls, cohorts and video rooms are built in, not bolted on.
               </p>
-              <div className="split coaching-split">
-                <div className="point-list rv d1">
-                  {coaching.map((p) => (
-                    <div className="point row" key={p.t}>
-                      <span className="pi">
-                        <ToolIcon svg={p.svg} size={22} />
-                      </span>
-                      <div>
-                        <h4>{p.t}</h4>
-                        <p>{p.d}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-                <div className="media-col rv d2">
-                  {media("coaching.mp4") ? (
-                    <div className="shot call">
-                      <video
-                        autoPlay
-                        muted
-                        loop
-                        playsInline
-                        src="/media/coaching.mp4"
-                        poster={media("coaching.jpg") ? "/media/coaching.jpg" : undefined}
-                      />
-                    </div>
-                  ) : (
-                    /* The live room needs camera+mic delegated into the frame or
-                       getUserMedia rejects silently and the demo looks broken. */
-                    <LiveEmbed
-                      path="/embed/sandbox/room"
-                      title="Wayfinder OS video room - live demo"
-                      allow="camera; microphone; display-capture"
-                    >
-                      <CallGridMock />
-                    </LiveEmbed>
-                  )}
-                </div>
+              {/* the room is a full-width stage: a real meeting UI squeezed into
+                  a half column gets clipped and reads as broken */}
+              <div className="coaching-stage rv d1">
+                {media("coaching.mp4") ? (
+                  <div className="shot call wide">
+                    <video
+                      autoPlay
+                      muted
+                      loop
+                      playsInline
+                      src="/media/coaching.mp4"
+                      poster={media("coaching.jpg") ? "/media/coaching.jpg" : undefined}
+                    />
+                  </div>
+                ) : (
+                  /* The live room needs camera+mic delegated into the frame or
+                     getUserMedia rejects silently and the demo looks broken. */
+                  <LiveEmbed
+                    path="/embed/sandbox/room"
+                    title="Wayfinder OS video room - live demo"
+                    allow="camera; microphone; display-capture"
+                    liveHeight={620}
+                  >
+                    <CallGridMock />
+                  </LiveEmbed>
+                )}
+              </div>
+              <div className="points coaching-points">
+                {coaching.map((p) => (
+                  <div className="point rv" key={p.t}>
+                    <span className="pi">
+                      <ToolIcon svg={p.svg} size={22} />
+                    </span>
+                    <h4>{p.t}</h4>
+                    <p>{p.d}</p>
+                  </div>
+                ))}
               </div>
             </div>
           </section>

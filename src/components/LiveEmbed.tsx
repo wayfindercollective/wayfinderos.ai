@@ -38,6 +38,7 @@ export default function LiveEmbed({
   path,
   title,
   allow,
+  liveHeight,
   children,
 }: {
   path: string; // e.g. "/embed/sandbox/composer"
@@ -47,6 +48,11 @@ export default function LiveEmbed({
   // allow-list, so the camera demo would look broken rather than blocked.
   // Everything else stays on the default (no delegated permissions).
   allow?: string;
+  // Height the wrapper grows to once the REAL product is showing. The coded
+  // placeholders are deliberately compact; the actual app needs more room (a
+  // pipeline board or a video room squeezed into placeholder height gets
+  // clipped). Only applied when live, so the pre-reveal layout is unchanged.
+  liveHeight?: number;
   children: React.ReactNode; // the coded placeholder
 }) {
   const [src, setSrc] = useState<string | null>(null);
@@ -125,7 +131,11 @@ export default function LiveEmbed({
   // too - `aria-hidden` alone still leaves its buttons focusable, stranding
   // keyboard users in controls they cannot see.
   return (
-    <div className={`live-embed${live ? " live" : ""}`} ref={ref}>
+    <div
+      className={`live-embed${live ? " live" : ""}`}
+      ref={ref}
+      style={live && liveHeight ? { minHeight: liveHeight } : undefined}
+    >
       <div className="le-placeholder" inert={live || undefined}>
         {children}
       </div>
