@@ -539,8 +539,14 @@ export default function SpaceScene() {
         // by half its own width/height in that direction - so it slides continuously
         // from "right of icon" through "above icon" to "left of icon" as the node
         // orbits, with no snap at the halfway point, and never reaches inward.
+        // Labels earn their place in the hero, where they name the tools. Past
+        // it they just collide with the section artwork (the login pileup sits
+        // exactly where the orbit swings), so fade them out as the scroll moves
+        // on and let the icons alone carry the collapse.
+        const labelA = vis * 0.8 * (1 - chaos);
+        if (labelA <= 0.02) continue;
         ctx.font = `500 ${10.5 * DPR}px ${monoFont}`;
-        ctx.fillStyle = rgba([200, 208, 216], vis * 0.8);
+        ctx.fillStyle = rgba([200, 208, 216], labelA);
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
         const text = n.label.toUpperCase();

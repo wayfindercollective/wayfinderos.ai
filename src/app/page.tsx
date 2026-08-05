@@ -232,7 +232,7 @@ export default function Home() {
                 <p className="rv d2">
                   So you&apos;re stressed. Guessing at your numbers. Money
                   leaking somewhere you can&apos;t see. Meanwhile someone in
-                  your market just <em>asks</em> their business a question and
+                  your market just <em>asks</em>{" "}their business a question and
                   gets an answer - and they&apos;re enjoying it. That gap is
                   going to close a lot of companies this year.
                 </p>

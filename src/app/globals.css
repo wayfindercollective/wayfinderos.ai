@@ -466,6 +466,11 @@ p a {
 .problem-copy p + p {
   margin-top: 18px;
 }
+/* the one italicised word in the race copy - it carries the whole idea */
+.problem-copy em {
+  font-style: italic;
+  color: var(--ink);
+}
 .problem-media .shot {
   aspect-ratio: 16 / 9;
   max-height: 74vh;
