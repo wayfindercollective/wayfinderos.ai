@@ -23,6 +23,15 @@ const svgFor: Record<string, string> = Object.fromEntries(
 //   testimonial-1.mp4    - video testimonial (+ optional testimonial-1.jpg poster)
 const media = (f: string) => existsSync(join(process.cwd(), "public/media", f));
 
+// Say this -> get that. Concrete proof of the one claim, in the visitor's own
+// words. Deliberately ordinary sentences, not prompt-engineering.
+const SAY_THIS = [
+  { q: "Who's gone quiet this week?", a: "Every deal with no reply, ranked by what it's worth." },
+  { q: "Follow up with Sarah about the payment plan.", a: "Written in your voice, waiting for your nod." },
+  { q: "How much did we actually collect this month?", a: "One number. The real one." },
+  { q: "Book Leo in for Thursday.", a: "Held, invited, reminded." },
+];
+
 // The stresses, melting away: a pain you recognise dissolves into its relief.
 const melts = [
   { pain: "The midnight commission spreadsheet, payroll due tomorrow.", relief: "It calculates itself now." },
@@ -154,7 +163,7 @@ export default function Home() {
           </span>
         </a>
         <div className="navlinks">
-          <a href="#demo">See it work</a>
+          <a href="#demo">Talk to it</a>
           <a href="#platform">What&apos;s inside</a>
           <a href="#coaching">Coaching</a>
           <a href="#migration">Switching</a>
@@ -184,12 +193,11 @@ export default function Home() {
                 <span className="chip-dot" aria-hidden="true" />
                 Founders pass · {SPOTS_LEFT} spots left
               </div>
-              <h1 className="rv d1">
-                It shouldn&apos;t take seven logins to run one company.
-              </h1>
+              <h1 className="rv d1">Talk to your business.</h1>
               <p className="sub rv d2">
-                The operating system for coaching companies. One login, one set
-                of numbers you can finally trust.
+                The first coaching platform you run by talking to it. Ask for
+                what you want - the email, the follow-up, the number - and it&apos;s
+                already done.
               </p>
               <div className="hero-cta rv d3">
                 <Link className="btn lg" href="/waitlist">
@@ -211,19 +219,22 @@ export default function Home() {
           <section id="problem">
             <div className="problem-grid">
               <div className="problem-copy">
-                <div className="eyebrow rv">We know the feeling</div>
+                <div className="eyebrow rv">The race</div>
                 <h2 className="title rv d1">
-                  You&apos;re the only thing holding it together.
+                  You&apos;re in a horse and cart. They just bought a racecar.
                 </h2>
                 <p className="rv d2">
-                  Seven logins. A commission spreadsheet you re-check at
-                  midnight. A hot lead going cold in the one inbox nobody
-                  watches, and money quietly leaking between tools that
-                  don&apos;t talk.
+                  If it takes seven logins and a spreadsheet to answer one
+                  simple question about your own company, you&apos;re not slow
+                  because you&apos;re bad at this. You&apos;re slow because of
+                  what you&apos;re driving.
                 </p>
                 <p className="rv d2">
-                  We know, because we ran our coaching company on the exact same
-                  mess - and nothing we could buy fixed it.
+                  So you&apos;re stressed. Guessing at your numbers. Money
+                  leaking somewhere you can&apos;t see. Meanwhile someone in
+                  your market just <em>asks</em> their business a question and
+                  gets an answer - and they&apos;re enjoying it. That gap is
+                  going to close a lot of companies this year.
                 </p>
               </div>
               <div className="problem-media rv d2">
@@ -235,38 +246,60 @@ export default function Home() {
                 animation that pulls every tool into the one orb with the logo */}
             <div id="collapse" className="fix">
               <div className="center statement">
-                <div className="eyebrow rv">So we built the way out</div>
+                <div className="eyebrow rv">So we built the racecar</div>
                 <h2 className="title rv d1">
-                  We put it all in <span className="dim">one place.</span>
+                  One business. <span className="dim">One conversation.</span>
                 </h2>
                 <p className="lead rv d2">
-                  One database. One login. One set of numbers. We run our own
-                  company on it every day - and now it&apos;s yours.
+                  Everything you run pulled into a single system - then a way to
+                  drive it that isn&apos;t clicking. You talk. It does the rest.
                 </p>
               </div>
             </div>
           </section>
 
-          {/* DEMO - the product, hands-on */}
+          {/* THE ONE THING - talking to it. This is the whole pitch; everything
+              below is evidence that it's real, not a second sales argument. */}
           <section id="demo">
             <div className="center">
-              <div className="eyebrow rv">See it work</div>
-              <h2 className="title rv d1">Watch a lead become revenue.</h2>
+              <div className="eyebrow rv">The one thing</div>
+              <h2 className="title rv d1">Just say what you want.</h2>
               <p className="lead rv d2">
-                A lead books, the payment collects, the commission calculates,
-                the dashboard updates. Click around - or just watch.
+                Not fourteen dashboards to learn. You describe it in a sentence
+                and it&apos;s written, sent, updated, booked. Try it right here -
+                this is the real thing, not a video.
               </p>
-              {/* upgrades itself to the real product when the embed origin is
-                  configured; the coded walkthrough is the placeholder. The
-                  sandbox "os" frame is the shell-with-sidebar one, which is what
-                  OSDemo imitates - opening on pipeline to match it. */}
-              <LiveEmbed
-                path="/embed/sandbox/os?start=pipeline"
-                title="Wayfinder OS - live demo"
-                liveHeight={720}
-              >
-                <OSDemo />
-              </LiveEmbed>
+              <div className="ai-vignette rv d2">
+                <LiveEmbed
+                  path="/embed/sandbox/composer"
+                  title="Wayfinder OS AI writing assistant - live demo"
+                  liveHeight={920}
+                >
+                  <AIDraftCard />
+                </LiveEmbed>
+              </div>
+              <div className="says">
+                {SAY_THIS.map((s) => (
+                  <div className="say rv" key={s.q}>
+                    <span className="say-q">&ldquo;{s.q}&rdquo;</span>
+                    <span className="say-a">{s.a}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          {/* PROOF - one number, from a real operator */}
+          <section id="proof">
+            <div className="center statement">
+              <div className="eyebrow rv">What it does to a week</div>
+              <p className="bignum rv d1">
+                50%<span>more productive</span>
+              </p>
+              <p className="lead rv d2">
+                &ldquo;A 50% increase in productivity.&rdquo;
+                <span className="attrib">Cbaas</span>
+              </p>
             </div>
           </section>
 
@@ -289,11 +322,14 @@ export default function Home() {
           {/* PLATFORM */}
           <section id="platform">
             <div className="center">
-              <div className="eyebrow rv">What&apos;s inside</div>
-              <h2 className="title rv d1">One system. Fourteen jobs.</h2>
+              <div className="eyebrow rv">Under the hood</div>
+              <h2 className="title rv d1">
+                And yes - it replaces the rest.
+              </h2>
               <p className="lead rv d2">
-                Every module reads the same records. A deal moves, and the
-                invoice, commission and dashboard already know.
+                CRM, payments, calls, booking, commissions. All of it is in
+                here, all reading the same records. But that&apos;s the boring
+                part - the point is you stop clicking through it.
               </p>
               <div className="split platform-split">
                 <div className="feature-list">
@@ -334,21 +370,22 @@ export default function Home() {
           {/* AI */}
           <section id="ai">
             <div className="center">
-              <div className="eyebrow rv">AI, built in</div>
-              <h2 className="title rv d1">It does the busywork before you ask.</h2>
+              <div className="eyebrow rv">Everywhere at once</div>
+              <h2 className="title rv d1">
+                One sentence moves the whole company.
+              </h2>
               <p className="lead rv d2">
-                It drafts replies, reviews calls and scores deals while you
-                work. Watch it write:
+                Say it once and the deal, the invoice, the commission and the
+                dashboard already know. This is the business it&apos;s running -
+                click anything.
               </p>
-              <div className="ai-vignette rv d2">
-                <LiveEmbed
-                  path="/embed/sandbox/composer"
-                  title="Wayfinder OS AI email drafting - live demo"
-                  liveHeight={920}
-                >
-                  <AIDraftCard />
-                </LiveEmbed>
-              </div>
+              <LiveEmbed
+                path="/embed/sandbox/os?start=pipeline"
+                title="Wayfinder OS - live demo"
+                liveHeight={720}
+              >
+                <OSDemo />
+              </LiveEmbed>
               <div className="points">
                 {AI_POINTS.map((p) => (
                   <div className="point rv" key={p.t}>
@@ -506,7 +543,7 @@ export default function Home() {
                 <nav className="fcols" aria-label="Footer">
                   <div>
                     <h5>Product</h5>
-                    <a href="#demo">See it work</a>
+                    <a href="#demo">Talk to it</a>
                     <a href="#platform">What&apos;s inside</a>
                     <a href="#ai">The AI</a>
                     <a href="#coaching">Coaching</a>
