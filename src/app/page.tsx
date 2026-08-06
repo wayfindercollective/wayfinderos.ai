@@ -271,13 +271,13 @@ export default function Home() {
             <div id="collapse" className="fix">
               <div className="center statement">
                 <h2 className="title rv d1">
-                  So we fired <span className="dim">the dashboard.</span>
+                  So we demoted <span className="dim">the dashboard.</span>
                 </h2>
                 <p className="lead rv d2">
-                  Software made you the operator of the software - screens to
-                  learn, tabs to check, numbers you quietly doubt. Everything is
-                  still in here: the CRM, the dialer, the payments, the P&L.
-                  You just stop clicking through it, and start asking.
+                  It&apos;s still in there - it&apos;s just not your job
+                  anymore. You ask, it answers, it acts. And when you do open a
+                  screen, the number on it is collected cash, reconciled to the
+                  cent - not a story about closed-won.
                 </p>
               </div>
             </div>
@@ -397,14 +397,12 @@ export default function Home() {
           <section id="platform">
             <div className="center">
               <div className="eyebrow rv">Under the hood</div>
-              <h2 className="title rv d1">
-                Yes, the boring parts are all in there.
-              </h2>
+              <h2 className="title rv d1">The truth, to the cent.</h2>
               <p className="lead rv d2">
                 CRM, payments, calls, booking, commissions - one database, so
-                nothing disagrees with anything. We&apos;re not going to sell
-                you a list of it. You already own tools that do this. What you
-                don&apos;t own is a way to stop clicking through them.
+                nothing disagrees with anything. That dashboard is the real one,
+                live: orders and collected cash, not projections. Ask for a
+                number, and this is where it comes from.
               </p>
               <div className="split platform-split">
                 <div className="feature-list">
