@@ -718,6 +718,39 @@ p a {
   color: var(--faint);
 }
 
+/* ---------- candour: what we're not ---------- */
+.nots {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 34px 56px;
+  max-width: 940px;
+  margin: 50px 0 0;
+}
+.not {
+  padding-left: 20px;
+  border-left: 1px solid var(--line);
+}
+.not h4 {
+  font-family: var(--font-geist-sans), sans-serif;
+  font-weight: 600;
+  font-size: 19px;
+  letter-spacing: -0.2px;
+  margin: 0 0 8px;
+  color: var(--ink);
+  text-wrap: pretty;
+}
+.not p {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--muted);
+  text-wrap: pretty;
+}
+.nots-close {
+  margin-top: 46px;
+  color: var(--ink);
+}
+
 /* ---------- the melt: a pain you recognise dissolves into its relief ---------- */
 .melts {
   display: grid;
@@ -2287,6 +2320,7 @@ textarea.wl-input {
   .points,
   .coaching-points,
   .melts,
+  .nots,
   .says,
   .compare,
   .steps,

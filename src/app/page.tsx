@@ -32,6 +32,27 @@ const SAY_THIS = [
   { q: "Book Leo in for Thursday.", a: "Held, invited, reminded." },
 ];
 
+// Admit the negative and you're believed on everything else. Every line here is
+// true and disqualifies somebody - that's the point, not a rhetorical trick.
+const NOT_FOR = [
+  {
+    t: "We have fewer features than GoHighLevel.",
+    d: "Deliberately. Every one we add is another thing you'd have to learn.",
+  },
+  {
+    t: "There's no app marketplace.",
+    d: "No 300 integrations. If your business runs on a chain of Zapier duct tape, keep it - it'll be less painful than moving.",
+  },
+  {
+    t: "We're new.",
+    d: "You'd be one of ten companies on this, not one of ten thousand. That means our phone number, and a say in what gets built. It also means you're early.",
+  },
+  {
+    t: "We only take coaching companies.",
+    d: "Agencies, e-com, everyone else: no. The whole thing is shaped around coach and student, and it shows.",
+  },
+];
+
 // The stresses, melting away: a pain you recognise dissolves into its relief.
 const melts = [
   { pain: "The midnight commission spreadsheet, payroll due tomorrow.", relief: "It calculates itself now." },
@@ -110,8 +131,12 @@ const faqs = [
     a: "Yes. Build a workflow off almost anything - a new lead, a deal moving stage, an inbound message, a booking - then send emails, texts, AI calls, deal updates or follow-up tasks in order. Quiet hours, frequency caps and consent rules are handled for you, so nothing fires at 2am or to someone who opted out.",
   },
   {
-    q: "How much of this is really AI?",
-    a: "More than you'd think, and none of it is a chatbot bolted on the side. It's woven through every part of the platform and runs in the background - scoring, drafting and surfacing the next move while you work, without you ever stopping to prompt it.",
+    q: "Isn't this just GoHighLevel with a chatbot on top?",
+    a: "No, and the difference is the whole company. A chatbot sits beside software you still have to drive. Here, talking is how you drive it - the assistant reads and writes the same records as every module, so asking for something is the same action as doing it. The honest version: GoHighLevel has more features. We have fewer screens. Pick the problem you actually have.",
+  },
+  {
+    q: "What happens when it gets something wrong?",
+    a: "You see it before it goes out. Drafts wait for your nod, and anything that moves money or touches a customer shows you what it's about to do first. It's an assistant with its hands on the controls, not an autopilot you hope for the best with.",
   },
   {
     q: "Is this built for coaches, or rebranded sales software?",
@@ -166,6 +191,7 @@ export default function Home() {
           <a href="#demo">Talk to it</a>
           <a href="#platform">What&apos;s inside</a>
           <a href="#coaching">Coaching</a>
+          <a href="#honest">Honest bit</a>
           <a href="#migration">Switching</a>
           <a href="#faq">FAQ</a>
         </div>
@@ -195,9 +221,8 @@ export default function Home() {
               </div>
               <h1 className="rv d1">Talk to your business.</h1>
               <p className="sub rv d2">
-                The first coaching platform you run by talking to it. Ask for
-                what you want - the email, the follow-up, the number - and it&apos;s
-                already done.
+                Every other coaching platform sells you more screens to click.
+                Wayfinder is the first one you just talk to.
               </p>
               <div className="hero-cta rv d3">
                 <Link className="btn lg" href="/waitlist">
@@ -236,11 +261,14 @@ export default function Home() {
             <div id="collapse" className="fix">
               <div className="center statement">
                 <h2 className="title rv d1">
-                  So we built <span className="dim">the racecar.</span>
+                  Everyone else adds screens.{" "}
+                  <span className="dim">We took them away.</span>
                 </h2>
                 <p className="lead rv d2">
-                  Everything you run pulled into one system - then a way to
-                  drive it that isn&apos;t clicking. You talk. It does the rest.
+                  GoHighLevel has more features than we do. So does every
+                  platform built in the last decade - and that is the entire
+                  problem. Each new feature is one more tab, one more login, one
+                  more thing to teach a new hire. We went the other way.
                 </p>
               </div>
             </div>
@@ -253,9 +281,9 @@ export default function Home() {
               <div className="eyebrow rv">The one thing</div>
               <h2 className="title rv d1">Just say what you want.</h2>
               <p className="lead rv d2">
-                Not fourteen dashboards to learn. You describe it in a sentence
-                and it&apos;s written, sent, updated, booked. Try it right here -
-                this is the real thing, not a video.
+                Nothing to learn. You say it in a sentence and it&apos;s
+                written, sent, updated, booked. This is the real product, not a
+                video - go on, type something.
               </p>
               <div className="ai-vignette rv d2">
                 <LiveEmbed
@@ -291,6 +319,28 @@ export default function Home() {
             </div>
           </section>
 
+          {/* CANDOR - admit the negative. Disqualifying people is the point. */}
+          <section id="honest">
+            <div className="center">
+              <div className="eyebrow rv">Before you apply</div>
+              <h2 className="title rv d1">It&apos;s probably not for you.</h2>
+              <p className="lead rv d2">
+                We&apos;d rather lose you here than three months in. So, plainly:
+              </p>
+              <div className="nots">
+                {NOT_FOR.map((n) => (
+                  <div className="not rv" key={n.t}>
+                    <h4>{n.t}</h4>
+                    <p>{n.d}</p>
+                  </div>
+                ))}
+              </div>
+              <p className="lead rv d2 nots-close">
+                Still here? Then you&apos;re exactly who we built it for.
+              </p>
+            </div>
+          </section>
+
           {/* RELIEF - the stresses literally melt away */}
           <section id="relief">
             <div className="center">
@@ -312,12 +362,13 @@ export default function Home() {
             <div className="center">
               <div className="eyebrow rv">Under the hood</div>
               <h2 className="title rv d1">
-                And yes - it replaces the rest.
+                Yes, the boring parts are all in there.
               </h2>
               <p className="lead rv d2">
-                CRM, payments, calls, booking, commissions. All of it is in
-                here, all reading the same records. But that&apos;s the boring
-                part - the point is you stop clicking through it.
+                CRM, payments, calls, booking, commissions - one database, so
+                nothing disagrees with anything. We&apos;re not going to sell
+                you a list of it. You already own tools that do this. What you
+                don&apos;t own is a way to stop clicking through them.
               </p>
               <div className="split platform-split">
                 <div className="feature-list">
@@ -480,11 +531,12 @@ export default function Home() {
           <section id="apply">
             <div className="apply rv">
               <div className="eyebrow">Founders pass</div>
-              <h2 className="title">Try it free. Help shape it.</h2>
+              <h2 className="title">Ten companies. That&apos;s the whole list.</h2>
               <p className="lead">
-                {SPOTS_LEFT} founding companies get Wayfinder OS free while we
-                tailor it to them - hands-on migration, a direct line to the
-                builders. When the seats fill, the door closes.
+                {SPOTS_LEFT} coaching companies get Wayfinder OS free while we
+                shape it around them - hands-on migration, our phone numbers, a
+                real say in what gets built. We&apos;re taking ten because ten
+                is what we can do properly. Then the door closes.
               </p>
               <div className="spots" aria-label={`${SPOTS_LEFT} founders pass spots left`}>
                 {Array.from({ length: SPOTS_LEFT }).map((_, i) => (
@@ -535,7 +587,8 @@ export default function Home() {
                     <a href="#platform">What&apos;s inside</a>
                     <a href="#ai">The AI</a>
                     <a href="#coaching">Coaching</a>
-                    <a href="#migration">Switching</a>
+                    <a href="#honest">Honest bit</a>
+          <a href="#migration">Switching</a>
                   </div>
                   <div>
                     <h5>Company</h5>
