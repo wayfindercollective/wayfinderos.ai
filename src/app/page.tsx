@@ -64,7 +64,7 @@ const NOT_FOR = [
 const melts = [
   { pain: "The midnight commission spreadsheet, payroll due tomorrow.", relief: "It calculates itself now." },
   { pain: "Three dashboards, three different numbers.", relief: "Collected. To the cent." },
-  { pain: "Chasing failed payments, one awkward email at a time.", relief: "The money chases itself." },
+  { pain: "Chasing failed payments, one awkward email at a time.", relief: "You never send that email again." },
   { pain: "A week of tool training for every new hire.", relief: "One login. They just start." },
 ];
 
@@ -81,8 +81,8 @@ const coaching = [
     svg: svgFor.team,
   },
   {
-    t: "Cohorts & programs",
-    d: "Track students through cohorts and program milestones, not just deals through pipeline stages.",
+    t: "Attendance, logged",
+    d: "Who showed and who's slipping, written to each student's record - without anyone taking a register.",
     svg: '<path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/>',
   },
   {
@@ -131,7 +131,7 @@ const steps = [
 const faqs = [
   {
     q: "What does it cost?",
-    a: "Pricing is built around your setup. Most companies end up paying less than they did stacking GoHighLevel Elite and the tools around it - usually about 20% less. Founding companies run free while we tailor it to them.",
+    a: "Pricing is built around your setup. Most companies end up paying less than the GoHighLevel-Elite-plus-add-ons stack they replace. Founding companies run free while we tailor it to them.",
   },
   {
     q: "Can I automate follow-up across email, SMS and calls?",
@@ -147,7 +147,7 @@ const faqs = [
   },
   {
     q: "Is this built for coaches, or rebranded sales software?",
-    a: "Built for coaches. The data model is the coach-student relationship, not an agency sub-account: track students through cohorts and program history per customer, and let the AI tell you where each one is in their journey before a renewal conversation.",
+    a: "Built for coaches - by a coaching company, for how one actually runs. Sessions, attendance and recordings live on the same customer record as the deals and the payments, so delivery and revenue sit in one place instead of an agency sub-account bolted onto sales software.",
   },
   {
     q: "Does it track commissions automatically?",
@@ -231,8 +231,8 @@ export default function Home() {
               <h1 className="rv d1">Talk to your business.</h1>
               <p className="sub rv d2">
                 Ask what you collected. Ask who&apos;s gone quiet. Tell it what
-                to do about both - and it does it. The coaching platform that
-                answers you, with the truth.
+                to do about both - it&apos;s drafted, booked, and waiting for
+                your nod. The coaching OS that answers you, with the truth.
               </p>
               <div className="hero-cta rv d3">
                 <Link className="btn lg" href="/waitlist">
@@ -259,10 +259,11 @@ export default function Home() {
                 <span className="dim">They just bought a racecar.</span>
               </h2>
               <p className="lead rv d2">
-                Someone in your market just <em>asks</em>{" "}
-                their business a question and gets an answer. You open seven logins. You&apos;re
-                not slower because you&apos;re worse at this - you&apos;re
-                slower because of what you&apos;re driving.
+                Within a year, someone in your market will just <em>ask</em>{" "}
+                their business a question and get an answer. The only question
+                is whether that&apos;s you - or the one still opening seven
+                logins. You&apos;re not slower because you&apos;re worse at
+                this. You&apos;re slower because of what you&apos;re driving.
               </p>
             </div>
 
@@ -276,8 +277,8 @@ export default function Home() {
                 <p className="lead rv d2">
                   It&apos;s still in there - it&apos;s just not your job
                   anymore. You ask, it answers, it acts. And when you do open a
-                  screen, the number on it is collected cash, reconciled to the
-                  cent - not a story about closed-won.
+                  screen, the number on it is collected cash, matched against
+                  your live bank feed - not a story about closed-won.
                 </p>
               </div>
             </div>
@@ -314,15 +315,17 @@ export default function Home() {
             </div>
           </section>
 
-          {/* PROOF - one number, from a real operator */}
+          {/* PROOF - the quote, verbatim and attributed. No big-number theatre:
+              on a page about numbers you can trust, an unmeasurable percentage
+              in 130px type would be the one thing here that isn't in the page's
+              own currency. The video testimonials below carry the weight. */}
           <section id="proof">
             <div className="center statement">
-              <div className="eyebrow rv">What it does to a week</div>
-              <p className="bignum rv d1">
-                50%<span>more productive</span>
-              </p>
-              <p className="lead rv d2">
+              <div className="eyebrow rv">From seat one</div>
+              <blockquote className="bigquote rv d1">
                 &ldquo;A 50% increase in productivity.&rdquo;
+              </blockquote>
+              <p className="lead rv d2">
                 <span className="attrib">Cbaas · one of the first three on board</span>
               </p>
             </div>
@@ -381,7 +384,7 @@ export default function Home() {
           <section id="relief">
             <div className="center">
               <div className="eyebrow rv">What changes</div>
-              <h2 className="title rv d1">Feel the stress melt away.</h2>
+              <h2 className="title rv d1">What stops being your job.</h2>
               <div className="melts">
                 {melts.map((m) => (
                   <div className="melt rv" key={m.relief}>

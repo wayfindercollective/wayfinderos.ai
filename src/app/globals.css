@@ -681,6 +681,19 @@ p a {
   color: var(--muted);
 }
 
+/* ---------- the quote, given weight without number-theatre ---------- */
+.bigquote {
+  margin: 0 auto 18px;
+  max-width: 22ch;
+  font-family: var(--font-geist-sans), sans-serif;
+  font-weight: 600;
+  font-size: clamp(26px, 3.4vw, 42px);
+  line-height: 1.2;
+  letter-spacing: -0.8px;
+  color: var(--ink);
+  text-wrap: balance;
+}
+
 /* ---------- the one number ---------- */
 .bignum {
   display: flex;

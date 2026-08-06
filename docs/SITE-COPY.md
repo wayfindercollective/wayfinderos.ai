@@ -1,4 +1,4 @@
-# Wayfinder OS site - full copy (as deployed, 2026-08-06)
+# Wayfinder OS site - full copy (as deployed, 2026-08-06, post OS-team audit)
 
 Every user-visible word on wayfinderos.ai, in page order, for a truth audit
 against the product. Dynamic values shown at their current settings
@@ -21,7 +21,8 @@ Chip: `● FOUNDERS PASS · 7 OF 10 SEATS LEFT`
 # Talk to your business.
 
 Ask what you collected. Ask who's gone quiet. Tell it what to do about both -
-and it does it. The coaching platform that answers you, with the truth.
+it's drafted, booked, and waiting for your nod. The coaching OS that answers
+you, with the truth.
 
 [Apply to try it free]  [See it in action ↓]
 
@@ -33,9 +34,10 @@ Eyebrow: THE RACE
 
 ## You're in a horse and cart. *They just bought a racecar.*
 
-Someone in your market just *asks* their business a question and gets an
-answer. You open seven logins. You're not slower because you're worse at this -
-you're slower because of what you're driving.
+Within a year, someone in your market will just *ask* their business a
+question and get an answer. The only question is whether that's you - or the
+one still opening seven logins. You're not slower because you're worse at
+this. You're slower because of what you're driving.
 
 *(orbit collapses into the one orb with the logo)*
 
@@ -43,7 +45,7 @@ you're slower because of what you're driving.
 
 It's still in there - it's just not your job anymore. You ask, it answers, it
 acts. And when you do open a screen, the number on it is collected cash,
-reconciled to the cent - not a story about closed-won.
+matched against your live bank feed - not a story about closed-won.
 
 ## The one thing  (`#demo`)
 
@@ -68,11 +70,9 @@ Say-this / get-that pairs:
 
 ## Proof  (`#proof`)
 
-Eyebrow: WHAT IT DOES TO A WEEK
+Eyebrow: FROM SEAT ONE
 
-# 50%  (more productive)
-
-"A 50% increase in productivity."
+## "A 50% increase in productivity."  (large quote, no number-theatre)
 `CBAAS · ONE OF THE FIRST THREE ON BOARD`
 
 ## The honest bit  (`#honest`)
@@ -113,13 +113,13 @@ Caption 1: Cbaas · one of the first three on board
 
 Eyebrow: WHAT CHANGES
 
-## Feel the stress melt away.
+## What stops being your job.
 
 - ~~The midnight commission spreadsheet, payroll due tomorrow.~~ →
   **It calculates itself now.**
 - ~~Three dashboards, three different numbers.~~ → **Collected. To the cent.**
 - ~~Chasing failed payments, one awkward email at a time.~~ →
-  **The money chases itself.**
+  **You never send that email again.**
 - ~~A week of tool training for every new hire.~~ →
   **One login. They just start.**
 
@@ -201,8 +201,8 @@ and video rooms are built in, not bolted on.
   with attendance logged straight to each student's record.
 - **Breakout rooms** - Split a cohort into small groups for an exercise, then
   pull everyone back together.
-- **Cohorts & programs** - Track students through cohorts and program
-  milestones, not just deals through pipeline stages.
+- **Attendance, logged** - Who showed and who's slipping, written to each
+  student's record - without anyone taking a register.
 - **Recordings & recaps** - Every session recorded and shared back to the
   group, without anyone having to remember to.
 
@@ -241,9 +241,8 @@ the door closes.
 
 Eyebrow: QUESTIONS · **A few things people ask.**
 
-- **What does it cost?** Pricing is built around your setup. Most companies end
-  up paying less than they did stacking GoHighLevel Elite and the tools around
-  it - usually about 20% less. Founding companies run free while we tailor it
+- **What does it cost?** Pricing is built around your setup. Most companies end up paying less than the
+  GoHighLevel-Elite-plus-add-ons stack they replace. Founding companies run free while we tailor it
   to them.
 - **Can I automate follow-up across email, SMS and calls?** Yes. Build a
   workflow off almost anything - a new lead, a deal moving stage, an inbound
@@ -261,10 +260,10 @@ Eyebrow: QUESTIONS · **A few things people ask.**
   shows you what it's about to do first. It's an assistant with its hands on
   the controls, not an autopilot you hope for the best with.
 - **Is this built for coaches, or rebranded sales software?** Built for
-  coaches. The data model is the coach-student relationship, not an agency
-  sub-account: track students through cohorts and program history per customer,
-  and let the AI tell you where each one is in their journey before a renewal
-  conversation.
+  coaches - by a coaching company, for how one actually runs. Sessions,
+  attendance and recordings live on the same customer record as the deals and
+  the payments, so delivery and revenue sit in one place instead of an agency
+  sub-account bolted onto sales software.
 - **Does it track commissions automatically?** Yes - tiered structures,
   brackets and per-order allocation. Coaches move up tiers on their own and
   commissions recalculate across the whole team.
@@ -340,18 +339,29 @@ side by side until you trust it.)
 
 ---
 
-## Claims that must survive the product audit
+## Audit status (OS-team codebase audit, 2026-08-06)
 
-The candor section invites scrutiny, so every one of these needs to be true:
+Resolved in this revision:
+1. ~~"Reconciled to the cent"~~ → now "matched against your live bank feed"
+   (true from day one; reconciliation depends on org's bank feed + matching).
+2. ~~Hero "and it does it"~~ → "it's drafted, booked, and waiting for your nod"
+   (consistent with the honest bit's guardrails).
+3. ~~"Cohorts & programs / program milestones"~~ → "Attendance, logged" - the
+   cohort/program-milestone model does not exist in the schema; copy now leans
+   only on what's real (video rooms, attendance, recordings). FAQ identity
+   answer rewritten accordingly.
+4. ~~Pricing "usually about 20% less"~~ → "less than the
+   GoHighLevel-Elite-plus-add-ons stack they replace".
+5. Category unified: "coaching OS" everywhere (hero no longer says "platform").
+6. Race flipped to future-tense FOMO (first-mover, not catcher-upper).
 
-1. "Collected cash, **reconciled to the cent**" (collapse + platform) - is the
-   demo/product number bank-reconciled, or order-collected? Soften to match.
-2. "Every action is **permission-gated and logged**, and money never moves
-   without your say-so" (honest bit) - must match the real assistant guardrails.
-3. "**Three companies run on it today**" - current fact?
-4. "**50% increase in productivity**" - Cbaas quote verbatim and attributable?
-5. "Tell it what to do about both - **and it does it**" (hero) - the composer
-   drafts; can the assistant act (book, charge, call) today?
-6. Pricing "usually about 20% less", mobile app, HIPAA mode, Mercury/Stripe
-   bank feed, QuickBooks sync, data export - all inherited from the earlier
-   site; re-confirm each.
+Green from the audit (real code backing): HIPAA mode, video rooms/breakouts,
+customer portal, QuickBooks + Mercury, seat math consistency.
+
+Still open - confirm before launch:
+- **Native iOS/Android dialer claim** (modules + FAQ): no mobile codebase in the
+  OS repo. If the native app lives in a separate repo, fine; if reality is the
+  installable web app, the copy must say that.
+- "Three companies run on it today" and the Cbaas quote - facts outside the
+  repo; keep the number consistent everywhere (currently is).
+- QuickBooks "stays in step" depth worth one look.
