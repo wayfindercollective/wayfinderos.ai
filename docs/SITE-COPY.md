@@ -346,7 +346,9 @@ Resolved in this revision:
 4. ~~Pricing "usually about 20% less"~~ → "less than the
    GoHighLevel-Elite-plus-add-ons stack they replace".
 5. Category unified: "coaching OS" everywhere (hero no longer says "platform").
-6. Race flipped to future-tense FOMO (first-mover, not catcher-upper).
+6. Race is present-tense and the racecars are OURS: "Three coaching companies
+   already run their whole business by talking to it" - no phantom
+   alternatives implied, and the three matches the seat meter everywhere.
 
 Green from the audit (real code backing): HIPAA mode, video rooms/breakouts,
 customer portal, QuickBooks + Mercury, seat math consistency.
