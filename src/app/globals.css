@@ -442,9 +442,8 @@ p a {
   }
 }
 
-/* ---------- problem (image bleeds to the right edge) ---------- */
+/* ---------- the race (one centred beat, resolving into #collapse) ---------- */
 #problem {
-  padding-right: 0;
   overflow: hidden;
 }
 .problem-grid {
@@ -466,10 +465,13 @@ p a {
 .problem-copy p + p {
   margin-top: 18px;
 }
-/* the one italicised word in the race copy - it carries the whole idea */
-.problem-copy em {
+/* The one italicised word in the race copy - it carries the whole idea.
+   The slant leans into the next word, so buy back a sliver of space on top of
+   the real one (which JSX needs an explicit {" "} to keep). */
+.lead em {
   font-style: italic;
   color: var(--ink);
+  margin-right: 0.05em;
 }
 .problem-media .shot {
   aspect-ratio: 16 / 9;

@@ -7,7 +7,7 @@ import OSDemo from "@/components/OSDemo";
 import TestimonialVideo from "@/components/TestimonialVideo";
 import AIDraftCard from "@/components/AIDraftCard";
 import LiveEmbed from "@/components/LiveEmbed";
-import { LoginPileup, CallGridMock, DashboardShot } from "@/components/Vignettes";
+import { CallGridMock, DashboardShot } from "@/components/Vignettes";
 import { Logo, ToolIcon } from "@/components/Brand";
 import { TOOLS, EXTRAS, AI_POINTS } from "@/lib/tools";
 import { SPOTS_LEFT, PRIVACY_URL, TERMS_URL } from "@/lib/waitlist";
@@ -217,41 +217,29 @@ export default function Home() {
               orbit; the story resolves in the #collapse statement below, where the
               canvas pulls every tool into one orb with the logo inside. */}
           <section id="problem">
-            <div className="problem-grid">
-              <div className="problem-copy">
-                <div className="eyebrow rv">The race</div>
-                <h2 className="title rv d1">
-                  You&apos;re in a horse and cart. They just bought a racecar.
-                </h2>
-                <p className="rv d2">
-                  If it takes seven logins and a spreadsheet to answer one
-                  simple question about your own company, you&apos;re not slow
-                  because you&apos;re bad at this. You&apos;re slow because of
-                  what you&apos;re driving.
-                </p>
-                <p className="rv d2">
-                  So you&apos;re stressed. Guessing at your numbers. Money
-                  leaking somewhere you can&apos;t see. Meanwhile someone in
-                  your market just <em>asks</em>{" "}their business a question and
-                  gets an answer - and they&apos;re enjoying it. That gap is
-                  going to close a lot of companies this year.
-                </p>
-              </div>
-              <div className="problem-media rv d2">
-                <LoginPileup />
-              </div>
+            <div className="center statement">
+              <div className="eyebrow rv">The race</div>
+              <h2 className="title rv d1">
+                You&apos;re in a horse and cart.{" "}
+                <span className="dim">They just bought a racecar.</span>
+              </h2>
+              <p className="lead rv d2">
+                Someone in your market just <em>asks</em>{" "}
+                their business a question and gets an answer. You open seven logins. You&apos;re
+                not slower because you&apos;re worse at this - you&apos;re
+                slower because of what you&apos;re driving.
+              </p>
             </div>
 
-            {/* the resolution of the same story - #collapse anchors the canvas
+            {/* the resolution of the same beat - #collapse anchors the canvas
                 animation that pulls every tool into the one orb with the logo */}
             <div id="collapse" className="fix">
               <div className="center statement">
-                <div className="eyebrow rv">So we built the racecar</div>
                 <h2 className="title rv d1">
-                  One business. <span className="dim">One conversation.</span>
+                  So we built <span className="dim">the racecar.</span>
                 </h2>
                 <p className="lead rv d2">
-                  Everything you run pulled into a single system - then a way to
+                  Everything you run pulled into one system - then a way to
                   drive it that isn&apos;t clicking. You talk. It does the rest.
                 </p>
               </div>
@@ -380,7 +368,7 @@ export default function Home() {
                 click anything.
               </p>
               <LiveEmbed
-                path="/embed/sandbox/os?start=pipeline"
+                path="/embed/sandbox/pipeline"
                 title="Wayfinder OS - live demo"
                 liveHeight={720}
               >
