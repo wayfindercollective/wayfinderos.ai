@@ -10,7 +10,7 @@ import LiveEmbed from "@/components/LiveEmbed";
 import { CallGridMock, DashboardShot } from "@/components/Vignettes";
 import { Logo, ToolIcon } from "@/components/Brand";
 import { TOOLS, EXTRAS, AI_POINTS } from "@/lib/tools";
-import { SPOTS_LEFT, PRIVACY_URL, TERMS_URL } from "@/lib/waitlist";
+import { SPOTS_LEFT, SPOTS_TAKEN, SPOTS_TOTAL, PRIVACY_URL, TERMS_URL } from "@/lib/waitlist";
 
 // icon lookup by key, drawn from the single source of truth in lib/tools.ts
 const svgFor: Record<string, string> = Object.fromEntries(
@@ -20,8 +20,15 @@ const svgFor: Record<string, string> = Object.fromEntries(
 // Real media drops into public/media/ and appears automatically on the next build:
 //   dashboard.png        - real dashboard screenshot (platform section panel)
 //   coaching.mp4         - b-roll of a live coaching call (+ optional coaching.jpg poster)
-//   testimonial-1.mp4    - video testimonial (+ optional testimonial-1.jpg poster)
+//   testimonial-1.mp4 .. testimonial-6.mp4 - founder video testimonials, in seat
+//   order (+ optional matching testimonial-N.jpg posters). Names/captions below.
 const media = (f: string) => existsSync(join(process.cwd(), "public/media", f));
+
+// Captions for the founder videos, by number. Fill in real names/companies as
+// the videos land; a missing entry just renders without a caption.
+const TESTIMONIAL_CAPTIONS: Record<number, string> = {
+  1: "Cbaas · one of the first three on board",
+};
 
 // Say this -> get that. Concrete proof of the one claim, in the visitor's own
 // words. Deliberately ordinary sentences, not prompt-engineering.
@@ -45,7 +52,7 @@ const NOT_FOR = [
   },
   {
     t: "We're new.",
-    d: "You'd be one of ten companies on this, not one of ten thousand. That means our phone number, and a say in what gets built. It also means you're early.",
+    d: "Three companies run on it today, and you'd be the fourth - not the ten-thousandth. That means our phone number, and a say in what gets built. It also means you're early.",
   },
   {
     t: "We only take coaching companies.",
@@ -173,7 +180,9 @@ const faqs = [
 ];
 
 export default function Home() {
-  const hasTestimonial = media("testimonial-1.mp4");
+  const testimonialVideos = [1, 2, 3, 4, 5, 6].filter((n) =>
+    media(`testimonial-${n}.mp4`)
+  );
 
   return (
     <>
@@ -217,7 +226,7 @@ export default function Home() {
             <div className="hero-core">
               <div className="chip rv">
                 <span className="chip-dot" aria-hidden="true" />
-                Founders pass · {SPOTS_LEFT} spots left
+                Founders pass · {SPOTS_LEFT} of {SPOTS_TOTAL} seats left
               </div>
               <h1 className="rv d1">Talk to your business.</h1>
               <p className="sub rv d2">
@@ -314,7 +323,7 @@ export default function Home() {
               </p>
               <p className="lead rv d2">
                 &ldquo;A 50% increase in productivity.&rdquo;
-                <span className="attrib">Cbaas</span>
+                <span className="attrib">Cbaas · one of the first three on board</span>
               </p>
             </div>
           </section>
@@ -340,6 +349,33 @@ export default function Home() {
               </p>
             </div>
           </section>
+
+          {/* THE FIRST THREE - founder videos, seat order. Renders once the
+              files exist in public/media/; the seat meter in #apply agrees. */}
+          {testimonialVideos.length > 0 && (
+            <section id="operators">
+              <div className="center">
+                <div className="eyebrow rv">The first three</div>
+                <h2 className="title rv d1">
+                  Three of the ten seats are taken.
+                </h2>
+                <p className="lead rv d2">
+                  These are the companies already running on it - in their own
+                  words, not ours.
+                </p>
+                <div className="tvideos">
+                  {testimonialVideos.map((n) => (
+                    <TestimonialVideo
+                      key={n}
+                      src={`/media/testimonial-${n}.mp4`}
+                      poster={media(`testimonial-${n}.jpg`) ? `/media/testimonial-${n}.jpg` : undefined}
+                      caption={TESTIMONIAL_CAPTIONS[n]}
+                    />
+                  ))}
+                </div>
+              </div>
+            </section>
+          )}
 
           {/* RELIEF - the stresses literally melt away */}
           <section id="relief">
@@ -489,21 +525,6 @@ export default function Home() {
             </div>
           </section>
 
-          {/* PROOF - real video testimonial; renders only when the file exists */}
-          {hasTestimonial && (
-            <section id="proof">
-              <div className="center">
-                <div className="eyebrow rv">From the floor</div>
-                <h2 className="title rv d1">What it&apos;s like to run on it.</h2>
-                <TestimonialVideo
-                  src="/media/testimonial-1.mp4"
-                  poster={media("testimonial-1.jpg") ? "/media/testimonial-1.jpg" : undefined}
-                  caption="A founding operator on moving their company across."
-                />
-              </div>
-            </section>
-          )}
-
           {/* MIGRATION */}
           <section id="migration">
             <div className="center">
@@ -533,16 +554,20 @@ export default function Home() {
               <div className="eyebrow">Founders pass</div>
               <h2 className="title">Ten companies. That&apos;s the whole list.</h2>
               <p className="lead">
-                {SPOTS_LEFT} coaching companies get Wayfinder OS free while we
-                shape it around them - hands-on migration, our phone numbers, a
-                real say in what gets built. We&apos;re taking ten because ten
-                is what we can do properly. Then the door closes.
+                Three seats are already taken. The remaining {SPOTS_LEFT}{" "}
+                get Wayfinder OS free while we shape it around them - hands-on
+                migration, our phone numbers, a real say in what gets built.
+                We&apos;re taking ten because ten is what we can do properly.
+                Then the door closes.
               </p>
-              <div className="spots" aria-label={`${SPOTS_LEFT} founders pass spots left`}>
-                {Array.from({ length: SPOTS_LEFT }).map((_, i) => (
-                  <span key={i} aria-hidden="true" />
+              <div
+                className="spots"
+                aria-label={`${SPOTS_TAKEN} of ${SPOTS_TOTAL} founders pass seats taken, ${SPOTS_LEFT} left`}
+              >
+                {Array.from({ length: SPOTS_TOTAL }).map((_, i) => (
+                  <span key={i} className={i < SPOTS_TAKEN ? "taken" : ""} aria-hidden="true" />
                 ))}
-                <em>{SPOTS_LEFT} spots left</em>
+                <em>{SPOTS_TAKEN} taken · {SPOTS_LEFT} left</em>
               </div>
               {/* the warp-trigger plays the hyperspace jump, then lands on /waitlist;
                   without JS it's a plain link to the same place */}
@@ -587,12 +612,11 @@ export default function Home() {
                     <a href="#platform">What&apos;s inside</a>
                     <a href="#ai">The AI</a>
                     <a href="#coaching">Coaching</a>
-                    <a href="#honest">Honest bit</a>
-          <a href="#migration">Switching</a>
+                    <a href="#migration">Switching</a>
                   </div>
                   <div>
                     <h5>Company</h5>
-                    <a href="#problem">Why we built it</a>
+                    <a href="#honest">The honest bit</a>
                     <a href="#faq">FAQ</a>
                     <a href={PRIVACY_URL}>Privacy</a>
                     <a href={TERMS_URL}>Terms</a>

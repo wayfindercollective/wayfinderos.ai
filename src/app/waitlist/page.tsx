@@ -7,7 +7,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Logo } from "@/components/Brand";
 import WaitlistStepper from "@/components/WaitlistStepper";
-import { SPOTS_LEFT, PRIVACY_URL, TERMS_URL } from "@/lib/waitlist";
+import { SPOTS_LEFT, SPOTS_TOTAL, PRIVACY_URL, TERMS_URL } from "@/lib/waitlist";
 
 export const metadata: Metadata = {
   title: "Apply to try it free - Wayfinder OS",
@@ -53,13 +53,14 @@ export default function WaitlistPage() {
         <header className="wl-head">
           <div className="chip">
             <span className="chip-dot" aria-hidden="true" />
-            Founders pass · {SPOTS_LEFT} spots left
+            Founders pass · {SPOTS_LEFT} of {SPOTS_TOTAL} seats left
           </div>
           <h1>Apply to try it free.</h1>
           <p>
             Ten coaching companies get Wayfinder OS free while we tailor it to
-            them. Tell us where it hurts - it takes about two minutes, and the
-            number is so we can call you back, not to spam you.
+            them - three seats are already taken. Tell us where it hurts. It
+            takes about two minutes, and the number is so we can call you back,
+            not to spam you.
           </p>
         </header>
 

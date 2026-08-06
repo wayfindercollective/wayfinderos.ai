@@ -2,7 +2,11 @@
 // exactly - same steps, labels, placeholders, options and validation - so both sites
 // feed the same list with the same shape.
 
-export const SPOTS_LEFT = 10; // founders-pass seats shown across the site
+// Founders-pass seats, shown across the site. Three are filled - the companies
+// in the testimonial section - so the meter and the social proof agree.
+export const SPOTS_TOTAL = 10;
+export const SPOTS_TAKEN = 3;
+export const SPOTS_LEFT = SPOTS_TOTAL - SPOTS_TAKEN;
 
 // Canonical legal pages live on the Collective site - link, never duplicate,
 // so the two can't drift out of sync when one is updated.

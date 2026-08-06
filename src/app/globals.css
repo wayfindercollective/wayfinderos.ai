@@ -826,7 +826,19 @@ p a {
   transform: none;
 }
 
-/* ---------- video testimonial ---------- */
+/* ---------- video testimonials ---------- */
+/* one video = a wide centred stage; two or three = a row that shares it */
+.tvideos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  max-width: 1120px;
+  margin: 44px auto 0;
+}
+.tvideos .tvideo {
+  margin: 0;
+  max-width: none;
+}
 .tvideo {
   max-width: 860px;
   margin: 44px auto 0;
@@ -1088,6 +1100,12 @@ footer.site {
   border-radius: 50%;
   border: 1px solid rgba(34, 211, 238, 0.55);
   background: rgba(34, 211, 238, 0.12);
+}
+/* a filled seat: solid, and visibly different from the open ones */
+.spots span.taken {
+  background: var(--accent);
+  border-color: var(--accent);
+  box-shadow: 0 0 8px rgba(34, 211, 238, 0.5);
 }
 .spots em {
   margin-left: 10px;
