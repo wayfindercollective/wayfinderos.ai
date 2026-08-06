@@ -10,7 +10,18 @@ import LiveEmbed from "@/components/LiveEmbed";
 import { CallGridMock, DashboardShot } from "@/components/Vignettes";
 import { Logo, ToolIcon } from "@/components/Brand";
 import { TOOLS, EXTRAS } from "@/lib/tools";
-import { SPOTS_LEFT, SPOTS_TAKEN, SPOTS_TOTAL, PRIVACY_URL, TERMS_URL } from "@/lib/waitlist";
+import {
+  SPOTS_LEFT,
+  SPOTS_TAKEN,
+  SPOTS_TOTAL,
+  TAKEN_WORD,
+  TAKEN_WORD_CAP,
+  TOTAL_WORD,
+  TOTAL_WORD_CAP,
+  NEXT_SEAT_ORDINAL,
+  PRIVACY_URL,
+  TERMS_URL,
+} from "@/lib/waitlist";
 
 // icon lookup by key, drawn from the single source of truth in lib/tools.ts
 const svgFor: Record<string, string> = Object.fromEntries(
@@ -27,7 +38,7 @@ const media = (f: string) => existsSync(join(process.cwd(), "public/media", f));
 // Captions for the founder videos, by number. Fill in real names/companies as
 // the videos land; a missing entry just renders without a caption.
 const TESTIMONIAL_CAPTIONS: Record<number, string> = {
-  1: "Cbaas · one of the first three on board",
+  1: `Cbaas · one of the first ${TAKEN_WORD} on board`,
 };
 
 // Say this -> get that. Concrete proof of the one claim, in the visitor's own
@@ -47,8 +58,12 @@ const NOT_FOR = [
     d: "We built it for ourselves first, so it has strong defaults instead of a thousand settings. If you want infinitely configurable white-label software, GoHighLevel is right there.",
   },
   {
+    t: "It has hands on your money.",
+    d: "The assistant can act - email, call, charge. So every action is permission-gated and logged, and money never moves without your say-so. If you want an AI with no leash at all, that's not this.",
+  },
+  {
     t: "We're new.",
-    d: "Three companies run on it today, and you'd be the fourth - not the ten-thousandth. That means our phone number, and a say in what gets built. It also means you're early.",
+    d: `${TAKEN_WORD_CAP} companies run on it today, and you'd be the ${NEXT_SEAT_ORDINAL} - not the ten-thousandth. That means our phone number, and a say in what gets built. It also means you're early.`,
   },
   {
     t: "We only take coaching companies.",
@@ -255,12 +270,10 @@ export default function Home() {
                 <span className="dim">They just bought a racecar.</span>
               </h2>
               <p className="lead rv d2">
-                This isn&apos;t coming - it&apos;s here. Three coaching
-                companies already run their whole business by talking to it -
-                and they&apos;re pulling away ridiculously fast. Businesses are
-                going to fail this year over exactly this gap. You&apos;re not
-                slower because you&apos;re worse at this. You&apos;re slower
-                because of what you&apos;re driving.
+                This isn&apos;t coming - it&apos;s here. {TAKEN_WORD_CAP}{" "}
+                coaching companies already run on it - and they&apos;re pulling
+                away. You&apos;re not slower because you&apos;re worse at this.
+                You&apos;re slower because of what you&apos;re driving.
               </p>
             </div>
 
@@ -323,7 +336,7 @@ export default function Home() {
                 &ldquo;A 50% increase in productivity.&rdquo;
               </blockquote>
               <p className="lead rv d2">
-                <span className="attrib">Cbaas · one of the first three on board</span>
+                <span className="attrib">Cbaas · one of the first {TAKEN_WORD} on board</span>
               </p>
             </div>
           </section>
@@ -355,9 +368,9 @@ export default function Home() {
           {testimonialVideos.length > 0 && (
             <section id="operators">
               <div className="center">
-                <div className="eyebrow rv">The first three</div>
+                <div className="eyebrow rv">The first {TAKEN_WORD}</div>
                 <h2 className="title rv d1">
-                  Three of the ten seats are taken.
+                  {TAKEN_WORD_CAP} of the {TOTAL_WORD} seats are taken.
                 </h2>
                 <p className="lead rv d2">
                   These are the companies already running on it - in their own
@@ -459,6 +472,11 @@ export default function Home() {
               >
                 <OSDemo />
               </LiveEmbed>
+              <p className="lead rv lead-after">
+                And while you&apos;re in here, it&apos;s working the rest:
+                scoring every lead, reading every call, writing the summary and
+                the next move - without being asked.
+              </p>
             </div>
           </section>
 
@@ -539,13 +557,15 @@ export default function Home() {
           <section id="apply">
             <div className="apply rv">
               <div className="eyebrow">Founders pass</div>
-              <h2 className="title">Ten companies. That&apos;s the whole list.</h2>
+              <h2 className="title">
+                {TOTAL_WORD_CAP} companies. That&apos;s the whole list.
+              </h2>
               <p className="lead">
-                Three seats are already taken. The remaining {SPOTS_LEFT}{" "}
-                get Wayfinder OS free while we shape it around them - hands-on
-                migration, our phone numbers, a real say in what gets built.
-                We&apos;re taking ten because ten is what we can do properly.
-                Then the door closes.
+                {TAKEN_WORD_CAP} seats are already taken. The remaining{" "}
+                {SPOTS_LEFT} get Wayfinder OS free while we shape it around
+                them - hands-on migration, our phone numbers, a real say in
+                what gets built. We&apos;re taking {TOTAL_WORD} because{" "}
+                {TOTAL_WORD} is what we can do properly. Then the door closes.
               </p>
               <div
                 className="spots"

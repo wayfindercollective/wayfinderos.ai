@@ -34,14 +34,13 @@ Eyebrow: THE RACE
 
 ## You're in a horse and cart. *They just bought a racecar.*
 
-This isn't coming - it's here. Three coaching companies already run their
-whole business by talking to it - and they're pulling away ridiculously fast.
-Businesses are going to fail this year over exactly this gap. You're not
-slower because you're worse at this. You're slower because of what you're
-driving.
+This isn't coming - it's here. Three coaching companies already run on it -
+and they're pulling away. You're not slower because you're worse at this.
+You're slower because of what you're driving.
 
-*(Note: "Three" appears here, in the honest bit, and in the apply card - all
-three must move together when seats fill; the meter itself is single-sourced.)*
+*(Every prose seat-number on the site - here, the honest bit, operators, apply,
+the waitlist intro, the Cbaas caption - now renders from waitlist.ts word
+forms. Filling a seat = change SPOTS_TAKEN once.)*
 
 *(orbit collapses into the one orb with the logo)*
 
@@ -90,6 +89,9 @@ We'd rather lose you here than three months in. So, plainly:
 - **It's opinionated.** We built it for ourselves first, so it has strong
   defaults instead of a thousand settings. If you want infinitely configurable
   white-label software, GoHighLevel is right there.
+- **It has hands on your money.** The assistant can act - email, call, charge.
+  So every action is permission-gated and logged, and money never moves without
+  your say-so. If you want an AI with no leash at all, that's not this.
 - **We're new.** Three companies run on it today, and you'd be the fourth - not
   the ten-thousandth. That means our phone number, and a say in what gets
   built. It also means you're early.
@@ -176,8 +178,9 @@ know. This is the business it's running - click anything.
 
 `[LIVE EMBED: /embed/sandbox/pipeline]`
 
-(The six AI feature points that used to sit under this embed were removed
-2026-08-06 - they were a feature list with no clear purpose in the section.)
+Grounding line under the embed: "And while you're in here, it's working the
+rest: scoring every lead, reading every call, writing the summary and the next
+move - without being asked."
 
 ## Made for coaching  (`#coaching`)
 
@@ -360,10 +363,18 @@ Request to the OS team (composer embed):
   the origin boundary; it has to happen inside the frame. preventScroll
   matters: a bare focus() can yank the parent page's scroll position.
 
-Still open - confirm before launch:
-- **Native iOS/Android dialer claim** (modules + FAQ): no mobile codebase in the
-  OS repo. If the native app lives in a separate repo, fine; if reality is the
-  installable web app, the copy must say that.
-- "Three companies run on it today" and the Cbaas quote - facts outside the
-  repo; keep the number consistent everywhere (currently is).
+Round-2 audit outcomes (2026-08-06):
+- **Mobile app claim: GREEN** - apps/mobile-dialer/ is a full Expo/RN app with
+  native SIP on both platforms; apps/desktop/ is a real Electron app.
+- Race de-over-claimed: "run on it" (all surfaces agree), doom sentence cut,
+  "ridiculously" cut.
+- "Hands on your money" candor bullet RESTORED (real guardrails; pre-answers
+  the category's biggest objection above the FAQ fold).
+- Seat numbers single-sourced (see race note above).
+- Embeds verified LIVE (all four /embed/sandbox/* routes 200 on wf-os-demo).
+  The embed code lives in the **wf-demo-embed** checkout at
+  src/app/(standalone)/embed/sandbox/ - point the autofocus request there.
+
+Still open - facts outside the repo:
+- The Cbaas quote verbatim + attributable.
 - QuickBooks "stays in step" depth worth one look.

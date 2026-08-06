@@ -2,11 +2,24 @@
 // exactly - same steps, labels, placeholders, options and validation - so both sites
 // feed the same list with the same shape.
 
-// Founders-pass seats, shown across the site. Three are filled - the companies
-// in the testimonial section - so the meter and the social proof agree.
+// Founders-pass seats, shown across the site. Currently three are filled - the
+// companies in the testimonial section - so the meter and the social proof
+// agree. The word/ordinal forms below feed every PROSE mention of the count
+// (race, honest bit, operators, apply, waitlist intro, captions), so filling a
+// seat means changing SPOTS_TAKEN here and nothing else.
 export const SPOTS_TOTAL = 10;
 export const SPOTS_TAKEN = 3;
 export const SPOTS_LEFT = SPOTS_TOTAL - SPOTS_TAKEN;
+
+const WORDS = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"];
+const ORDINALS = ["zeroth", "first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eighth", "ninth", "tenth"];
+const cap = (s: string) => s[0].toUpperCase() + s.slice(1);
+
+export const TAKEN_WORD = WORDS[SPOTS_TAKEN]; // "three"
+export const TAKEN_WORD_CAP = cap(TAKEN_WORD); // "Three"
+export const TOTAL_WORD = WORDS[SPOTS_TOTAL]; // "ten"
+export const TOTAL_WORD_CAP = cap(TOTAL_WORD); // "Ten"
+export const NEXT_SEAT_ORDINAL = ORDINALS[SPOTS_TAKEN + 1]; // "fourth"
 
 // Canonical legal pages live on the Collective site - link, never duplicate,
 // so the two can't drift out of sync when one is updated.
