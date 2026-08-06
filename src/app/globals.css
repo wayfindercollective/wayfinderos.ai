@@ -1582,6 +1582,9 @@ footer.site {
 .live-embed {
   position: relative;
   width: 100%;
+  /* This box swaps interactive documents and must never become the browser's
+     scroll anchor while its reserved space is being established off-screen. */
+  overflow-anchor: none;
 }
 .le-placeholder {
   transition: opacity 0.45s ease;

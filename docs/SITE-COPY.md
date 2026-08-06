@@ -34,11 +34,14 @@ Eyebrow: THE RACE
 
 ## You're in a horse and cart. *They just bought a racecar.*
 
-This isn't coming - it's here. Some companies in your market already just
-*ask* their business a question and get an answer, and they're pulling away
-ridiculously fast. Businesses will fail this year over nothing but this gap.
-You're not slower because you're worse at this. You're slower because of what
-you're driving.
+This isn't coming - it's here. Three coaching companies already run their
+whole business by talking to it - and they're pulling away ridiculously fast.
+Businesses are going to fail this year over exactly this gap. You're not
+slower because you're worse at this. You're slower because of what you're
+driving.
+
+*(Note: "Three" appears here, in the honest bit, and in the apply card - all
+three must move together when seats fill; the meter itself is single-sourced.)*
 
 *(orbit collapses into the one orb with the logo)*
 

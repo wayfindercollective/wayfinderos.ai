@@ -255,13 +255,12 @@ export default function Home() {
                 <span className="dim">They just bought a racecar.</span>
               </h2>
               <p className="lead rv d2">
-                This isn&apos;t coming - it&apos;s here. Some companies in your
-                market already just <em>ask</em>{" "}
-                their business a question and get an answer, and they&apos;re
-                pulling away ridiculously fast. Businesses will fail this year
-                over nothing but this gap. You&apos;re not slower because
-                you&apos;re worse at this. You&apos;re slower because of what
-                you&apos;re driving.
+                This isn&apos;t coming - it&apos;s here. Three coaching
+                companies already run their whole business by talking to it -
+                and they&apos;re pulling away ridiculously fast. Businesses are
+                going to fail this year over exactly this gap. You&apos;re not
+                slower because you&apos;re worse at this. You&apos;re slower
+                because of what you&apos;re driving.
               </p>
             </div>
 

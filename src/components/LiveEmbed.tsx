@@ -48,10 +48,10 @@ export default function LiveEmbed({
   // allow-list, so the camera demo would look broken rather than blocked.
   // Everything else stays on the default (no delegated permissions).
   allow?: string;
-  // Height the wrapper grows to once the REAL product is showing. The coded
-  // placeholders are deliberately compact; the actual app needs more room (a
-  // pipeline board or a video room squeezed into placeholder height gets
-  // clipped). Only applied when live, so the pre-reveal layout is unchanged.
+  // Height reserved for the real product as soon as its frame starts loading.
+  // Reserving it ahead of the viewport prevents a late readiness handshake from
+  // inserting hundreds of pixels underneath the visitor while they are
+  // scrolling. The coded placeholder still remains visible until the handshake.
   liveHeight?: number;
   children: React.ReactNode; // the coded placeholder
 }) {
@@ -134,7 +134,7 @@ export default function LiveEmbed({
     <div
       className={`live-embed${live ? " live" : ""}`}
       ref={ref}
-      style={live && liveHeight ? { minHeight: liveHeight } : undefined}
+      style={src && liveHeight ? { minHeight: liveHeight } : undefined}
     >
       <div className="le-placeholder" inert={live || undefined}>
         {children}
