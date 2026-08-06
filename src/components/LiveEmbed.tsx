@@ -38,6 +38,7 @@ export default function LiveEmbed({
   path,
   title,
   allow,
+  focusOnVisible = false,
   liveHeight,
   children,
 }: {
@@ -48,6 +49,10 @@ export default function LiveEmbed({
   // allow-list, so the camera demo would look broken rather than blocked.
   // Everything else stays on the default (no delegated permissions).
   allow?: string;
+  // Some embeds (currently the composer) expose a deliberate frame-focus
+  // contract: focusing the iframe asks the embed to place its caret without
+  // scrolling the parent page. Do this only after the live frame is visible.
+  focusOnVisible?: boolean;
   // Height reserved for the real product as soon as its frame starts loading.
   // Reserving it ahead of the viewport prevents a late readiness handshake from
   // inserting hundreds of pixels underneath the visitor while they are
@@ -66,9 +71,9 @@ export default function LiveEmbed({
 
   // A cross-origin embed can autofocus one of its own controls while it is
   // loading. Chrome then scrolls the parent page far enough to reveal that
-  // focused frame. Visibility alone is not consent to focus: the browsing
-  // context stays inert until the visitor deliberately moves/clicks over it or
-  // reaches it with the keyboard.
+  // focused frame. Keep its browsing context inert until the frame is mostly
+  // visible and its reveal has completed. Non-composer frames additionally
+  // require deliberate pointer or keyboard activity before becoming active.
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
@@ -152,10 +157,20 @@ export default function LiveEmbed({
     return () => window.clearTimeout(t);
   }, [live, inViewport]);
 
-  const interactive = live && inViewport && interactionReady && visitorActivated;
+  const interactive =
+    live && inViewport && interactionReady && (focusOnVisible || visitorActivated);
+  const needsActivation = live && !focusOnVisible && !visitorActivated;
   const activate = () => {
     if (live) setVisitorActivated(true);
   };
+
+  // The composer listens for focus on its iframe window and then focuses its
+  // textarea with preventScroll. Focusing the owner iframe the same way gives
+  // visitors a blinking caret without either document dragging the page.
+  useEffect(() => {
+    if (!interactive || !focusOnVisible) return;
+    frameRef.current?.focus({ preventScroll: true });
+  }, [focusOnVisible, interactive]);
 
   // When the live frame takes over, the placeholder must leave the tab order
   // too - `aria-hidden` alone still leaves its buttons focusable, stranding
@@ -165,10 +180,10 @@ export default function LiveEmbed({
       className={`live-embed${live ? " live" : ""}${interactive ? " interactive" : ""}`}
       ref={ref}
       style={src && liveHeight ? { minHeight: liveHeight } : undefined}
-      tabIndex={live && !visitorActivated ? 0 : undefined}
-      role={live && !visitorActivated ? "group" : undefined}
+      tabIndex={needsActivation ? 0 : undefined}
+      role={needsActivation ? "group" : undefined}
       aria-label={
-        live && !visitorActivated
+        needsActivation
           ? `${title}. Move your pointer here or press Tab again to use the live demo.`
           : undefined
       }

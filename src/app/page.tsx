@@ -309,6 +309,7 @@ export default function Home() {
                 <LiveEmbed
                   path="/embed/sandbox/composer"
                   title="Wayfinder OS AI writing assistant - live demo"
+                  focusOnVisible
                   liveHeight={920}
                 >
                   <AIDraftCard />

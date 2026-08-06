@@ -356,12 +356,14 @@ Resolved in this revision:
 Green from the audit (real code backing): HIPAA mode, video rooms/breakouts,
 customer portal, QuickBooks + Mercury, seat math consistency.
 
-Request to the OS team (composer embed):
-- **Autofocus the prompt input** when `/embed/sandbox/composer` loads, using
-  `focus({ preventScroll: true })` - so the visitor arrives at a blinking
-  cursor and can type immediately. The marketing side cannot do this across
-  the origin boundary; it has to happen inside the frame. preventScroll
-  matters: a bare focus() can yank the parent page's scroll position.
+Composer focus contract (implemented 2026-08-06):
+- The OS embed focuses the prompt on mount and whenever its iframe window gains
+  focus, using `focus({ preventScroll: true })` both times.
+- Once the composer is substantially visible, the marketing wrapper calls
+  `iframe.focus({ preventScroll: true })`. It cannot reach the inner prompt
+  across the origin boundary, so the OS-side window-focus handler completes the
+  handoff. Using `preventScroll` on both sides keeps the caret blinking without
+  yanking the parent page to the email section.
 
 Round-2 audit outcomes (2026-08-06):
 - **Mobile app claim: GREEN** - apps/mobile-dialer/ is a full Expo/RN app with

@@ -26,7 +26,13 @@ signup, and nothing on screen they are not allowed to do.
   visitor labelled as the real product.
 - While loading, the frame is `visibility: hidden` and `pointer-events: none`,
   so it is neither clickable nor focusable over the placeholder beneath it. Once
-  live, the placeholder becomes `inert` so it leaves the tab order.
+  live, the placeholder becomes `inert` so it leaves the tab order. The frame
+  itself stays `inert` until it is substantially visible; non-composer embeds
+  also wait for deliberate pointer or keyboard activity.
+- The composer opts into `focusOnVisible`. Once its reveal finishes, the site
+  calls `iframe.focus({ preventScroll: true })`; the composer treats window
+  focus as the signal to focus its prompt with `preventScroll` too. Both sides
+  are required to produce a blinking caret without dragging the parent page.
 - **No handshake within 12s** => the frame is discarded and the coded
   placeholder simply remains. Same for any failure.
 - **Below 1024px viewport width the iframe is never created** - real app UI does
