@@ -35,7 +35,7 @@ const TESTIMONIAL_CAPTIONS: Record<number, string> = {
 const SAY_THIS = [
   { q: "Who's gone quiet this week?", a: "Every deal with no reply, ranked by what it's worth." },
   { q: "Follow up with Sarah about the payment plan.", a: "Written in your voice, waiting for your nod." },
-  { q: "How much did we actually collect this month?", a: "One number. The real one." },
+  { q: "How much did we actually collect this month?", a: "Collected, not “closed won”. Closed is a story - collected is a fact." },
   { q: "Book Leo in for Thursday.", a: "Held, invited, reminded." },
 ];
 
@@ -43,12 +43,12 @@ const SAY_THIS = [
 // true and disqualifies somebody - that's the point, not a rhetorical trick.
 const NOT_FOR = [
   {
-    t: "We have fewer features than GoHighLevel.",
-    d: "Deliberately. Every one we add is another thing you'd have to learn.",
+    t: "It's opinionated.",
+    d: "We built it for ourselves first, so it has strong defaults instead of a thousand settings. If you want infinitely configurable white-label software, GoHighLevel is right there.",
   },
   {
-    t: "There's no app marketplace.",
-    d: "No 300 integrations. If your business runs on a chain of Zapier duct tape, keep it - it'll be less painful than moving.",
+    t: "It has hands on your money.",
+    d: "The assistant can act - email, call, charge. So every action is permission-gated and logged, and money never moves without your say-so. If you want an AI with no leash at all, that's not this.",
   },
   {
     t: "We're new.",
@@ -63,7 +63,7 @@ const NOT_FOR = [
 // The stresses, melting away: a pain you recognise dissolves into its relief.
 const melts = [
   { pain: "The midnight commission spreadsheet, payroll due tomorrow.", relief: "It calculates itself now." },
-  { pain: "Three dashboards, three different numbers.", relief: "One number. Live. True." },
+  { pain: "Three dashboards, three different numbers.", relief: "Collected. To the cent." },
   { pain: "Chasing failed payments, one awkward email at a time.", relief: "The money chases itself." },
   { pain: "A week of tool training for every new hire.", relief: "One login. They just start." },
 ];
@@ -230,8 +230,9 @@ export default function Home() {
               </div>
               <h1 className="rv d1">Talk to your business.</h1>
               <p className="sub rv d2">
-                Every other coaching platform sells you more screens to click.
-                Wayfinder is the first one you just talk to.
+                Ask what you collected. Ask who&apos;s gone quiet. Tell it what
+                to do about both - and it does it. The coaching platform that
+                answers you, with the truth.
               </p>
               <div className="hero-cta rv d3">
                 <Link className="btn lg" href="/waitlist">
@@ -270,14 +271,13 @@ export default function Home() {
             <div id="collapse" className="fix">
               <div className="center statement">
                 <h2 className="title rv d1">
-                  Everyone else adds screens.{" "}
-                  <span className="dim">We took them away.</span>
+                  So we fired <span className="dim">the dashboard.</span>
                 </h2>
                 <p className="lead rv d2">
-                  GoHighLevel has more features than we do. So does every
-                  platform built in the last decade - and that is the entire
-                  problem. Each new feature is one more tab, one more login, one
-                  more thing to teach a new hire. We went the other way.
+                  Software made you the operator of the software - screens to
+                  learn, tabs to check, numbers you quietly doubt. Everything is
+                  still in here: the CRM, the dialer, the payments, the P&L.
+                  You just stop clicking through it, and start asking.
                 </p>
               </div>
             </div>
@@ -610,7 +610,7 @@ export default function Home() {
                     <h5>Product</h5>
                     <a href="#demo">Talk to it</a>
                     <a href="#platform">What&apos;s inside</a>
-                    <a href="#ai">The AI</a>
+                    <a href="#ai">Ask it anything</a>
                     <a href="#coaching">Coaching</a>
                     <a href="#migration">Switching</a>
                   </div>
