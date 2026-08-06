@@ -60,13 +60,15 @@ export default function LiveEmbed({
   const [dead, setDead] = useState(false);
   const [inViewport, setInViewport] = useState(false);
   const [interactionReady, setInteractionReady] = useState(false);
+  const [visitorActivated, setVisitorActivated] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const frameRef = useRef<HTMLIFrameElement>(null);
 
   // A cross-origin embed can autofocus one of its own controls while it is
   // loading. Chrome then scrolls the parent page far enough to reveal that
-  // focused frame. Keep the browsing context inert until it is substantially
-  // visible; the short delay also covers the placeholder/frame cross-fade.
+  // focused frame. Visibility alone is not consent to focus: the browsing
+  // context stays inert until the visitor deliberately moves/clicks over it or
+  // reaches it with the keyboard.
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
@@ -150,16 +152,29 @@ export default function LiveEmbed({
     return () => window.clearTimeout(t);
   }, [live, inViewport]);
 
-  const interactive = live && inViewport && interactionReady;
+  const interactive = live && inViewport && interactionReady && visitorActivated;
+  const activate = () => {
+    if (live) setVisitorActivated(true);
+  };
 
   // When the live frame takes over, the placeholder must leave the tab order
   // too - `aria-hidden` alone still leaves its buttons focusable, stranding
   // keyboard users in controls they cannot see.
   return (
     <div
-      className={`live-embed${live ? " live" : ""}`}
+      className={`live-embed${live ? " live" : ""}${interactive ? " interactive" : ""}`}
       ref={ref}
       style={src && liveHeight ? { minHeight: liveHeight } : undefined}
+      tabIndex={live && !visitorActivated ? 0 : undefined}
+      role={live && !visitorActivated ? "group" : undefined}
+      aria-label={
+        live && !visitorActivated
+          ? `${title}. Move your pointer here or press Tab again to use the live demo.`
+          : undefined
+      }
+      onPointerMove={activate}
+      onPointerDown={activate}
+      onFocus={activate}
     >
       <div className="le-placeholder" inert={live || undefined}>
         {children}

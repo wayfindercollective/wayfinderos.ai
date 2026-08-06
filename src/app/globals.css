@@ -1617,6 +1617,8 @@ footer.site {
 .live-embed.live .le-frame {
   opacity: 1;
   visibility: visible;
+}
+.live-embed.interactive .le-frame {
   pointer-events: auto;
 }
 /* the video room gets the full container width; its 4:3-ish placeholder would
