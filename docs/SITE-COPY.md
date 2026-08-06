@@ -34,10 +34,11 @@ Eyebrow: THE RACE
 
 ## You're in a horse and cart. *They just bought a racecar.*
 
-Within a year, someone in your market will just *ask* their business a
-question and get an answer. The only question is whether that's you - or the
-one still opening seven logins. You're not slower because you're worse at
-this. You're slower because of what you're driving.
+This isn't coming - it's here. Some companies in your market already just
+*ask* their business a question and get an answer, and they're pulling away
+ridiculously fast. Businesses will fail this year over nothing but this gap.
+You're not slower because you're worse at this. You're slower because of what
+you're driving.
 
 *(orbit collapses into the one orb with the logo)*
 
@@ -86,9 +87,6 @@ We'd rather lose you here than three months in. So, plainly:
 - **It's opinionated.** We built it for ourselves first, so it has strong
   defaults instead of a thousand settings. If you want infinitely configurable
   white-label software, GoHighLevel is right there.
-- **It has hands on your money.** The assistant can act - email, call, charge.
-  So every action is permission-gated and logged, and money never moves without
-  your say-so. If you want an AI with no leash at all, that's not this.
 - **We're new.** Three companies run on it today, and you'd be the fourth - not
   the ten-thousandth. That means our phone number, and a say in what gets
   built. It also means you're early.
@@ -175,16 +173,8 @@ know. This is the business it's running - click anything.
 
 `[LIVE EMBED: /embed/sandbox/pipeline]`
 
-Points:
-- **Email drafting** - Replies and campaigns drafted in each coach's own voice.
-- **Lead scoring** - Every form, call and webchat scored so reps work the
-  hottest leads first.
-- **Call summaries & scorecards** - Automatic transcription, one-paragraph
-  recaps, and objection & coaching scorecards.
-- **Buyer personas** - Generated from your real pipeline, not a generic
-  template.
-- **Upsell briefs** - The next best offer for each customer, written for you.
-- **Voice campaigns** - Outbound that dials and qualifies leads automatically.
+(The six AI feature points that used to sit under this embed were removed
+2026-08-06 - they were a feature list with no clear purpose in the section.)
 
 ## Made for coaching  (`#coaching`)
 
@@ -357,6 +347,13 @@ Resolved in this revision:
 
 Green from the audit (real code backing): HIPAA mode, video rooms/breakouts,
 customer portal, QuickBooks + Mercury, seat math consistency.
+
+Request to the OS team (composer embed):
+- **Autofocus the prompt input** when `/embed/sandbox/composer` loads, using
+  `focus({ preventScroll: true })` - so the visitor arrives at a blinking
+  cursor and can type immediately. The marketing side cannot do this across
+  the origin boundary; it has to happen inside the frame. preventScroll
+  matters: a bare focus() can yank the parent page's scroll position.
 
 Still open - confirm before launch:
 - **Native iOS/Android dialer claim** (modules + FAQ): no mobile codebase in the

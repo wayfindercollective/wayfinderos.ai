@@ -9,7 +9,7 @@ import AIDraftCard from "@/components/AIDraftCard";
 import LiveEmbed from "@/components/LiveEmbed";
 import { CallGridMock, DashboardShot } from "@/components/Vignettes";
 import { Logo, ToolIcon } from "@/components/Brand";
-import { TOOLS, EXTRAS, AI_POINTS } from "@/lib/tools";
+import { TOOLS, EXTRAS } from "@/lib/tools";
 import { SPOTS_LEFT, SPOTS_TAKEN, SPOTS_TOTAL, PRIVACY_URL, TERMS_URL } from "@/lib/waitlist";
 
 // icon lookup by key, drawn from the single source of truth in lib/tools.ts
@@ -45,10 +45,6 @@ const NOT_FOR = [
   {
     t: "It's opinionated.",
     d: "We built it for ourselves first, so it has strong defaults instead of a thousand settings. If you want infinitely configurable white-label software, GoHighLevel is right there.",
-  },
-  {
-    t: "It has hands on your money.",
-    d: "The assistant can act - email, call, charge. So every action is permission-gated and logged, and money never moves without your say-so. If you want an AI with no leash at all, that's not this.",
   },
   {
     t: "We're new.",
@@ -259,11 +255,13 @@ export default function Home() {
                 <span className="dim">They just bought a racecar.</span>
               </h2>
               <p className="lead rv d2">
-                Within a year, someone in your market will just <em>ask</em>{" "}
-                their business a question and get an answer. The only question
-                is whether that&apos;s you - or the one still opening seven
-                logins. You&apos;re not slower because you&apos;re worse at
-                this. You&apos;re slower because of what you&apos;re driving.
+                This isn&apos;t coming - it&apos;s here. Some companies in your
+                market already just <em>ask</em>{" "}
+                their business a question and get an answer, and they&apos;re
+                pulling away ridiculously fast. Businesses will fail this year
+                over nothing but this gap. You&apos;re not slower because
+                you&apos;re worse at this. You&apos;re slower because of what
+                you&apos;re driving.
               </p>
             </div>
 
@@ -462,17 +460,6 @@ export default function Home() {
               >
                 <OSDemo />
               </LiveEmbed>
-              <div className="points">
-                {AI_POINTS.map((p) => (
-                  <div className="point rv" key={p.t}>
-                    <span className="pi">
-                      <ToolIcon svg={p.svg} size={22} />
-                    </span>
-                    <h4>{p.t}</h4>
-                    <p>{p.d}</p>
-                  </div>
-                ))}
-              </div>
             </div>
           </section>
 

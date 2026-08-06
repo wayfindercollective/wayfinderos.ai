@@ -732,11 +732,12 @@ p a {
 }
 
 /* ---------- candour: what we're not ---------- */
+/* three admissions share one row on desktop, stack below */
 .nots {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 34px 56px;
-  max-width: 940px;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 34px 44px;
+  max-width: 1040px;
   margin: 50px 0 0;
 }
 .not {
