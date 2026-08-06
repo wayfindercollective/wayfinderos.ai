@@ -24,11 +24,12 @@ signup, and nothing on screen they are not allowed to do.
   iframe `load` event is deliberately ignored - it also fires for 404s, 500s,
   auth redirects and some CSP failures, which would present an error page to the
   visitor labelled as the real product.
-- While loading, the frame is `visibility: hidden` and `pointer-events: none`,
-  so it is neither clickable nor focusable over the placeholder beneath it. Once
-  live, the placeholder becomes `inert` so it leaves the tab order. The frame
-  itself stays `inert` until it is substantially visible; non-composer embeds
-  also wait for deliberate pointer or keyboard activity.
+- While off-screen, the frame has `display: none`: it still loads and completes
+  the readiness handshake, but has no rendered owner box that an inner autofocus
+  call could drag into view. At 50% visibility it receives a box; until ready it
+  also remains `visibility: hidden` and `pointer-events: none`. Once live, the
+  placeholder becomes `inert` so it leaves the tab order. Non-composer embeds
+  additionally wait for deliberate pointer or keyboard activity.
 - The composer opts into `focusOnVisible`. Once its reveal finishes, the site
   calls `iframe.focus({ preventScroll: true })`; the composer treats window
   focus as the signal to focus its prompt with `preventScroll` too. Both sides

@@ -78,7 +78,7 @@ export default function LiveEmbed({
     const el = ref.current;
     if (!el) return;
     const io = new IntersectionObserver(
-      ([entry]) => setInViewport(entry.isIntersecting),
+      ([entry]) => setInViewport(entry.intersectionRatio >= 0.5),
       { threshold: 0.5 }
     );
     io.observe(el);
@@ -177,7 +177,7 @@ export default function LiveEmbed({
   // keyboard users in controls they cannot see.
   return (
     <div
-      className={`live-embed${live ? " live" : ""}${interactive ? " interactive" : ""}`}
+      className={`live-embed${live ? " live" : ""}${inViewport ? " in-viewport" : ""}${interactive ? " interactive" : ""}`}
       ref={ref}
       style={src && liveHeight ? { minHeight: liveHeight } : undefined}
       tabIndex={needsActivation ? 0 : undefined}

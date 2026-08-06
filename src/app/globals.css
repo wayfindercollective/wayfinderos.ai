@@ -1598,6 +1598,11 @@ footer.site {
   pointer-events: none;
 }
 .le-frame {
+  /* A nested document can programmatically focus one of its controls despite
+     the owner iframe being inert. With a rendered off-screen box Chrome may
+     then scroll the parent to reveal it. The frame still loads and handshakes
+     under display:none; it only receives a box once its wrapper is on screen. */
+  display: none;
   position: absolute;
   inset: 0;
   width: 100%;
@@ -1613,6 +1618,9 @@ footer.site {
   pointer-events: none;
   transition: opacity 0.45s ease;
   background: #0c0d12;
+}
+.live-embed.in-viewport .le-frame {
+  display: block;
 }
 .live-embed.live .le-frame {
   opacity: 1;
