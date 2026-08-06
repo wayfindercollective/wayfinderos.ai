@@ -58,8 +58,25 @@ export default function LiveEmbed({
   const [src, setSrc] = useState<string | null>(null);
   const [ready, setReady] = useState(false);
   const [dead, setDead] = useState(false);
+  const [inViewport, setInViewport] = useState(false);
+  const [interactionReady, setInteractionReady] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const frameRef = useRef<HTMLIFrameElement>(null);
+
+  // A cross-origin embed can autofocus one of its own controls while it is
+  // loading. Chrome then scrolls the parent page far enough to reveal that
+  // focused frame. Keep the browsing context inert until it is substantially
+  // visible; the short delay also covers the placeholder/frame cross-fade.
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      ([entry]) => setInViewport(entry.isIntersecting),
+      { threshold: 0.5 }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
 
   // Arm the load well before the section is on screen, so it's interactive on
   // arrival. Nothing loads on initial paint. Re-evaluated on resize so a window
@@ -127,6 +144,14 @@ export default function LiveEmbed({
 
   const live = Boolean(src) && ready && !dead;
 
+  useEffect(() => {
+    if (!live || !inViewport) return;
+    const t = window.setTimeout(() => setInteractionReady(true), 450);
+    return () => window.clearTimeout(t);
+  }, [live, inViewport]);
+
+  const interactive = live && inViewport && interactionReady;
+
   // When the live frame takes over, the placeholder must leave the tab order
   // too - `aria-hidden` alone still leaves its buttons focusable, stranding
   // keyboard users in controls they cannot see.
@@ -146,6 +171,8 @@ export default function LiveEmbed({
           src={src}
           title={title}
           loading="eager"
+          inert={!interactive || undefined}
+          tabIndex={interactive ? undefined : -1}
           // Minimum viable capability set. `allow-same-origin` is required for
           // the embed's own session/storage; `allow-top-navigation` is
           // deliberately absent so nothing inside can steer this page. Add
