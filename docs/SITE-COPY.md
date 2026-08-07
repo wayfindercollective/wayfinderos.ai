@@ -376,7 +376,9 @@ Round-2 audit outcomes (2026-08-06):
   native SIP on both platforms; apps/desktop/ is a real Electron app.
 - Race de-over-claimed: "run on it" (all surfaces agree), doom sentence cut,
   "ridiculously" cut.
-- "Hands on your money" candor bullet RESTORED (real guardrails; pre-answers
+- "Hands on your money" candor bullet RESTORED and CONFIRMED by Nathan
+  2026-08-07 - four nos is the settled decision, do not re-litigate.
+  (Real guardrails; pre-answers
   the category's biggest objection above the FAQ fold).
 - Seat numbers single-sourced (see race note above).
 - Embeds verified LIVE (all four /embed/sandbox/* routes 200 on wf-os-demo).
