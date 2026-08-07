@@ -286,9 +286,11 @@ export default function Home() {
                 </h2>
                 <p className="lead rv d2">
                   It&apos;s still in there - it&apos;s just not your job
-                  anymore. You ask, it answers, it acts. And when you do open a
-                  screen, the number on it is collected cash, matched against
-                  your live bank feed - not a story about closed-won.
+                  anymore. We skipped the app marketplace and built one
+                  database instead, so nothing can disagree with anything: the
+                  number you see is collected cash, matched against your live
+                  bank feed. And when every answer is true, you can stop
+                  checking screens and just ask.
                 </p>
               </div>
             </div>

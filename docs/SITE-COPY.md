@@ -46,9 +46,15 @@ forms. Filling a seat = change SPOTS_TAKEN once.)*
 
 ## So we demoted *the dashboard.*
 
-It's still in there - it's just not your job anymore. You ask, it answers, it
-acts. And when you do open a screen, the number on it is collected cash,
-matched against your live bank feed - not a story about closed-won.
+It's still in there - it's just not your job anymore. We skipped the app
+marketplace and built one database instead, so nothing can disagree with
+anything: the number you see is collected cash, matched against your live bank
+feed. And when every answer is true, you can stop checking screens and just
+ask.
+
+*(This beat now carries the full causal chain - sacrifice (no marketplace) →
+truth (one database, bank-matched) → talk (so just ask). The dashboard
+demotion is the hook; truth is the payload.)*
 
 ## The one thing  (`#demo`)
 
